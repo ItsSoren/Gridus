@@ -1,0 +1,2976 @@
+<!DOCTYPE html>
+<html lang="fr" data-bs-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GRID WARS</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* ─ background layers */
+  --bg:   #16181f;
+  --bg2:  #1e2130;
+  --bg3:  #252840;
+  --bg4:  #2c3050;
+  --surface: #11131a;
+
+  /* ─ player 1 — electric blue */
+  --p1:      #5b9cf6;
+  --p1-d:    #2d6ecf;
+  --p1-dim:  rgba(91,156,246,.14);
+  --p1-bdr:  rgba(91,156,246,.5);
+
+  /* ─ player 2 — red-orange */
+  --p2:      #f0633a;
+  --p2-d:    #b8391a;
+  --p2-dim:  rgba(240,99,58,.14);
+  --p2-bdr:  rgba(240,99,58,.5);
+
+  /* ─ grille carte (fond uni, plus damier) */
+  --sq-a:   #2a2d38;
+  --sq-b:   #33374a;
+  --sq-map: #2e3242;
+
+  /* ─ accents */
+  --gold:   #e8b84b;
+  --good:   #4caf7d;
+  --danger: #e85555;
+
+  /* ─ text */
+  --txt:    #dde6f5;
+  --txt-2:  #8f9fc0;
+  --txt-3:  #505870;
+
+  /* ─ borders */
+  --bdr:    rgba(255,255,255,.06);
+  --bdr-md: rgba(255,255,255,.11);
+  --bdr-hi: rgba(255,255,255,.18);
+
+  --r: 12px;
+  --shadow: 0 4px 20px rgba(0,0,0,.55);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+/* UI global un peu plus grand (le radial reste en px/vw, donc peu impacté) */
+html{font-size:18px}
+
+body {
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--txt);
+  font-size:18px;
+  line-height:1.25;
+  height:100vh;
+  overflow:hidden;
+}
+
+/* ─── BACKGROUND ─────────────────────────────── */
+.bg-noise {
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 55% at 0% 0%,  rgba(91,156,246,.06) 0%,transparent 55%),
+    radial-gradient(ellipse 70% 55% at 100% 100%, rgba(240,99,58,.06) 0%,transparent 55%);
+}
+
+/* ─── SCREENS ─────────────────────────────────── */
+.screen{
+  display:none;position:relative;z-index:10;
+  height:100vh;flex-direction:column;
+  align-items:center;justify-content:center;
+}
+.screen.active{display:flex}
+
+/* ═══════════════════════════════════════════════
+   MENU
+═══════════════════════════════════════════════ */
+.menu-wrap{
+  display:flex;flex-direction:column;align-items:center;
+  text-align:center;width:100%;max-width:400px;padding:0 28px;
+}
+
+/* mini grid logo */
+.logo-grid{
+  display:grid;grid-template-columns:repeat(5,1fr);
+  width:60px;height:60px;gap:2px;margin-bottom:22px;
+  border-radius:8px;overflow:hidden;
+  box-shadow:0 8px 32px rgba(0,0,0,.6), 0 0 0 1px var(--bdr-md);
+}
+.logo-grid .c{display:block}
+.logo-grid .ca{background:var(--sq-a)}
+.logo-grid .cb{background:var(--sq-b)}
+.logo-grid .cp1{background:var(--p1-d)}
+.logo-grid .cp2{background:var(--p2-d)}
+
+.logo-name{
+  font-size:clamp(2.6rem,9vw,5rem);
+  font-weight:800;
+  letter-spacing:-.03em;
+  line-height:1;
+  color:var(--txt);
+}
+.logo-name em{font-style:normal;color:var(--p1)}
+
+.logo-tag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.58rem;letter-spacing:.4em;
+  color:var(--txt-3);text-transform:uppercase;
+  margin-top:6px;
+}
+
+.divider{
+  width:100%;height:1px;
+  margin:26px 0;
+  background:linear-gradient(90deg,transparent,var(--bdr-hi),transparent);
+}
+
+.menu-btns{display:flex;flex-direction:column;gap:8px;width:100%}
+
+/* ─ main buttons */
+.mbtn{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 18px;width:100%;
+  background:var(--bg2);border:2px solid var(--bdr-md);
+  border-radius:var(--r);cursor:pointer;
+  font-family:'Inter',sans-serif;font-size:.9rem;font-weight:600;
+  color:var(--txt);
+  transition:background .15s,border-color .15s,transform .1s,box-shadow .15s;
+  text-align:left;
+}
+.mbtn .ico{
+  width:34px;height:34px;border-radius:5px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;flex-shrink:0;
+}
+.mbtn .lbl{flex:1}
+.mbtn .arr{color:var(--txt-3);font-size:.75rem;transition:transform .15s,color .15s}
+.mbtn:hover{background:var(--bg3);border-color:var(--p1);box-shadow:0 0 0 3px rgba(91,156,246,.1);transform:translateY(-1px)}
+.mbtn:hover .arr{transform:translateX(4px);color:var(--p1)}
+.mbtn:active{transform:translateY(0)}
+.mbtn.primary .ico{background:var(--p1-d);color:#fff}
+.mbtn.vs .ico{background:#35263e;color:var(--p2)}
+.mbtn.info .ico{background:#1f3040;color:var(--p1)}
+
+/* ═══════════════════════════════════════════════
+   SCREEN CARDS
+═══════════════════════════════════════════════ */
+.card-wrap{
+  background:var(--bg2);border:2px solid var(--bdr-md);
+  border-radius:12px;padding:32px 28px;
+  max-width:510px;width:calc(100% - 40px);
+  box-shadow:var(--shadow);
+}
+/* garde les vars si on combine avec .card Bootstrap */
+.card-wrap.card{background:var(--bg2);border-color:var(--bdr-md)}
+.card-title{
+  font-size:clamp(1.4rem,3vw,1.9rem);font-weight:800;
+  letter-spacing:-.02em;color:var(--txt);margin-bottom:3px;
+}
+.card-sub{
+  font-family:'JetBrains Mono',monospace;font-size:.58rem;
+  letter-spacing:.28em;color:var(--txt-3);text-transform:uppercase;
+  margin-bottom:24px;
+}
+
+/* difficulty cards */
+.diff-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.diff-card{
+  background:var(--bg3);border:2px solid var(--bdr-md);border-radius:8px;
+  padding:16px 8px;cursor:pointer;text-align:center;
+  transition:border-color .15s,background .15s,transform .12s,box-shadow .15s;
+}
+.diff-card:hover{border-color:var(--p1);background:var(--bg4);transform:translateY(-2px);box-shadow:0 4px 16px rgba(91,156,246,.12)}
+.diff-card .dk{font-size:1.6rem;margin-bottom:8px}
+.diff-card .dl{font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--p1);letter-spacing:.1em;text-transform:uppercase}
+.diff-card .dd{font-size:.72rem;color:var(--txt-2);margin-top:3px}
+
+.back{
+  font-family:'JetBrains Mono',monospace;font-size:.6rem;
+  color:var(--txt-3);letter-spacing:.15em;cursor:pointer;
+  display:inline-flex;align-items:center;gap:6px;text-transform:uppercase;
+  transition:color .15s;
+}
+.back::before{content:'←'}
+.back:hover{color:var(--p1)}
+
+/* rules */
+.rules-list{list-style:none;display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
+.rules-list li{
+  font-size:.84rem;line-height:1.5;padding:9px 12px;
+  background:var(--bg3);border-radius:4px;
+  border-left:3px solid var(--p1);color:var(--txt);
+}
+.rules-list li .tag{color:var(--p1);font-weight:700;margin-right:4px}
+.rules-list li .cost{color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:.78rem}
+.rules-note{
+  font-size:.78rem;color:var(--txt-2);
+  border-top:1px solid var(--bdr);padding-top:12px;line-height:1.8;
+}
+.rules-note strong{color:var(--gold)}
+
+/* ═══════════════════════════════════════════════
+   GAME
+═══════════════════════════════════════════════ */
+#game{justify-content:flex-start;padding:0;align-items:stretch}
+
+/* ── HUD bar */
+.hud{
+  width:100%;display:flex;align-items:stretch;
+  background:var(--bg2);border-bottom:1px solid var(--bdr-md);
+  flex-shrink:0;position:relative;z-index:20;
+}
+.hud::after{
+  content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--p1),transparent 35%,transparent 65%,var(--p2));
+  opacity:.45;
+}
+
+/* HUD multi-joueurs (jusqu'à 4) */
+#hudStrip{display:flex;flex-wrap:wrap;align-items:stretch;flex:1;gap:0}
+.hud-chip{
+  flex:1 1 22%;min-width:118px;display:flex;flex-direction:column;justify-content:center;
+  padding:10px 12px;gap:6px;position:relative;border-right:1px solid var(--bdr);
+  text-align:left;
+}
+.hud-chip:last-child{border-right:none}
+.hud-chip .hud-bar{width:100%;max-width:140px}
+.hud-chip .hud-row{flex-direction:row}
+.hud-chip.p-right{text-align:right;align-items:flex-end}
+.hud-chip.p-right .hud-row{flex-direction:row-reverse}
+.hud-chip::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:var(--chip);box-shadow:0 0 8px var(--chip);
+  opacity:.35;
+}
+.hud-chip.active-turn::before{opacity:1}
+.hud-chip.active-turn{
+  filter:brightness(1.25) saturate(1.18);
+}
+.hud-side{display:none}
+.hud-name{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.65rem;
+  letter-spacing:.12em;color:var(--txt-3);text-transform:uppercase;
+}
+.hud-pts{
+  font-size:clamp(.95rem,2vw,1.35rem);
+  font-weight:800;letter-spacing:-.02em;line-height:1;
+  color:var(--chip);
+}
+.hud-row{display:flex;align-items:center;gap:8px}
+.hud-bar{
+  width:clamp(64px,9vw,160px);height:5px;
+  background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden;
+}
+.hud-bar-fill{height:100%;border-radius:3px;transition:width .35s ease;background:var(--chip)}
+.hud-res{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.72rem;
+  color:var(--gold);
+  line-height:1.35;
+  letter-spacing:.02em;
+}
+.hud-stars{display:flex;gap:4px;align-items:center}
+.hud-stars .star{
+  font-size:.72rem;
+  line-height:1;
+  color:rgba(255,255,255,.18);
+  transform:translateY(1px);
+}
+.hud-stars .star.on{
+  color:var(--c);
+  text-shadow:0 0 10px color-mix(in srgb,var(--c) 55%, transparent);
+  animation:starPulse .9s ease-in-out infinite;
+}
+
+.hud-center{
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:10px 16px;min-width:88px;gap:5px;
+  flex:0 0 auto;border-left:1px solid var(--bdr);border-right:1px solid var(--bdr);
+}
+.hud-turn{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.72rem;
+  color:var(--gold);letter-spacing:.1em;
+}
+.hud-who{font-size:.78rem;font-weight:700;color:var(--txt-2);letter-spacing:.03em;text-align:center;max-width:10rem}
+.hud-actions{font-size:.68rem;color:var(--txt-3);font-family:'JetBrains Mono',monospace;font-weight:600}
+.hud-dot{
+  width:7px;height:7px;border-radius:50%;
+  animation:dotPulse 1.8s ease-in-out infinite;
+}
+@keyframes dotPulse{0%,100%{transform:scale(1);opacity:.8}50%{transform:scale(1.45);opacity:1}}
+
+/* ── GRID */
+.grid-wrap{
+  flex:1;width:100%;overflow:hidden;
+  cursor:grab;touch-action:none;position:relative;
+  background:var(--surface);
+}
+.grid-wrap:active{cursor:grabbing}
+#gridPan{width:100%;transform-origin:top left;will-change:transform}
+
+/* colonnes / lignes : --grid-cols, --grid-rows, ratio largeur:hauteur = cols:rows */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(var(--grid-cols, 12),1fr);
+  gap:1px;width:100%;
+  aspect-ratio:var(--grid-cols, 12) / var(--grid-rows, 12);
+  padding:1px;background:rgba(0,0,0,.5);
+}
+
+.tile{
+  aspect-ratio:1;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;
+  font-size:clamp(.7rem,1.2vw,1.5rem);
+  transition:filter .12s,box-shadow .12s;
+  position:relative;overflow:hidden;
+  user-select:none;
+  /* Grille beaucoup plus arrondie, proportionnelle à la taille d'une case */
+  border-radius:clamp(12px, calc(var(--tile-px, 64px) * 0.28), 28px);
+  border:4px solid transparent;
+}
+.tile.sq-neutral{background:var(--sq-map)}
+.tile.t-mountain{
+  background:#0d0f14!important;
+  border-color:rgba(0,0,0,.55)!important;
+  cursor:default;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.65);
+}
+/* Zone ressource : teinte dorée / ambre sans pictogramme */
+.tile-source-zone{
+  position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:linear-gradient(165deg,
+    rgba(232,184,75,.22) 0%,
+    rgba(200,140,40,.12) 45%,
+    rgba(160,100,30,.18) 100%);
+  box-shadow:inset         0 0 0 1px rgba(232,184,75,.35);
+}
+.tile-source-zone.pulse{
+  animation:srcZoneGlow 2.2s ease-in-out infinite;
+}
+@keyframes srcZoneGlow{
+  0%,100%{filter:brightness(1);opacity:1}
+  50%{filter:brightness(1.15);opacity:.92}
+}
+.tile-type-tint{
+  position:absolute;left:0;right:0;top:0;height:28%;
+  max-height:calc(var(--tile-px, 64px) * 0.42);
+  pointer-events:none;z-index:1;
+  background:linear-gradient(180deg, var(--tile-tint, rgba(255,255,255,.12)) 0%, transparent 100%);
+  opacity:.88;
+}
+.tile:hover{filter:brightness(1.18)}
+.tile.t-mountain:hover{filter:none}
+
+/* Couleurs tuiles joueurs : --pc par joueur (injecté JS #dynamicColors) */
+.tile.p1,.tile.p2,.tile.p3,.tile.p4{--pc:var(--p1)}
+.tile.p2{--pc:var(--p2)}
+.tile.p3{--pc:var(--p3)}
+.tile.p4{--pc:var(--p4)}
+.tile.p1,.tile.p2,.tile.p3,.tile.p4{
+  background:linear-gradient(145deg,color-mix(in srgb,var(--pc) 88%,#000),color-mix(in srgb,var(--pc) 52%,#2a2a3a))!important;
+  box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--pc) 75%,transparent),0 0 8px color-mix(in srgb,var(--pc) 35%,transparent);
+  border:4px solid color-mix(in srgb,var(--pc) 65%,transparent)!important;
+}
+
+.tile.citadel{
+  animation:cPulse 2.8s ease-in-out infinite;
+  border-style:dashed!important;
+  box-shadow:inset 0 0 0 2.5px var(--pc),0 0 18px color-mix(in srgb,var(--pc) 45%,transparent)!important;
+  border-color:color-mix(in srgb,var(--pc) 80%,#fff)!important;
+}
+@keyframes cPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+
+/* playable / attackable highlights */
+.tile.playable{
+  cursor:crosshair;
+  box-shadow:inset 0 0 0 2px rgba(232,184,75,.9) !important;
+  animation:playBlink .85s ease-in-out infinite;
+  border:4px solid rgba(232,184,75,.8);
+}
+.tile.playable::after{content:'';position:absolute;inset:0;background:rgba(232,184,75,.1)}
+@keyframes playBlink{0%,100%{filter:brightness(1.05)}50%{filter:brightness(1.25)}}
+
+.tile.attackable{
+  cursor:crosshair;
+  box-shadow:inset 0 0 0 2px rgba(232,85,85,.9) !important;
+  animation:atkBlink .65s ease-in-out infinite;
+  border:4px dashed rgba(232,85,85,.9);
+}
+.tile.attackable::after{content:'';position:absolute;inset:0;background:rgba(232,85,85,.12)}
+@keyframes atkBlink{0%,100%{filter:brightness(1)}50%{filter:brightness(1.2)}}
+
+/* tile spawn animation */
+@keyframes tSpawn{
+  0%  {transform:scale(.2) rotate(-12deg);opacity:0}
+  70% {transform:scale(1.1) rotate(2deg)}
+  100%{transform:scale(1) rotate(0);opacity:1}
+}
+.tile.just-placed{animation:tSpawn .3s cubic-bezier(.34,1.56,.64,1) forwards}
+
+/* tile icons */
+.tile-ico{
+  position:relative;z-index:2;
+  margin-top:auto;margin-bottom:auto;
+  font-size:clamp(1.25rem, calc(var(--tile-px, 64px) * 0.62), 4.7rem);
+  line-height:1;pointer-events:none;
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,.6));
+}
+
+/* Grades : △ (haut), ◁▷ (côtés), ◤◥◣◢ (niveau max) */
+.tile-grade-marks{
+  position:absolute;inset:0;z-index:4;pointer-events:none;
+  color:rgba(255,252,245,.94);
+  font-weight:900;
+  line-height:1;
+  text-shadow:0 1px 2px rgba(0,0,0,.5);
+}
+.tile-grade-top{
+  position:absolute;top:2px;left:0;right:0;
+  display:flex;justify-content:center;align-items:center;gap:3px;
+  font-size:clamp(.55rem, calc(var(--tile-px, 64px) * 0.22), 1rem);
+}
+.tile-grade-side-l{
+  position:absolute;left:2px;top:50%;transform:translateY(-50%);
+  font-size:clamp(.58rem, calc(var(--tile-px, 64px) * 0.24), 1.05rem);
+}
+
+.tile-grade-bottom{
+  position:absolute;bottom:2px;left:0;right:0;
+  display:flex;justify-content:center;align-items:center;gap:3px;
+  font-size:clamp(.55rem, calc(var(--tile-px, 64px) * 0.22), 1rem);
+}
+.tile-grade-side-r{
+  position:absolute;right:2px;top:50%;transform:translateY(-50%);
+  font-size:clamp(.58rem, calc(var(--tile-px, 64px) * 0.24), 1.05rem);
+}
+.tile-grade-corners .tg-corner{
+  position:absolute;
+  font-size:clamp(.48rem, calc(var(--tile-px, 64px) * 0.2), .82rem);
+  line-height:1;
+}
+
+
+.tile-grade-corners .tg-corner {
+  position: absolute;
+  font-size: 24px;       /* taille du symbole */
+  transform: scale(3); /* agrandir */
+}
+
+.tile-grade-corners .tg-tl{top:1px;left:1px}
+.tile-grade-corners .tg-tr{top:1px;right:1px}
+.tile-grade-corners .tg-bl{bottom:2px;left:1px}
+.tile-grade-corners .tg-br{bottom:2px;right:1px}
+
+/* icône radial : scale avec la taille de case, sans changer les dimensions du bouton */
+.rad-btn > span:first-child{
+  font-size:clamp(1.15rem, calc(var(--tile-px, 64px) * 0.38), 2rem);
+  line-height:1;
+}
+
+/* ── ACTION BAR (DYNAMIC ISLAND) */
+.action-bar{
+  width:auto;display:flex;align-items:center;gap:0;padding:0;
+  background:transparent;border:none;
+  flex-shrink:0;position:absolute;bottom:20px;left:50%;transform:translateX(-50%);z-index:20;
+}
+
+/* island container */
+.action-bar::before{
+  content:'';position:absolute;inset:-8px;
+  background:var(--bg2);border:2px solid var(--bdr-md);
+  border-radius:50px;z-index:-1;
+  box-shadow:0 12px 40px rgba(0,0,0,.7);
+}
+
+.abtn{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:10px 14px;border-radius:0;cursor:pointer;
+  font-family:'Inter',sans-serif;font-size:.75rem;font-weight:600;
+  background:transparent;border:none;color:var(--txt);
+  transition:color .15s,background .15s;
+  position:relative;z-index:1;
+}
+
+.abtn:first-child{border-radius:50px 0 0 50px;padding-left:18px}
+.abtn:last-child{border-radius:0 50px 50px 0;padding-right:18px}
+
+.abtn:not(.sq):hover{
+  background:rgba(91,156,246,.15);color:var(--p1);
+}
+
+.abtn.sq{
+  flex:0 0 auto;padding:12px 12px;font-size:1rem;
+  border-radius:50%;background:rgba(91,156,246,.2);
+  border:2px solid rgba(91,156,246,.4);
+  margin:0 4px;
+  transition:background .15s,border-color .15s,transform .15s;
+}
+
+.abtn.sq:hover{
+  background:var(--p1);border-color:var(--p1);
+  color:#fff;transform:scale(1.1);
+}
+
+.abtn.sq.primary{
+  background:var(--p1-d);border-color:var(--p1);
+  color:#fff;font-weight:700;
+}
+
+.abtn.sq.primary:hover{
+  background:var(--p1);transform:scale(1.15);
+  box-shadow:0 0 16px rgba(91,156,246,.4);
+}
+.abtn-eco.passe-tour{
+  background:rgba(232,85,85,.22)!important;
+  border:2px solid rgba(232,85,85,.55)!important;
+  color:#ffb4b4!important;
+}
+.abtn-eco.passe-tour:hover{
+  background:rgba(232,85,85,.35)!important;
+  color:#fff!important;
+}
+.map-preset-btn.active{
+  border-color:var(--p1)!important;
+  color:var(--p1)!important;
+  background:rgba(91,156,246,.12)!important;
+}
+
+/* ═══════════════════════════════════════════════
+   RADIAL MENU  ← fixed version
+═══════════════════════════════════════════════ */
+#radialMenu{
+  display:none;
+  position:fixed;
+  left:0;top:0;          /* ← critical: anchor at viewport origin */
+  width:0;height:0;
+  z-index:900;
+  pointer-events:none;
+  --radP: var(--p1);
+}
+#radialMenu.open{display:block;pointer-events:all}
+
+.rad-overlay{
+  position:fixed;inset:0;z-index:-1;
+  background:rgba(16,18,26,.6);
+  backdrop-filter:blur(5px);
+}
+
+.rad-btn.rad-upgrade-top{
+  width:clamp(72px,7vw,100px);
+  height:clamp(56px,5.5vw,76px);
+  border:2px solid rgba(232,184,75,.55);
+  transform: translate(-50%, -70%) scale(1);
+}
+.rad-btn{
+  position:absolute;
+  width:clamp(66px,6.2vw,92px);
+  height:clamp(78px,7.5vw,104px);
+  border-radius:10px;
+  background:var(--bg3);
+  border:3px solid var(--bdr-hi);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  cursor:pointer;
+  /* centre on the computed point via transform only – no negative margins */
+  transform:translate(-50%,-50%) scale(1);
+  font-size:clamp(1.6rem,2.2vw,2rem);
+  box-shadow:0 8px 28px rgba(0,0,0,.65);
+  transition:background .14s,border-color .14s,box-shadow .14s;
+  animation:radPop .2s cubic-bezier(.34,1.56,.64,1) both;
+  opacity:0;
+  z-index:2;
+}
+@keyframes radPop{
+  0%  {opacity:0;transform:translate(-50%,-50%) scale(.15)}
+  100%{opacity:1;transform:translate(-50%,-50%) scale(1)}
+}
+.rad-btn:not(.cant):hover{
+  background:color-mix(in srgb,var(--radP) 28%, var(--bg3));
+  border-color:var(--radP);
+  box-shadow:0 8px 28px rgba(0,0,0,.55),0 0 0 3px color-mix(in srgb,var(--radP) 30%, transparent);
+  transform:translate(-50%,-50%) scale(1.08) !important;
+}
+.rad-btn.cant{
+  opacity:1;
+  cursor:not-allowed;pointer-events:none;
+  background:linear-gradient(165deg,#2a2228,#1f1a1e)!important;
+  border:3px solid rgba(232,85,85,.45)!important;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.4);
+  filter:saturate(.65) brightness(.85);
+}
+.rad-btn.cant .rad-lbl{color:rgba(255,200,200,.75)!important}
+.rad-btn.cant .rad-price{color:rgba(255,150,150,.9)!important}
+.rad-price{
+  font-family:'JetBrains Mono',monospace;
+  font-size:clamp(.52rem,1.5vw,.68rem);
+  font-weight:800;
+  color:var(--gold);
+  line-height:1.1;
+  margin-top:2px;
+}
+
+.rad-lbl{
+  font-family:'Inter',sans-serif;
+  font-size:.48rem;color:var(--txt);line-height:1;
+  letter-spacing:.02em;font-weight:600;
+}
+.rad-btn:not(.cant):hover .rad-lbl{color:#fff}
+
+.rad-center{
+  position:absolute;
+  width:28px;height:28px;border-radius:50%;
+  background:var(--bg2);border:2px solid var(--bdr-hi);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  transform:translate(-50%,-50%);
+  color:var(--txt-3);font-size:.85rem;
+  transition:.15s;z-index:1;
+}
+.rad-center{z-index:5;}
+.rad-center:hover{border-color:var(--danger);color:var(--danger)}
+
+/* ═══════════════════════════════════════════════
+   MODAL
+═══════════════════════════════════════════════ */
+.modal-content{
+  background:var(--bg2) !important;
+  border:2px solid var(--bdr-hi) !important;
+  box-shadow:0 24px 64px rgba(0,0,0,.7) !important;
+  border-radius:10px !important;
+  font-family:'Inter',sans-serif;
+}
+.modal-header{
+  background:var(--bg3) !important;
+  border-bottom:1px solid var(--bdr) !important;
+  padding:14px 20px !important;
+}
+.modal-title-text{
+  font-size:.95rem;font-weight:800;
+  letter-spacing:-.01em;color:var(--txt);
+}
+.modal-body{padding:18px 20px !important;color:var(--txt)}
+.btn-close-white{filter:invert(1) opacity(.4)}
+.btn-close-white:hover{filter:invert(1) opacity(.9)}
+
+.atk-preview{
+  background:var(--bg3);border:2px solid rgba(240,99,58,.2);
+  border-radius:8px;padding:14px;margin-bottom:14px;
+  display:flex;align-items:center;gap:14px;
+}
+.atk-preview .a-ico{font-size:7rem}
+.atk-preview .a-info{
+  font-family:'JetBrains Mono',monospace;font-size:.68rem;
+  color:var(--txt-2);line-height:1.75;
+}
+.atk-preview .a-info strong{
+  display:block;font-family:'Inter',sans-serif;
+  font-size:.9rem;font-weight:700;color:var(--txt);margin-bottom:3px;
+}
+
+.btn-atk{
+  width:100%;background:transparent;
+  border:3px solid var(--p2);color:var(--p2);
+  font-family:'Inter',sans-serif;font-weight:700;font-size:.88rem;
+  padding:12px;border-radius:var(--r);cursor:pointer;
+  transition:.2s;
+}
+.btn-atk:hover:not(:disabled){
+  background:var(--p2);color:#fff;
+  box-shadow:0 4px 16px rgba(240,99,58,.3);
+}
+.btn-atk:disabled{opacity:.2;cursor:not-allowed}
+
+/* ═══════════════════════════════════════════════
+   WIN OVERLAY
+═══════════════════════════════════════════════ */
+.win-overlay{
+  position:fixed;inset:0;z-index:950;
+  display:none;align-items:center;justify-content:center;flex-direction:column;
+  background:rgba(16,18,26,.92);backdrop-filter:blur(14px);
+}
+.win-overlay.active{display:flex}
+
+.win-badge{
+  background:var(--bg2);border:2px solid var(--bdr-hi);
+  border-radius:16px;padding:48px 60px;text-align:center;
+  box-shadow:0 32px 80px rgba(0,0,0,.7);
+  display:flex;flex-direction:column;align-items:center;gap:12px;
+  animation:wSlide .5s cubic-bezier(.22,1,.36,1) forwards;
+}
+@keyframes wSlide{
+  0%{transform:translateY(36px);opacity:0}
+  100%{transform:translateY(0);opacity:1}
+}
+.win-icon{
+  font-size:3.2rem;
+  animation:wIcon .65s .25s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes wIcon{
+  0%{transform:scale(0) rotate(-25deg);opacity:0}
+  100%{transform:scale(1) rotate(0);opacity:1}
+}
+.win-title{
+  font-size:clamp(1.8rem,7vw,3.2rem);
+  font-weight:800;letter-spacing:-.03em;
+}
+.win-title.p1{color:var(--p1)}
+.win-title.p2{color:var(--p2)}
+.win-sub{
+  font-family:'JetBrains Mono',monospace;font-size:.62rem;
+  color:var(--txt-3);letter-spacing:.3em;text-transform:uppercase;
+}
+#particleCanvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:-1}
+
+/* ─ util */
+.mt3{margin-top:14px!important}
+
+/* ══ TINTS UNITÉS (reflet / volume par type, --pc = joueur) ═════════════════ */
+.tile.t-outpost{background:linear-gradient(145deg,color-mix(in srgb,var(--pc) 95%,#fff),color-mix(in srgb,var(--pc) 60%,#ccc))!important}
+.tile.t-bastion{background:linear-gradient(145deg,color-mix(in srgb,var(--pc) 55%,#000),color-mix(in srgb,var(--pc) 70%,#1e293b))!important}
+.tile.t-fortress{background:linear-gradient(145deg,color-mix(in srgb,var(--pc) 35%,#000),color-mix(in srgb,var(--pc) 50%,#0f172a))!important}
+.tile.t-reserve{background:linear-gradient(145deg,color-mix(in srgb,var(--pc) 45%,#0369a1),color-mix(in srgb,var(--pc) 65%,#38bdf8))!important}
+.tile.t-armory{background:linear-gradient(145deg,color-mix(in srgb,var(--pc) 40%,#334155),color-mix(in srgb,var(--pc) 55%,#64748b))!important}
+
+/* ══ ACTION BAR BUTTONS ══════════════════════════ */
+.abtn-eco{
+  padding:10px 30px;font-size:.82rem;font-weight:700;letter-spacing:.01em;
+  background:rgba(91,156,246,.18);color:var(--p1);
+  border-left:1px solid var(--bdr-hi);border-right:1px solid var(--bdr-hi);
+  white-space:nowrap;
+}
+.abtn-eco:hover{background:var(--p1-d);color:#fff;}
+
+/* ══ ATTACK RADIAL ══════════════════════════════ */
+.rad-btn.atk{border-color:rgba(240,99,58,.5) !important;background:rgba(40,15,10,.85);}
+.rad-btn.atk:not(.cant):hover{
+  background:rgba(184,57,26,.9);border-color:var(--p2)!important;
+  box-shadow:0 8px 28px rgba(0,0,0,.55),0 0 0 3px rgba(240,99,58,.25);
+  transform:translate(-50%,-50%) scale(1.12) !important;
+}
+.rad-btn.atk:not(.cant):hover .rad-lbl,.rad-btn.atk:not(.cant):hover .rad-cost{color:#fff;}
+.rad-center.atk{
+  width:62px;height:62px;border-radius:50%;
+  background:rgba(60,10,10,.8);border-color:rgba(240,99,58,.7);
+  color:var(--p2);font-size:.6rem;font-weight:700;
+  text-align:center;line-height:1.25;
+}
+.rad-cost{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.52rem;color:var(--txt-2);display:block;
+}
+
+/* ══ STATS MODAL ═════════════════════════════════ */
+.stat-grid{display:grid;grid-template-columns:1fr auto;gap:5px 12px;font-size:.82rem}
+.stat-key{color:var(--txt-2)}
+.stat-val{text-align:right;font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--txt)}
+.stat-winner{
+  margin-top:12px;padding:10px 14px;
+  background:var(--bg3);border:2px solid var(--bdr-hi);border-radius:6px;
+  text-align:center;font-size:.84rem;
+}
+
+/* stats : camembert + chances (étoiles/diamants) */
+.stat-pie{
+  width:150px;height:150px;border-radius:50%;
+  background:conic-gradient(from 90deg, var(--c1) 0 var(--a1), var(--c2) var(--a1) 100%);
+  position:relative; display:flex;align-items:center;justify-content:center;
+  border:2px solid var(--bdr-hi);
+  box-shadow:0 12px 38px rgba(0,0,0,.45);
+}
+.stat-pie::after{
+  content:''; position:absolute;
+  width:64%;height:64%; border-radius:50%;
+  background:rgba(17,19,26,.78);
+  border:2px solid rgba(255,255,255,.08);
+}
+.stat-pie .stat-pie-inner{
+  position:relative; z-index:2;
+  text-align:center;
+  font-family:'JetBrains Mono',monospace;
+  font-weight:900;
+  letter-spacing:.04em;
+  font-size:.78rem;
+  color:var(--txt);
+}
+.win-stars{display:flex;gap:4px;align-items:center;justify-content:flex-end}
+.win-stars .star{
+  font-size:1.05rem;
+  line-height:1;
+  color:rgba(255,255,255,.18);
+  transform:translateY(1px);
+}
+.win-stars .star.on{
+  color:var(--c);
+  text-shadow:0 0 10px color-mix(in srgb,var(--c) 55%, transparent);
+  animation:starPulse .9s ease-in-out infinite;
+}
+@keyframes starPulse{
+  0%,100%{filter:brightness(1);transform:translateY(1px) scale(1)}
+  50%{filter:brightness(1.35);transform:translateY(0px) scale(1.08)}
+}
+
+/* config IA : multiplicateurs + range (évite 2e bloc <style>) */
+.multiplier-btn{
+  padding:10px;background:var(--bg3);border:2px solid var(--bdr);border-radius:5px;
+  color:var(--txt);cursor:pointer;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:.85rem;
+  transition:background .15s,border-color .15s,color .15s;
+}
+.multiplier-btn:hover{background:var(--bg4);border-color:var(--p1);color:var(--p1)}
+.multiplier-btn.active{background:var(--p1);border-color:var(--p1);color:#fff}
+input[type="range"]{cursor:pointer;accent-color:var(--p1)}
+input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:50%;background:var(--p1);cursor:pointer;border:none}
+input[type="range"]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--p1);cursor:pointer;border:none}
+
+/* écran menu : carte Bootstrap + thème perso */
+.screen-card{max-width:520px}
+
+/* -------- setup : plus compact + actions toujours cliquables -------- */
+#setup .card-wrap{
+  max-height:88vh;
+  overflow:auto;
+  display:flex;
+  flex-direction:column;
+  padding:26px 22px;
+}
+#setup .setup-actions{
+  position:sticky;
+  bottom:0;
+  z-index:50;
+  margin-top:auto;
+  background:rgba(30,33,48,.92);
+  backdrop-filter:blur(10px);
+  border-top:1px solid var(--bdr-md);
+  padding:14px 0 18px;
+}
+#setup .setup-actions .btn{
+  padding:.6rem .9rem;
+  font-weight:700;
+}
+
+/* -------- tour banner (milieu de l'écran) -------- */
+#turnBanner{
+  position:fixed;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  z-index:1200;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .18s ease;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:14px 22px;
+  border-radius:16px;
+  background:rgba(17,19,26,.68);
+  border:2px solid rgba(255,255,255,.16);
+  backdrop-filter:blur(14px);
+  font-family:'JetBrains Mono',monospace;
+  font-weight:800;
+  letter-spacing:.02em;
+  color:var(--gold);
+  text-align:center;
+}
+#turnBanner.show{
+  opacity:1;
+  animation:turnBannerPop .7s cubic-bezier(.2,1,.3,1) both;
+}
+#turnBanner.hide{
+  opacity:0;
+  animation:turnBannerFadeOut .35s ease both;
+}
+@keyframes turnBannerPop{
+  0%{ transform:translate(-50%,-50%) scale(.92); filter:brightness(.92); }
+  60%{ transform:translate(-50%,-50%) scale(1.08); filter:brightness(1.2); }
+  100%{ transform:translate(-50%,-50%) scale(1); }
+}
+@keyframes turnBannerFadeOut{
+  0%{ opacity:1; transform:translate(-50%,-50%) scale(1); filter:brightness(1); }
+  100%{ opacity:0; transform:translate(-50%,-50%) scale(.98); filter:brightness(.92); }
+}
+
+.hud-center.is-bot-turn .hud-dot{
+  filter:brightness(1.35) saturate(1.22);
+}
+.hud-center.is-human-turn .hud-dot{
+  filter:brightness(1.18) saturate(1.06);
+}
+
+/* Bot turn indicator (HUD top-left area) */
+.bot-turn-hud{
+  display:none;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:6px;
+}
+.bot-turn-text{
+  font-family:'JetBrains Mono',monospace;
+  font-weight:800;
+  letter-spacing:.06em;
+  font-size:.62rem;
+  color:var(--gold);
+  text-transform:uppercase;
+}
+.bot-turn-time-box{
+  padding:6px 10px;
+  border-radius:10px;
+  background:rgba(17,19,26,.55);
+  border:2px solid rgba(255,255,255,.14);
+  backdrop-filter:blur(10px);
+}
+.bot-turn-time{
+  font-family:'JetBrains Mono',monospace;
+  font-weight:900;
+  color:var(--txt);
+  font-size:.62rem;
+}
+.hud-center.is-bot-turn{
+  align-items:flex-start;
+  justify-content:flex-start;
+  padding-top:6px;
+}
+.hud-center.is-bot-turn .hud-dot,
+.hud-center.is-bot-turn .hud-turn,
+.hud-center.is-bot-turn .hud-who{
+  display:none;
+}
+.hud-center.is-bot-turn .bot-turn-hud{
+  display:flex;
+}
+</style>
+</head>
+<body>
+<!-- Fichier monopage : écrans .screen (un seul .active), logique jeu en bas du <script> -->
+<div class="bg-noise" aria-hidden="true"></div>
+
+<!-- ═══════ MENU ═══════ -->
+<div id="mMenu" class="screen active">
+  <div class="menu-wrap card bg-transparent border-0 shadow-none screen-card mx-auto">
+
+    <!-- Logo grid -->
+    <div class="logo-grid">
+      <span class="c ca"></span><span class="c cb"></span><span class="c ca"></span><span class="c cp1"></span><span class="c cb"></span>
+      <span class="c cb"></span><span class="c ca"></span><span class="c cb"></span><span class="c ca"></span><span class="c cp1"></span>
+      <span class="c ca"></span><span class="c cb"></span><span class="c ca"></span><span class="c cb"></span><span class="c ca"></span>
+      <span class="c cp2"></span><span class="c ca"></span><span class="c cb"></span><span class="c ca"></span><span class="c cb"></span>
+      <span class="c cb"></span><span class="c cp2"></span><span class="c ca"></span><span class="c cb"></span><span class="c ca"></span>
+    </div>
+
+    <div class="logo-name"><em>Grid</em> Wars</div>
+    <div class="logo-tag">Stratégie · carte procédurale · v7</div>
+
+    <div class="divider"></div>
+
+    <div class="menu-btns">
+      <button class="mbtn primary" onclick="openSetup(0)">
+        <span class="ico">⚔</span>
+        <span class="lbl">2 Joueurs</span>
+        <span class="arr">›</span>
+      </button>
+      <button class="mbtn vs" onclick="openSetup(1)">
+        <span class="ico">◈</span>
+        <span class="lbl">Contre l'IA</span>
+        <span class="arr">›</span>
+      </button>
+      <button class="mbtn info" onclick="go('history')">
+        <span class="ico">📈</span>
+        <span class="lbl">Historique & stats</span>
+        <span class="arr">›</span>
+      </button>
+      <button class="mbtn info" onclick="go('rules')">
+        <span class="ico">?</span>
+        <span class="lbl">Règles du jeu</span>
+        <span class="arr">›</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ CONFIG PARTIE (2J + IA) ═══════ -->
+<div id="setup" class="screen">
+  <div class="card-wrap card border-secondary shadow screen-card mx-auto" style="max-width:600px">
+    <div class="card-title" id="setupTitle">Partie</div>
+    <div class="card-sub" id="setupSub">Réglages</div>
+
+    <div class="mb-4">
+      <label class="form-label fw-semibold mb-2 d-block">📐 Taille de la carte</label>
+      <div class="d-flex flex-wrap gap-2" id="mapPresetRow">
+        <button type="button" class="btn btn-outline-secondary btn-sm map-preset-btn active" data-preset="small" onclick="CONFIG.mapPreset='small';updateConfigDisplay()">Petit ×0.5</button>
+        <button type="button" class="btn btn-outline-secondary btn-sm map-preset-btn" data-preset="normal" onclick="CONFIG.mapPreset='normal';updateConfigDisplay()">Normal ×1</button>
+        <button type="button" class="btn btn-outline-secondary btn-sm map-preset-btn" data-preset="large" onclick="CONFIG.mapPreset='large';updateConfigDisplay()">Grand ×2</button>
+      </div>
+      <p class="small text-secondary mt-2 mb-0" id="mapPresetHint">Normal : dimensions aléatoires ~10–20 (rectangle), puis symétrie selon le nombre de joueurs.</p>
+    </div>
+
+    <div class="mb-4" id="wrapDiffIA">
+      <label class="form-label fw-semibold mb-2 d-block">🤖 Difficulté de l'IA</label>
+      <div class="d-flex gap-2 align-items-center mb-2">
+        <input type="range" class="form-range flex-grow-1" id="diffSlider" min="0" max="1" step="0.1" value="0.5" oninput="CONFIG.botDifficulty=+this.value;updateConfigDisplay()">
+        <span id="diffVal" class="fw-bold font-monospace text-nowrap small" style="font-family:'JetBrains Mono',monospace;color:var(--p2);min-width:5.5rem">Normal</span>
+      </div>
+      <p class="small text-secondary mb-0">L'IA adapte agressivité / éco / rush selon la difficulté et l'estimation de victoire. Quand le curseur est haut, les bots passent en mode 🔥 Enfer.</p>
+    </div>
+
+    <div class="mb-4">
+      <label class="form-label fw-semibold mb-2 d-block">🤖 Bots aux autres coins (hors J1–J2)</label>
+      <select class="form-select form-select-sm bg-dark text-light border-secondary" id="extraBotsSelect" onchange="CONFIG.extraBots=+this.value;updateConfigDisplay()">
+        <option value="0">Aucun (partie classique 1v1)</option>
+        <option value="1">1 bot (partie à 3 citadelles)</option>
+        <option value="2">2 bots (4 joueurs sur la carte)</option>
+      </select>
+      <p class="small text-secondary mt-1 mb-0">Les bots supplémentaires sont toujours contrôlés par l'IA.</p>
+    </div>
+
+    <div class="mb-4 form-check">
+      <input type="checkbox" class="form-check-input" id="baseShieldCheck" onchange="CONFIG.baseShield=this.checked;updateConfigDisplay()">
+      <label class="form-check-label fw-semibold" for="baseShieldCheck">🛡️ Citadelle de secours — construire une citadelle (+50 ⚡)</label>
+    </div>
+
+    <div class="mb-4">
+      <label class="form-label fw-semibold mb-2 d-block">💰 Multiplicateur (revenus tour / économie)</label>
+      <div class="row row-cols-2 row-cols-sm-5 g-2">
+        <div class="col"><button type="button" class="multiplier-btn w-100" data-mult="0.5" onclick="CONFIG.pointsMultiplier=0.5;updateConfigDisplay()">×0.5</button></div>
+        <div class="col"><button type="button" class="multiplier-btn active w-100" data-mult="1" onclick="CONFIG.pointsMultiplier=1;updateConfigDisplay()">×1</button></div>
+        <div class="col"><button type="button" class="multiplier-btn w-100" data-mult="2" onclick="CONFIG.pointsMultiplier=2;updateConfigDisplay()">×2</button></div>
+        <div class="col"><button type="button" class="multiplier-btn w-100" data-mult="3" onclick="CONFIG.pointsMultiplier=3;updateConfigDisplay()">×3</button></div>
+        <div class="col"><button type="button" class="multiplier-btn w-100" data-mult="10" onclick="CONFIG.pointsMultiplier=10;updateConfigDisplay()">×10</button></div>
+      </div>
+    </div>
+
+    <div class="mb-2">
+      <label class="form-label fw-semibold mb-2 d-block">🎨 Couleurs (appliquées en partie)</label>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="small text-secondary mb-1">Joueur 1</div>
+          <div class="d-flex gap-2 align-items-center">
+            <input type="color" class="form-control form-control-color" id="p1ColorPicker" value="#5b9cf6" title="J1" onchange="CONFIG.p1Color=this.value;updateConfigDisplay()">
+            <div id="p1ColorPreview" class="flex-grow-1 rounded border" style="height:40px;background:#5b9cf6;border-color:rgba(91,156,246,.35)!important"></div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="small text-secondary mb-1">Autres joueurs (dérivées)</div>
+          <div class="d-flex flex-column gap-1 small font-monospace">
+            <div class="d-flex align-items-center gap-2"><span class="text-secondary" style="min-width:1.5rem">2</span><div id="p2ColorPreview" class="flex-grow-1 rounded border" style="height:22px;background:#f0633a"></div></div>
+            <div class="d-flex align-items-center gap-2"><span class="text-secondary" style="min-width:1.5rem">3</span><div id="p3ColorPreview" class="flex-grow-1 rounded border" style="height:22px;background:#888"></div></div>
+            <div class="d-flex align-items-center gap-2"><span class="text-secondary" style="min-width:1.5rem">4</span><div id="p4ColorPreview" class="flex-grow-1 rounded border" style="height:22px;background:#aaa"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="setup-actions d-flex flex-wrap gap-2 align-items-center justify-content-between px-0">
+      <button type="button" class="btn btn-outline-secondary" onclick="go('mMenu')">← Retour</button>
+      <button type="button" class="btn btn-outline-danger" onclick="go('mMenu')">Annuler</button>
+      <button type="button" class="btn btn-primary flex-grow-1" onclick="startGameFromSetup()">⚔ Démarrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ HISTORIQUE ═══════ -->
+<div id="history" class="screen">
+  <div class="card-wrap card border-secondary shadow screen-card mx-auto" style="max-width:640px;max-height:90vh;overflow:auto">
+    <div class="card-title">Historique</div>
+    <div class="card-sub">Parties & agrégats</div>
+    <div id="historyAggregates" class="small mb-3 p-3 rounded bg-dark bg-opacity-50 border border-secondary border-opacity-25"></div>
+    <div id="historyList" class="d-flex flex-column gap-2"></div>
+    <button type="button" class="btn btn-outline-secondary mt-3 w-100" onclick="go('mMenu')">← Menu</button>
+  </div>
+</div>
+
+<!-- ═══════ RÈGLES ═══════ -->
+<div id="rules" class="screen">
+  <div class="card-wrap card border-secondary shadow screen-card mx-auto">
+    <div class="card-title">Règles du jeu</div>
+    <div class="card-sub">Unités & mécaniques</div>
+    <ul class="rules-list">
+      <li><span class="tag">△ Avant-poste</span><span class="cost">⚡1 R:1</span> — Étend le territoire, bon marché</li>
+      <li><span class="tag">◇ Bastion</span><span class="cost">⚡3 R:3</span> — Structure défensive solide</li>
+      <li><span class="tag">⬡ Forteresse</span><span class="cost">⚡5 R:5</span> — Très difficile à détruire</li>
+      <li><span class="tag">◆ Réserve</span><span class="cost">⚡5 R:1</span> — +1 revenu/tour via Économie</li>
+      <li><span class="tag">⚒ Armurerie</span><span class="cost">⚡10 R:3</span> — +1 <strong>action</strong> (pose/assaut)</li>
+      <li><span class="tag">★ Citadelle</span><span class="cost">⚡50 R:12</span> — Détruire la <strong>dernière</strong> citadelle = victoire/élimination</li>
+    </ul>
+    <div class="rules-note">
+      Constructions <strong>adjacentes</strong> à votre territoire uniquement.<br>
+      Attaquer coûte la <strong>résistance</strong> de la cible.<br>
+      <strong>Économie</strong> = (1 ⚡ + revenus Réserves) × multiplicateur — termine le tour.<br>
+      <strong>Citadelle de secours</strong> (option) : si activé, vous pouvez construire jusqu'à <strong>2 citadelles</strong> (50 ⚡). On n'élimine un joueur que lorsqu'il n'a <strong>plus aucune citadelle</strong>.
+    </div>
+    <div class="back mt3" onclick="go('mMenu')">Menu Principal</div>
+  </div>
+</div>
+
+<!-- ═══════ GAME ═══════ -->
+<div id="game" class="screen">
+
+  <div class="hud" id="hud">
+    <div id="hudStrip"></div>
+    <div class="hud-center" id="hudCenter">
+      <div class="hud-dot" id="hudDot"></div>
+      <div class="hud-turn" id="turnInfo">Tour 1</div>
+      <div class="hud-who" id="turnPlayer">Joueur 1</div>
+      <div class="bot-turn-hud" id="botTurnHud" aria-hidden="true">
+        <div class="bot-turn-text" id="botTurnText">Au tour de BOT 1</div>
+        <div class="bot-turn-time-box" aria-hidden="true">
+          <span class="bot-turn-time" id="botTurnTime">00:00</span>
+        </div>
+      </div>
+      <div id="turnBanner"></div>
+      <div class="hud-actions" id="hudActions"></div>
+    </div>
+  </div>
+
+  <div class="grid-wrap" id="gridWrap">
+    <div id="gridPan">
+      <div class="grid" id="grid"></div>
+    </div>
+  </div>
+
+  <div class="action-bar">
+    <button class="abtn" onclick="showStats()" title="Statistiques">
+      <span>📊</span><span>Stats</span>
+    </button>
+    <button class="abtn abtn-eco" id="btnEco" onclick="eco()" title="Économie — termine le tour et encaisse (× multiplicateur)">
+      <span>◆</span><span id="ecoLabel">Économiser</span>
+    </button>
+    <button class="abtn" onclick="abandon()" title="Abandonner — l'adversaire remporte la victoire">
+      <span>⚑</span><span>Abandonner</span>
+    </button>
+  </div>
+</div>
+
+<!-- RADIAL MENU -->
+<div id="radialMenu"></div>
+
+<!-- WIN OVERLAY -->
+<div class="win-overlay" id="winOverlay">
+  <canvas id="particleCanvas"></canvas>
+  <div class="win-badge">
+    <div class="win-icon" id="winIcon">★</div>
+    <div class="win-title" id="winTitle"></div>
+    <div class="win-sub">Citadelle conquise</div>
+    <button type="button" class="btn btn-primary btn-lg mt-3 px-4" onclick="go('mMenu');closeWin()">↩ Menu principal</button>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal fade" id="modal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title-text" id="mTitle"></span>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="mBody"></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// ─────────────────────────────────────────────
+// GRID WARS — logique (N joueurs, bots, armureries = actions)
+// ─────────────────────────────────────────────
+const LS_KEY = 'gridwars_history_v1';
+
+const types = {
+  outpost : { n:'Avant-poste',  c:1,  r:1, i:'△', progressive:false },
+  bastion : { n:'Bastion',      c:3,  r:3, i:'◇', progressive:false },
+  fortress: { n:'Forteresse',  c:5,  r:5, i:'⬡', progressive:false },
+  reserve : { n:'Réserve',      c:5,  r:1, i:'◆', progressive:true,  incomePerLvl: 1, upkeep: 0 },
+  storage : { n:'Stockage',     c:5,  r:2, i:'■', progressive:true,  capPerLvl: 10, upkeep: 0 },
+  armory  : { n:'Armurerie',    c:10, r:3, i:'⚒', progressive:true,  actionsPerLvl: 1, upkeep: 0 },
+  // "citadelle" est buildable uniquement si l'option "secours" est activée (voir showRadial)
+  citadel : { n:'Citadelle',   c:50, r:12, i:'★', progressive:false },
+  mountain: { n:'Roc',        c:0,  r:0,  i:'', progressive:false }
+};
+
+// Plafond points sans stockage ; stockage ajoute +10 / lvl au plafond (types.storage.capPerLvl)
+const BASE_ECO_CAP = 10;
+const MAP_AREA_MULT = { small: 0.5, normal: 1, large: 2 };
+
+// Niveau 1 posé + 5 upgrades => niveau max 6
+const MAX_LVL = 6;
+const MAX_ACTIONS_PER_TURN = 3; // cap global (base incluse)
+const PROG_STEPS = [1, 0.5, 0.25, 0.12]; // +100% puis +50% puis +25% puis +12% puis stagnation
+
+function tileLvl(t) { return Math.max(1, Math.min(MAX_LVL, t?.lvl || 1)); }
+
+function tileRes(t) {
+  if (!t || !t.t || t.t === 'empty' || t.t === 'mountain') return 0;
+  return (types[t.t]?.r || 0) * tileLvl(t);
+}
+
+function isMountainCell(t) { return t && t.t === 'mountain'; }
+
+/** Voisins orthogonaux atteignables (les rocs ne sont ni construits ni possédés). */
+function getAdj(i) {
+  const W = CONFIG.gridW, H = CONFIG.gridH;
+  const r = Math.floor(i / W), c = i % W, a = [];
+  if (r > 0) a.push(i - W);
+  if (r < H - 1) a.push(i + W);
+  if (c > 0) a.push(i - 1);
+  if (c < W - 1) a.push(i + 1);
+  return a;
+}
+
+/** Pour expansion/combat : ignorer les cases montagne comme "terrain bloquant". */
+function getAdjPassable(i) {
+  return getAdj(i).filter(j => !isMountainCell(S.grid[j]));
+}
+
+function countOwnedTilesOfType(pid, typeKey) {
+  let n = 0;
+  for (const tt of S.grid) if (tt && tt.o === pid && tt.t === typeKey) n++;
+  return n;
+}
+
+function progressiveMultiplier(nOwned) {
+  // nOwned = nombre déjà possédé (avant le nouveau build)
+  const steps = Math.min(Math.max(0, nOwned), PROG_STEPS.length);
+  let m = 1;
+  for (let i = 0; i < steps; i++) m += PROG_STEPS[i];
+  return m;
+}
+
+function buildCostForPlayer(pid, typeKey) {
+  const base = types[typeKey]?.c || 0;
+  if (!types[typeKey]?.progressive) return base;
+  const nOwned = countOwnedTilesOfType(pid, typeKey);
+  return Math.round(base * progressiveMultiplier(nOwned));
+}
+
+/** Coût d'upgrade = même logique que poser la prochaine tuile de ce type (mindgame / risque). */
+function upgradeCostForPlayer(pid, tile) {
+  if (!tile || !types[tile.t] || tile.t === 'citadel') return Infinity;
+  if (tileLvl(tile) >= MAX_LVL) return Infinity;
+  return buildCostForPlayer(pid, tile.t);
+}
+
+function sumPlayerArmoryLvls(pid) {
+  let s = 0;
+  for (const tt of S.grid) if (tt && tt.o === pid && tt.t === 'armory') s += tileLvl(tt);
+  return s;
+}
+
+function actionsPerTurnForPlayer(pid) {
+  const bonus = Math.min(MAX_ACTIONS_PER_TURN - 1, sumPlayerArmoryLvls(pid));
+  return 1 + Math.max(0, bonus);
+}
+
+function sumPlayerReserveIncome(pid) {
+  let inc = 0;
+  for (const tt of S.grid) if (tt && tt.o === pid && tt.t === 'reserve') inc += tileLvl(tt);
+  return inc;
+}
+
+/** Bonus de plafond apporté par les tuiles stockage (+10 par niveau). */
+function playerStorageCap(pid) {
+  let cap = 0;
+  for (const tt of S.grid) if (tt && tt.o === pid && tt.t === 'storage') cap += (types.storage.capPerLvl || 10) * tileLvl(tt);
+  return cap;
+}
+
+function playerEconomyCap(pid) {
+  return BASE_ECO_CAP * CONFIG.pointsMultiplier + playerStorageCap(pid);
+}
+
+function clampPlayerPts(pid) {
+  const p = S.players[pid];
+  if (!p) return;
+  const cap = playerEconomyCap(pid);
+  p.pts = Math.max(0, Math.min(p.pts, cap));
+}
+
+/** Sources en zone : bonus éco selon distance Manhattan min à la zone (0 = 100%, 1 = 50%, sinon 0). */
+function manhattanMinDistFromPlayer(pid, idx) {
+  const W = CONFIG.gridW;
+  const r0 = Math.floor(idx / W), c0 = idx % W;
+  let d = Infinity;
+  S.grid.forEach((t, i) => {
+    if (!t || t.o !== pid) return;
+    const r = Math.floor(i / W), c = i % W;
+    const m = Math.abs(r - r0) + Math.abs(c - c0);
+    if (m < d) d = m;
+  });
+  return d === Infinity ? 99 : d;
+}
+
+function sourceIncomeBonus(pid) {
+  if (!S.sourceSites || !S.sourceSites.length) return 0;
+  let b = 0;
+  for (const s of S.sourceSites) {
+    let dmin = 99;
+    for (const idx of s.cells) {
+      const d = manhattanMinDistFromPlayer(pid, idx);
+      if (d < dmin) dmin = d;
+    }
+    if (dmin === 0) b += s.I;
+    else if (dmin === 1) b += Math.ceil(s.I / 2);
+  }
+  return b;
+}
+
+function citadelSlotsForPlayers(W, H, n) {
+  const ix = (r, c) => r * W + c;
+  const TL = ix(0, 0), TR = ix(0, W - 1), BL = ix(H - 1, 0), BR = ix(H - 1, W - 1);
+  if (n <= 2) return { 1: BL, 2: TR };
+  if (n === 3) return { 1: BL, 2: TR, 3: TL };
+  return { 1: BL, 2: TR, 3: TL, 4: BR };
+}
+
+/** Symétrie centrale (1v1) : paire (r,c) ↔ (H-1-r, W-1-c). */
+function centralPairIdx(r, c, W, H) {
+  const a = r * W + c;
+  const b = (H - 1 - r) * W + (W - 1 - c);
+  return a === b ? [a] : [a, b];
+}
+
+function centralSymExpandOne(ix, W, H) {
+  const r = Math.floor(ix / W), c = ix % W;
+  return centralPairIdx(r, c, W, H);
+}
+
+function fourFoldIdx(r, c, W, H) {
+  const s = new Set();
+  const add = (rr, cc) => {
+    if (rr >= 0 && rr < H && cc >= 0 && cc < W) s.add(rr * W + cc);
+  };
+  add(r, c);
+  add(r, W - 1 - c);
+  add(H - 1 - r, c);
+  add(H - 1 - r, W - 1 - c);
+  return [...s];
+}
+
+function rollBoardSize() {
+  const m = MAP_AREA_MULT[CONFIG.mapPreset] || 1;
+  const w0 = 10 + Math.floor(Math.random() * 11);
+  const h0 = 10 + Math.floor(Math.random() * 11);
+  return {
+    w: Math.max(8, Math.round(w0 * m)),
+    h: Math.max(8, Math.round(h0 * m))
+  };
+}
+
+/**
+ * Génération : symétrie centrale (1v1) ou 4 quarts (3–4 joueurs). Sources = zones symétrisées.
+ */
+function generateMirroredTerrain(W, H, nPlayers, cornerSet) {
+  const rng = Math.random;
+  S.sourceSites = [];
+
+  const paintMount = (indices) => {
+    if (indices.every(i => cornerSet.has(i))) return;
+    if (rng() < 0.15) {
+      for (const i of indices) {
+        if (!cornerSet.has(i)) S.grid[i].t = 'mountain';
+      }
+    }
+  };
+
+  if (nPlayers <= 2) {
+    for (let r = 0; r < H; r++) {
+      for (let c = 0; c < W; c++) {
+        const i = r * W + c;
+        const j = (H - 1 - r) * W + (W - 1 - c);
+        if (i > j) continue;
+        const pair = i === j ? [i] : [i, j];
+        paintMount(pair);
+        if (rng() < 0.09 && r > 1 && r < H - 2 && c > 0 && c < W - 1) {
+          if (rng() < 0.55) paintMount(pair);
+        }
+      }
+    }
+    if (rng() < 0.72 && W >= 8 && H >= 8) {
+      const cr = Math.floor(H / 2), cc = Math.floor(W / 2);
+      for (const [dr, dc] of [[0, 0], [0, -1], [0, 1], [-1, 0], [1, 0], [-1, -1], [1, 1]]) {
+        const r = cr + dr, c = cc + dc;
+        if (r < 0 || r >= H || c < 0 || c >= W) continue;
+        if (rng() < 0.72) {
+          const pair = centralPairIdx(r, c, W, H);
+          for (const idx of pair) {
+            if (!cornerSet.has(idx) && !isMountainCell(S.grid[idx])) S.grid[idx].t = 'mountain';
+          }
+        }
+      }
+    }
+  } else {
+    const hr = Math.ceil(H / 2), wr = Math.ceil(W / 2);
+    for (let r = 0; r < hr; r++) {
+      for (let c = 0; c < wr; c++) {
+        const quad = fourFoldIdx(r, c, W, H);
+        if (quad.every(i => cornerSet.has(i))) continue;
+        if (rng() < 0.13) {
+          for (const i of quad) {
+            if (!cornerSet.has(i)) S.grid[i].t = 'mountain';
+          }
+        } else if (rng() < 0.065 && r > 0 && r < hr - 1 && c > 0 && c < wr - 1) {
+          if (rng() < 0.5) {
+            for (const i of quad) {
+              if (!cornerSet.has(i)) S.grid[i].t = 'mountain';
+            }
+          }
+        }
+      }
+    }
+  }
+
+  const symExpand = (cells) => {
+    const out = new Set();
+    for (const ix of cells) {
+      const r = Math.floor(ix / W), c = ix % W;
+      if (nPlayers <= 2) centralPairIdx(r, c, W, H).forEach(i => out.add(i));
+      else fourFoldIdx(r, c, W, H).forEach(i => out.add(i));
+    }
+    return [...out];
+  };
+
+  const growBlob = (sr, sc, target) => {
+    const cells = [];
+    const seen = new Set();
+    const q = [[sr, sc]];
+    while (q.length && cells.length < target) {
+      const [r, c] = q.shift();
+      const ix = r * W + c;
+      if (r < 0 || r >= H || c < 0 || c >= W) continue;
+      if (seen.has(ix)) continue;
+      if (cornerSet.has(ix) || isMountainCell(S.grid[ix])) continue;
+      seen.add(ix);
+      cells.push(ix);
+      const dirs = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+      for (const [dr, dc] of dirs) {
+        if (rng() < 0.58) q.push([r + dr, c + dc]);
+      }
+    }
+    return cells;
+  };
+
+  const fund = [];
+  if (nPlayers <= 2) {
+    for (let r = 2; r < H - 2; r++) {
+      for (let c = 1; c < W - 1; c++) {
+        const i = r * W + c;
+        const j = (H - 1 - r) * W + (W - 1 - c);
+        if (i > j) continue;
+        if (cornerSet.has(i) || isMountainCell(S.grid[i])) continue;
+        fund.push({ r, c });
+      }
+    }
+  } else {
+    const hr = Math.ceil(H / 2), wr = Math.ceil(W / 2);
+    for (let r = 1; r < Math.max(1, hr - 1); r++) {
+      for (let c = 1; c < Math.max(1, wr - 1); c++) {
+        const i = r * W + c;
+        if (cornerSet.has(i) || isMountainCell(S.grid[i])) continue;
+        fund.push({ r, c });
+      }
+    }
+  }
+  for (let i = fund.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [fund[i], fund[j]] = [fund[j], fund[i]];
+  }
+
+  const nZones = Math.min(4, Math.max(2, Math.floor(Math.min(W, H) / 5)));
+  const claimed = new Set();
+  let z = 0;
+  for (const fc of fund) {
+    if (z >= nZones) break;
+    if (Math.abs(fc.r - H / 2) + Math.abs(fc.c - W / 2) < 1.4 && rng() > 0.5) continue;
+    const blob = growBlob(fc.r, fc.c, 2 + Math.floor(rng() * 3));
+    const all = symExpand(blob).filter(i => !cornerSet.has(i) && !isMountainCell(S.grid[i]) && !claimed.has(i));
+    if (all.length < 2) continue;
+    all.forEach(i => claimed.add(i));
+    const I = 1 + (z % 3);
+    S.sourceSites.push({ cells: all, I });
+    z++;
+  }
+}
+
+const TILE_TINT = {
+  outpost: 'rgba(147, 197, 255, .42)',
+  bastion: 'rgba(186, 230, 253, .4)',
+  fortress: 'rgba(224, 242, 254, .38)',
+  reserve: 'rgba(74, 222, 128, .35)',
+  storage: 'rgba(251, 191, 36, .38)',
+  armory: 'rgba(248, 113, 113, .38)',
+  citadel: 'rgba(250, 204, 21, .45)',
+  empty: 'transparent',
+  mountain: 'transparent'
+};
+
+/** Niveau tuile 2–5 : △ puis ◁▷ ; niveau 6 : ◤◥◣◢ uniquement. */
+function gradeMarksHTML(lvl) {
+  if (lvl <= 1) return '';
+
+  // Niveau 6 et plus : coins diagonaux uniquement
+  if (lvl >= 6) {
+    return `<span class="tile-grade-marks tile-grade-corners" aria-hidden="true">
+      <span class="tg-corner tg-tl">◤</span>
+      <span class="tg-corner tg-tr">◥</span>
+      <span class="tg-corner tg-bl">◣</span>
+      <span class="tg-corner tg-br">◢</span>
+    </span>`;
+  }
+
+  // Niveaux 2–5 : triangles et côtés
+  let inner = '';
+
+  // Triangle haut / bas
+  if (lvl >= 2) {
+    inner += `<span class="tile-grade-top">△</span>`;
+  }
+  if (lvl >= 3) inner += `<span class="tile-grade-bottom">▽</span>`;
+  // Triangles latéraux
+  if (lvl >= 4) inner += `<span class="tile-grade-side-l">◁</span>`;
+  if (lvl >= 5) inner += `<span class="tile-grade-side-r">▷</span>`;
+
+  return `<span class="tile-grade-marks">${inner}</span>`;
+}
+
+let S = {
+  grid: [], players: {}, turnOrder: [1, 2], eliminated: {},
+  cur: 1, turn: 1, active: false, actionsRemaining: 1, startTime: 0,
+  botMode: 'MIX',
+  sourceSites: []
+};
+let particleInterval = null;
+let botClockInterval = null;
+let botClockStart = 0;
+let turnBannerHideTimeout = null;
+
+let ecoBtnCachedText = null;
+
+let CONFIG = {
+  mapPreset: 'normal',
+  gridW: 12,
+  gridH: 12,
+  botDifficulty: 0.5,
+  baseShield: false,
+  hellMode: false,
+  pointsMultiplier: 1,
+  p1Color: '#5b9cf6',
+  p2Color: '#f0633a',
+  p3Color: '#4ade80',
+  p4Color: '#c084fc',
+  extraBots: 0,
+  vsAI: false
+};
+// extraBots synchronisé avec le <select> au 1er chargement
+
+const sqClass = i => {
+  const t = S.grid && S.grid[i];
+  if (t && t.t === 'mountain') return 'sq-neutral';
+  return 'sq-neutral';
+};
+
+function hexToRgb(hex) {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? {
+    r: parseInt(result[1], 16),
+    g: parseInt(result[2], 16),
+    b: parseInt(result[3], 16)
+  } : { r: 91, g: 156, b: 246 };
+}
+
+function invertColor(hex) {
+  const rgb = parseInt(hex.slice(1), 16);
+  const r = (rgb >> 16) & 255, g = (rgb >> 8) & 255, b = rgb & 255;
+  const inv = ((255 - r) << 16) | ((255 - g) << 8) | (255 - b);
+  return '#' + inv.toString(16).padStart(6, '0');
+}
+
+function rgbToHsl(r, g, b) {
+  r /= 255; g /= 255; b /= 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  let h, s;
+  const l = (max + min) / 2;
+  if (max === min) h = s = 0;
+  else {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+      case g: h = (b - r) / d + 2; break;
+      default: h = (r - g) / d + 4;
+    }
+    h /= 6;
+  }
+  return { h: h * 360, s, l };
+}
+
+function hslToRgb(h, s, l) {
+  h = ((h % 360) + 360) % 360 / 360;
+  let r, g, b;
+  if (s === 0) {
+    r = g = b = l;
+  } else {
+    const hue2rgb = (p, q, t) => {
+      if (t < 0) t += 1;
+      if (t > 1) t -= 1;
+      if (t < 1 / 6) return p + (q - p) * 6 * t;
+      if (t < 1 / 2) return q;
+      if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+      return p;
+    };
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    const p = 2 * l - q;
+    r = hue2rgb(p, q, h + 1 / 3);
+    g = hue2rgb(p, q, h);
+    b = hue2rgb(p, q, h - 1 / 3);
+  }
+  return '#' + [r, g, b].map(x => Math.round(x * 255).toString(16).padStart(2, '0')).join('');
+}
+
+function hueShiftHex(hex, deg) {
+  const { r, g, b } = hexToRgb(hex);
+  const hsl = rgbToHsl(r, g, b);
+  return hslToRgb((hsl.h + deg) % 360, hsl.s, hsl.l);
+}
+
+function derivePlayerColors() {
+  CONFIG.p2Color = invertColor(CONFIG.p1Color);
+  CONFIG.p3Color = hueShiftHex(CONFIG.p1Color, 118);
+  CONFIG.p4Color = hueShiftHex(CONFIG.p1Color, 232);
+}
+
+function go(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (id === 'setup') updateConfigDisplay();
+  if (id === 'history') renderHistory();
+  if (id === 'game') initGame();
+}
+
+function openSetup(vsAI) {
+  CONFIG.vsAI = !!vsAI;
+  const t = document.getElementById('setupTitle');
+  const sub = document.getElementById('setupSub');
+  const w = document.getElementById('wrapDiffIA');
+  if (t) t.textContent = vsAI ? 'Contre l\'IA' : '2 joueurs';
+  if (sub) sub.textContent = vsAI ? 'Affrontez le bot' : 'Local (+ bots aux autres coins)';
+  if (w) w.style.display = vsAI ? '' : 'none';
+  go('setup');
+}
+
+function startGameFromSetup() {
+  go('game');
+}
+
+function updateConfigDisplay() {
+  derivePlayerColors();
+  const dSl = document.getElementById('diffSlider');
+  const eSl = document.getElementById('extraBotsSelect');
+  if (dSl) dSl.value = CONFIG.botDifficulty;
+  if (eSl) eSl.value = String(CONFIG.extraBots);
+
+  document.querySelectorAll('.map-preset-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.preset === CONFIG.mapPreset);
+  });
+  const diffLabels = {
+    '0.0': 'Très facile', '0.1': 'Très facile +', '0.2': 'Faible', '0.3': 'Faible +', '0.4': 'Modéré −',
+    '0.5': 'Normal', '0.6': 'Normal +', '0.7': 'Difficile', '0.8': 'Difficile +', '0.9': 'Très difficile', '1.0': 'Extrême'
+  };
+  const diffKey = (Math.round(CONFIG.botDifficulty * 10) / 10).toFixed(1);
+  const isHell = CONFIG.botDifficulty >= 0.8;
+  const diffVal = document.getElementById('diffVal');
+  if (diffVal) diffVal.textContent = isHell ? (CONFIG.botDifficulty >= 0.99 ? 'Enfer ++' : 'Enfer') : (diffLabels[diffKey] || 'Normal');
+  CONFIG.hellMode = isHell;
+  document.getElementById('baseShieldCheck').checked = CONFIG.baseShield;
+  document.querySelectorAll('.multiplier-btn').forEach(btn => {
+    btn.classList.toggle('active', +btn.dataset.mult === CONFIG.pointsMultiplier);
+  });
+  document.getElementById('p1ColorPicker').value = CONFIG.p1Color;
+  document.getElementById('p1ColorPreview').style.background = CONFIG.p1Color;
+  document.getElementById('p2ColorPreview').style.background = CONFIG.p2Color;
+  document.getElementById('p3ColorPreview').style.background = CONFIG.p3Color;
+  document.getElementById('p4ColorPreview').style.background = CONFIG.p4Color;
+}
+
+function playerLabel(id) {
+  if (id === 1) return 'J1';
+  if (id === 2 && !CONFIG.vsAI) return 'J2';
+  // Bots nommés BOT 1, BOT 2, BOT 3...
+  const bots = (S.turnOrder || []).filter(pid => isBot(pid));
+  const idx = bots.indexOf(id);
+  return idx >= 0 ? ('BOT ' + (idx + 1)) : 'BOT';
+}
+
+function isBot(id) {
+  if (id >= 3) return true;
+  if (id === 2) return CONFIG.vsAI;
+  return false;
+}
+
+function isHuman(id) {
+  if (id === 1) return true;
+  if (id === 2) return !CONFIG.vsAI;
+  return false;
+}
+
+function countCitadels(pid) {
+  let n = 0;
+  for (const t of S.grid) {
+    if (t && t.o === pid && t.t === 'citadel') n++;
+  }
+  return n;
+}
+
+function getHumanTypeCounts() {
+  const counts = { outpost: 0, bastion: 0, fortress: 0, reserve: 0, storage: 0, armory: 0, citadel: 0 };
+  const humans = (S.turnOrder || []).filter(isHuman);
+  const humanSet = new Set(humans);
+  S.grid.forEach(t => {
+    if (!t || !t.o || !humanSet.has(t.o)) return;
+    if (t.t in counts) counts[t.t]++;
+  });
+  return counts;
+}
+
+function getBotIndex(pid) {
+  const bots = (S.turnOrder || []).filter(x => isBot(x));
+  const idx = bots.indexOf(pid);
+  return idx >= 0 ? (idx + 1) : 1;
+}
+
+function updateTurnBanner() {
+  const b = document.getElementById('turnBanner');
+  if (!b) return;
+
+  const humanIds = (S.turnOrder || []).filter(x => isHuman(x));
+  const botText = document.getElementById('botTurnText');
+
+  const stopBotClock = () => {
+    if (botClockInterval) clearInterval(botClockInterval);
+    botClockInterval = null;
+  };
+
+  const formatClock = (secs) => {
+    const mm = String(Math.floor(secs / 60)).padStart(2, '0');
+    const ss = String(secs % 60).padStart(2, '0');
+    return mm + ':' + ss;
+  };
+
+  if (isHuman(S.cur)) {
+    // 2 joueurs humains => "Au tour de J1/J2"
+    let msg = '';
+    if (humanIds.length === 2) msg = 'Au tour de ' + (S.cur === 1 ? 'J1' : 'J2');
+    else msg = "C'est ton tour !";
+
+    stopBotClock();
+    const t = document.getElementById('botTurnTime');
+    if (t) t.textContent = '00:00';
+
+    b.textContent = msg;
+    b.style.color = 'var(--p' + S.cur + ')';
+    b.classList.remove('hide');
+    b.classList.remove('show');
+    void b.offsetWidth; // relance animation CSS
+    b.classList.add('show');
+
+    if (turnBannerHideTimeout) clearTimeout(turnBannerHideTimeout);
+    turnBannerHideTimeout = setTimeout(() => {
+      b.classList.remove('show');
+      b.classList.add('hide');
+      setTimeout(() => b.classList.remove('hide'), 420);
+    }, 2000);
+  } else {
+    // Tours bots : pas de popup centré, on affiche le HUD en haut
+    if (turnBannerHideTimeout) clearTimeout(turnBannerHideTimeout);
+    b.classList.remove('show');
+    b.classList.remove('hide');
+
+    if (botText) botText.textContent = 'Au tour de BOT ' + getBotIndex(S.cur);
+
+    // clock discret (mm:ss) pour le bot courant
+    const tick = () => {
+      const t = document.getElementById('botTurnTime');
+      if (!t) return;
+      const secs = Math.floor((Date.now() - botClockStart) / 1000);
+      t.textContent = formatClock(secs);
+    };
+
+    stopBotClock();
+    botClockStart = Date.now();
+    tick();
+    botClockInterval = setInterval(tick, 250);
+  }
+}
+
+function getNextPlayerId(from) {
+  const order = S.turnOrder;
+  const i = order.indexOf(from);
+  for (let k = 1; k <= order.length + 2; k++) {
+    const n = order[(i + k) % order.length];
+    if (!S.eliminated[n]) return n;
+  }
+  return from;
+}
+
+function eliminatePlayer(pid, keepIdx = -1) {
+  S.eliminated[pid] = true;
+  S.grid.forEach((cell, idx) => {
+    if (idx === keepIdx) return;
+    if (cell.o === pid) S.grid[idx] = { t: 'empty', o: 0, fresh: false };
+  });
+}
+
+function estimateWinScores() {
+  const out = {};
+  S.turnOrder.forEach(id => {
+    if (S.eliminated[id]) { out[id] = 0; return; }
+    let terr = 0, arm = 0;
+    S.grid.forEach(t => {
+      if (t.o === id) {
+        terr++;
+        if (t.t === 'armory') arm++;
+      }
+    });
+    const p = S.players[id];
+    const inc = sumPlayerReserveIncome(id);
+    out[id] = p.pts * 2 + terr + inc * 3 + arm * 1.5;
+  });
+  return out;
+}
+
+function botPickReplaceType(p, atkCost, pid) {
+  const baseOrder = ['outpost', 'bastion', 'reserve', 'storage', 'armory', 'fortress'];
+  let order = baseOrder;
+  if (CONFIG.hellMode) {
+    const counts = getHumanTypeCounts();
+    // copie + amélioration : préférences basées sur la composition humaine
+    const preferred = baseOrder.slice().sort((a, b) => (counts[b] || 0) - (counts[a] || 0));
+    order = preferred;
+  }
+  for (const k of order) {
+    if (p.pts >= atkCost + buildCostForPlayer(pid || S.cur, k)) return k;
+  }
+  return null;
+}
+
+function initGame() {
+  const { w: GW, h: GH } = rollBoardSize();
+  CONFIG.gridW = GW;
+  CONFIG.gridH = GH;
+  const totalCells = GW * GH;
+  const n = 2 + CONFIG.extraBots;
+  S.grid = Array(totalCells).fill(null).map(() => ({ t: 'empty', o: 0, fresh: false }));
+  S.turnOrder = Array.from({ length: n }, (_, i) => i + 1);
+  S.eliminated = { 1: false, 2: false, 3: false, 4: false };
+  const mult = CONFIG.pointsMultiplier;
+  const basePts = 3 * mult;
+  S.players = {};
+  S.turnOrder.forEach(id => {
+    S.players[id] = {
+      pts: basePts, res: 0, armories: 0, tilesPlaced: 0, attacks: 0,
+      bases: 0
+    };
+  });
+
+  const corners = citadelSlotsForPlayers(GW, GH, n);
+  const cornerSet = new Set();
+  S.turnOrder.forEach(id => cornerSet.add(corners[id]));
+
+  generateMirroredTerrain(GW, GH, n, cornerSet);
+
+  S.turnOrder.forEach(id => {
+    S.grid[corners[id]] = { t: 'citadel', o: id, lvl: 1 };
+  });
+
+  S.turnOrder.forEach(id => clampPlayerPts(id));
+
+  S.cur = 1;
+  S.turn = 1;
+  S.active = true;
+  S.startTime = Date.now();
+  zoom = 1; panX = 0; panY = 0;
+  requestAnimationFrame(() => {
+    const wrap = document.getElementById('gridWrap');
+    const pan = document.getElementById('gridPan');
+    const gH = pan.offsetWidth;
+    const aH = wrap.offsetHeight;
+    if (gH > aH) panY = -(gH - aH) / 2;
+    applyTransform();
+  });
+  startPlayerTurn();
+}
+
+function startPlayerTurn() {
+  S.actionsRemaining = actionsPerTurnForPlayer(S.cur);
+  ecoBtnCachedText = null;
+  render();
+  updateTurnBanner();
+  if (isBot(S.cur)) setTimeout(runBot, 450);
+}
+
+function consumeActionOrEndTurn() {
+  S.actionsRemaining--;
+  if (S.actionsRemaining > 0) {
+    render();
+    if (isBot(S.cur)) setTimeout(runBot, 350);
+  } else {
+    endTurn();
+  }
+}
+
+function endTurn() {
+  const next = getNextPlayerId(S.cur);
+  S.cur = next;
+  S.turn++;
+  startPlayerTurn();
+}
+
+function injectDynamicColors() {
+  derivePlayerColors();
+  const st = document.getElementById('dynamicColors') || document.createElement('style');
+  if (!document.getElementById('dynamicColors')) {
+    st.id = 'dynamicColors';
+    document.head.appendChild(st);
+  }
+  const c = [1, 2, 3, 4].map(id => hexToRgb(CONFIG['p' + id + 'Color']));
+  const lines = [1, 2, 3, 4].map(id => {
+    const x = c[id - 1];
+    return `--p${id}: ${CONFIG['p' + id + 'Color']}; --p${id}-rgb: ${x.r},${x.g},${x.b};`;
+  });
+  st.textContent = `:root{ ${lines.join(' ')} }`;
+}
+
+function renderHudStrip() {
+  const strip = document.getElementById('hudStrip');
+  strip.innerHTML = '';
+  const alive = S.turnOrder.filter(pid => !S.eliminated[pid]);
+  const scores = estimateWinScores();
+  const totScore = alive.reduce((a, id) => a + (scores[id] || 0), 0) || 1;
+  S.turnOrder.forEach(pid => {
+    if (S.eliminated[pid]) return;
+    const p = S.players[pid];
+    const div = document.createElement('div');
+    div.className = 'hud-chip' + (S.cur === pid ? ' active-turn' : '');
+    div.style.setProperty('--chip', 'var(--p' + pid + ')');
+    const chance = (scores[pid] || 0) / totScore;
+    // 0→0 étoiles, 20%→1, 40%→2, 60%→3, 80%→4, 100%→5
+    const stars = Math.max(0, Math.min(5, Math.floor(chance / 0.2)));
+    const inc = sumPlayerReserveIncome(pid);
+    const srcB = sourceIncomeBonus(pid);
+    const act = actionsPerTurnForPlayer(pid);
+    const ecoCap = playerEconomyCap(pid);
+    const starHtml = Array.from({ length: 5 }, (_, i) => `<span class="star ${i < stars ? 'on' : ''}">◆</span>`).join('');
+    div.innerHTML = `
+      <div class="hud-name">${playerLabel(pid)}</div>
+      <div class="hud-pts">${Math.round(p.pts)} ⚡ <span class="text-secondary" style="font-size:.62em">/ ${Math.round(ecoCap)} ⚡</span></div>
+      <div class="hud-stars" style="--c:var(--p${pid})">${starHtml}</div>
+      <div class="hud-row">
+        <div class="hud-bar"><div class="hud-bar-fill" style="width:${Math.min(100, (p.pts / Math.max(1, ecoCap)) * 100)}%"></div></div>
+        <span class="hud-res">◆ ${inc} · zones +${srcB} · ⚒ ${act}</span>
+      </div>`;
+    strip.appendChild(div);
+  });
+}
+
+function render() {
+  injectDynamicColors();
+  const g = document.getElementById('grid');
+  const GW = CONFIG.gridW, GH = CONFIG.gridH;
+  g.style.setProperty('--grid-cols', String(GW));
+  g.style.setProperty('--grid-rows', String(GH));
+  g.style.gridTemplateColumns = `repeat(${GW}, 1fr)`;
+  g.innerHTML = '';
+
+  const sourceAt = (idx) => S.sourceSites && S.sourceSites.find(z => z.cells && z.cells.includes(idx));
+
+  S.grid.forEach((t, i) => {
+    const div = document.createElement('div');
+    const human = S.active && isHuman(S.cur);
+    const isAdj = human && getAdjPassable(i).some(a => S.grid[a].o === S.cur);
+    let cls = 'tile ' + sqClass(i);
+    if (t.o) cls += ' p' + t.o;
+    if (t.t !== 'empty') cls += ' t-' + t.t;
+    if (t.t === 'citadel') cls += ' citadel';
+    if (t.fresh) { cls += ' just-placed'; t.fresh = false; }
+    if (!t.o && t.t !== 'mountain' && isAdj) cls += ' playable';
+    else if (t.o && t.o !== S.cur && isAdj) cls += ' attackable';
+    div.className = cls;
+    if (t.t === 'mountain') {
+      div.innerHTML = '';
+    } else if (!t.o) {
+      const src = sourceAt(i);
+      if (src) {
+        div.innerHTML = `<span class="tile-source-zone pulse" title="Zone riche +${src.I} (plein / mi-tour à distance 1)"></span>`;
+      }
+    }
+    if (t.o && types[t.t]) {
+      const lvl = tileLvl(t);
+      const tint = TILE_TINT[t.t] || 'transparent';
+      div.style.setProperty('--tile-tint', tint);
+      div.innerHTML = `
+        <span class="tile-type-tint"></span>
+        ${gradeMarksHTML(lvl)}
+        <span class="tile-ico">${types[t.t].i}</span>`;
+    }
+    div.onclick = () => onTile(i);
+    g.appendChild(div);
+  });
+
+  // Permet au CSS d'adapter les icônes à la taille réelle d'une case
+  const firstTile = g.querySelector('.tile');
+  if (firstTile) {
+    const px = firstTile.getBoundingClientRect().width || firstTile.offsetWidth || 0;
+    if (px) document.documentElement.style.setProperty('--tile-px', px.toFixed(2) + 'px');
+  }
+
+  renderHudStrip();
+  document.getElementById('turnInfo').textContent = 'Manche ' + S.turn;
+  document.getElementById('turnPlayer').textContent = playerLabel(S.cur);
+  const hudActions = document.getElementById('hudActions');
+  const maxA = actionsPerTurnForPlayer(S.cur);
+  hudActions.textContent = S.actionsRemaining > 0
+    ? `Actions: ${S.actionsRemaining}/${maxA}`
+    : '';
+
+  const hc = document.getElementById('hudCenter');
+  hc.className = 'hud-center cur' + S.cur + (isBot(S.cur) ? ' is-bot-turn' : ' is-human-turn');
+  const dot = document.getElementById('hudDot');
+  dot.style.background = 'var(--p' + S.cur + ')';
+  dot.style.boxShadow = '0 0 8px var(--p' + S.cur + ')';
+
+  updateEcoButtonUI();
+}
+
+function onTile(i) {
+  if (!S.active || !isHuman(S.cur) || S.actionsRemaining <= 0) return;
+  const tile = S.grid[i];
+  if (isMountainCell(tile)) return;
+  const el = document.querySelectorAll('.tile')[i];
+  const rect = el.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  const isAdj = getAdjPassable(i).some(a => S.grid[a].o === S.cur);
+  if (tile.o === S.cur) showOverwriteRadial(i, cx, cy, rect.width);
+  else if (!tile.o && tile.t !== 'mountain' && isAdj) showRadial(i, cx, cy, rect.width);
+  else if (tile.o && tile.o !== S.cur && isAdj) attackMenu(i);
+}
+
+function showRadial(tileIdx, cx, cy, tileSize) {
+  const p = S.players[S.cur];
+  const citCount = countCitadels(S.cur);
+  const items = ['outpost', 'bastion', 'fortress', 'reserve', 'storage', 'armory'];
+  if (CONFIG.baseShield) items.push('citadel');
+  const menu = document.getElementById('radialMenu');
+  menu.innerHTML = '';
+  menu.style.setProperty('--radP', 'var(--p' + S.cur + ')');
+  const ov = document.createElement('div');
+  ov.className = 'rad-overlay';
+  ov.onclick = closeRadial;
+  menu.appendChild(ov);
+  const R = Math.max(84, Math.min(175, tileSize * (items.length >= 6 ? 2.2 : 2.05)));
+  const center = document.createElement('div');
+  center.className = 'rad-center';
+  center.style.cssText = `left:${cx}px;top:${cy}px`;
+  const resetCenter = () => {
+    center.innerHTML = '<div style="font-size:.95rem;line-height:1">✕</div><span class="rad-cost">Fermer</span>';
+  };
+  resetCenter();
+  center.onclick = closeRadial;
+  menu.appendChild(center);
+  items.forEach((k, idx) => {
+    const angle = (idx / items.length) * 2 * Math.PI - Math.PI / 2;
+    const bx = cx + Math.cos(angle) * R;
+    const by = cy + Math.sin(angle) * R;
+    const cost = (k === 'citadel') ? types.citadel.c : buildCostForPlayer(S.cur, k);
+    const can = k === 'citadel'
+      ? (p.pts >= types.citadel.c && citCount < 2)
+      : (p.pts >= cost);
+    const btn = document.createElement('div');
+    btn.className = 'rad-btn' + (can ? '' : ' cant');
+    btn.style.cssText = `left:${bx}px;top:${by}px;animation-delay:${idx * 0.045}s`;
+    btn.innerHTML = `<span>${types[k].i}</span><span class="rad-lbl">${types[k].n}</span><span class="rad-price">${cost} ⚡</span>`;
+    btn.title = `${types[k].n} — ${cost} ⚡`;
+    btn.onmouseenter = () => {
+      center.innerHTML = `<div style="font-size:.95rem;line-height:1">✕</div><span class="rad-cost">${k === 'citadel' ? 'Secours' : 'Construire'} · ${cost} ⚡</span>`;
+    };
+    btn.onmouseleave = resetCenter;
+    if (can) btn.onclick = e => { e.stopPropagation(); doBuild(k, tileIdx); };
+    menu.appendChild(btn);
+  });
+  menu.classList.add('open');
+}
+
+function closeRadial() {
+  document.getElementById('radialMenu').classList.remove('open');
+}
+
+function showOverwriteRadial(tileIdx, cx, cy, tileSize) {
+  const p = S.players[S.cur];
+  const oldTile = S.grid[tileIdx];
+  if (!oldTile || !oldTile.t) return;
+
+  const oldT = oldTile.t;
+  const oldRes = tileRes(oldTile);
+  const citCount = countCitadels(S.cur);
+
+  // Empêche l'écrasement de sa citadelle (base)
+  if (oldT === 'citadel') {
+    showM('Action impossible', `<p class="mb-0 small text-secondary">Tu ne peux pas écraser ta citadelle.</p>`);
+    return;
+  }
+
+  const items = ['outpost', 'bastion', 'fortress', 'reserve', 'storage', 'armory'];
+  if (CONFIG.baseShield) items.push('citadel');
+
+  const menu = document.getElementById('radialMenu');
+  menu.innerHTML = '';
+  menu.style.setProperty('--radP', 'var(--p' + S.cur + ')');
+
+  // overlay sombre
+  const ov = document.createElement('div');
+  ov.className = 'rad-overlay';
+  ov.onclick = closeRadial;
+  menu.appendChild(ov);
+
+  const R = Math.max(84, Math.min(175, tileSize * (items.length >= 6 ? 2.2 : 2.05)));
+
+  const center = document.createElement('div');
+  center.className = 'rad-center';
+  center.style.cssText = `left:${cx}px;top:${cy}px`;
+  const resetCenter = () => {
+    center.innerHTML = `<div style="font-size:.95rem;line-height:1">✕</div><span class="rad-cost">Modifier</span>`;
+  };
+  resetCenter();
+  center.onclick = closeRadial;
+  menu.appendChild(center);
+
+  const upCost = upgradeCostForPlayer(S.cur, oldTile);
+  const canUp = tileLvl(oldTile) < MAX_LVL && upCost !== Infinity && p.pts >= upCost;
+  const upBtn = document.createElement('div');
+  upBtn.className = 'rad-btn rad-upgrade-top' + (canUp ? '' : ' cant');
+  upBtn.style.cssText = `left:${cx}px;top:${cy - R - 62}px;animation-delay:0s`;
+  const upLabel = tileLvl(oldTile) >= MAX_LVL ? 'Niv. max' : `${upCost === Infinity ? '—' : upCost + ' ⚡'}`;
+  upBtn.innerHTML = `<span style="font-size:1.1rem">▲</span><span class="rad-lbl">Améliorer</span><span class="rad-price">${upLabel}</span>`;
+  upBtn.title = canUp ? `Améliorer (lvl ${tileLvl(oldTile)} → ${tileLvl(oldTile) + 1})` : 'Amélioration indisponible';
+  if (canUp) {
+    upBtn.onmouseenter = () => {
+      center.innerHTML = `<div style="font-size:.95rem;line-height:1">✕</div><span class="rad-cost">Upgrade · ${upCost} ⚡</span>`;
+    };
+    upBtn.onmouseleave = resetCenter;
+    upBtn.onclick = e => { e.stopPropagation(); doUpgrade(tileIdx); };
+  }
+  menu.appendChild(upBtn);
+
+  items.forEach((k, idx) => {
+    const angle = (idx / items.length) * 2 * Math.PI - Math.PI / 2;
+    const bx = cx + Math.cos(angle) * R;
+    const by = cy + Math.sin(angle) * R;
+
+    const canCitadel = k === 'citadel'
+      ? (oldT === 'citadel' ? citCount <= 2 : citCount < 2)
+      : true;
+
+    const cost = (k === 'citadel') ? types.citadel.c : buildCostForPlayer(S.cur, k);
+    const canCost = p.pts >= cost;
+    const can = canCitadel && canCost;
+    const net = oldRes - cost;
+
+    const btn = document.createElement('div');
+    btn.className = 'rad-btn' + (can ? '' : ' cant');
+    btn.style.cssText = `left:${bx}px;top:${by}px;animation-delay:${(idx + 1) * 0.045}s`;
+    btn.innerHTML = `<span>${types[k].i || types.citadel.i}</span><span class="rad-lbl">${types[k].n || types.citadel.n}</span><span class="rad-price">${cost} ⚡</span>`;
+    btn.title = `${types[k].n} — ${cost} ⚡`;
+
+    if (can) {
+      btn.onmouseenter = () => {
+        const sign = net >= 0 ? '+' : '';
+        center.innerHTML = `<div style="font-size:.95rem;line-height:1">✕</div><span class="rad-cost">−${cost} +${oldRes} = ${sign}${net}</span>`;
+      };
+      btn.onmouseleave = resetCenter;
+      btn.onclick = e => { e.stopPropagation(); doOverwrite(tileIdx, k); };
+    }
+
+    menu.appendChild(btn);
+  });
+
+  menu.classList.add('open');
+}
+
+function doOverwrite(tileIdx, newType) {
+  const tile = S.grid[tileIdx];
+  if (!tile || tile.o !== S.cur) return;
+
+  const oldT = tile.t;
+  const oldRes = tileRes(tile);
+  const cost = buildCostForPlayer(S.cur, newType);
+
+  // Base intouchable : évite tout contournement (ex: appel direct)
+  if (oldT === 'citadel') return;
+
+  const p = S.players[S.cur];
+  if (p.pts < cost) return;
+
+  // citadelle : limite à 2 (option secours)
+  if (newType === 'citadel') {
+    const citCount = countCitadels(S.cur);
+    const delta = oldT === 'citadel' ? 0 : 1;
+    if (!CONFIG.baseShield || citCount + delta > 2) return;
+  }
+
+  // Paiement + remboursement (résistance de l'ancienne tuile)
+  p.pts -= cost;
+  p.pts += oldRes;
+  clampPlayerPts(S.cur);
+
+  // Armurerie: peut donner 1 action immédiate (cap global)
+  if (newType === 'armory') {
+    const cap = actionsPerTurnForPlayer(S.cur);
+    S.actionsRemaining = Math.min(S.actionsRemaining + 1, cap);
+  }
+
+  S.grid[tileIdx] = { t: newType, o: S.cur, lvl: 1, fresh: true };
+
+  closeRadial();
+  consumeActionOrEndTurn();
+}
+
+function doBuild(t, i) {
+  const p = S.players[S.cur];
+  if (t === 'citadel') {
+    const citCount = countCitadels(S.cur);
+    if (!CONFIG.baseShield || citCount >= 2) return;
+  }
+  const cost = buildCostForPlayer(S.cur, t);
+  if (p.pts < cost) return;
+  p.pts -= cost;
+  clampPlayerPts(S.cur);
+  if (t === 'armory') {
+    // Optionnel: action immédiate ce tour (sans dépasser le cap)
+    const cap = actionsPerTurnForPlayer(S.cur);
+    S.actionsRemaining = Math.min(S.actionsRemaining + 1, cap);
+  }
+  p.tilesPlaced++;
+  S.grid[i] = { t, o: S.cur, lvl: 1, fresh: true };
+  closeRadial();
+  consumeActionOrEndTurn();
+}
+
+function doUpgrade(tileIdx) {
+  const tile = S.grid[tileIdx];
+  if (!tile || tile.o !== S.cur || tile.t === 'empty' || tile.t === 'citadel') return;
+  const lvl = tileLvl(tile);
+  if (lvl >= MAX_LVL) return;
+  const p = S.players[S.cur];
+  const cost = upgradeCostForPlayer(S.cur, tile);
+  if (p.pts < cost) return;
+  closeRadial();
+  p.pts -= cost;
+  tile.lvl = lvl + 1;
+  tile.fresh = true;
+  clampPlayerPts(S.cur);
+  if (tile.t === 'armory') {
+    const cap = actionsPerTurnForPlayer(S.cur);
+    S.actionsRemaining = Math.min(S.actionsRemaining + 1, cap);
+  }
+  consumeActionOrEndTurn();
+}
+
+function attackMenu(i) {
+  const tile = S.grid[i];
+  const el = document.querySelectorAll('.tile')[i];
+  const rect = el.getBoundingClientRect();
+  showAttackRadial(i, rect.left + rect.width / 2, rect.top + rect.height / 2, rect.width, tile);
+}
+
+function showAttackRadial(tileIdx, cx, cy, tileSize, targetTile) {
+  const p = S.players[S.cur];
+  const items = ['outpost', 'bastion', 'fortress', 'reserve', 'storage', 'armory'];
+  const menu = document.getElementById('radialMenu');
+  const atkCost = tileRes(targetTile);
+  menu.innerHTML = '';
+  const ov = document.createElement('div');
+  ov.className = 'rad-overlay';
+  ov.onclick = closeRadial;
+  menu.appendChild(ov);
+  const R = Math.max(78, Math.min(165, tileSize * 2.0));
+  const center = document.createElement('div');
+  center.className = 'rad-center atk';
+  center.style.cssText = `left:${cx}px;top:${cy}px`;
+  const resetCenter = () => {
+    center.innerHTML = `<div>⚔ ${atkCost} ⚡</div><div style="font-size:.5rem;opacity:.6;margin-top:1px">assaut</div>`;
+  };
+  resetCenter();
+  menu.appendChild(center);
+  items.forEach((k, idx) => {
+    const angle = (idx / items.length) * 2 * Math.PI - Math.PI / 2;
+    const bx = cx + Math.cos(angle) * R;
+    const by = cy + Math.sin(angle) * R;
+    const tileCost = buildCostForPlayer(S.cur, k);
+    const total = atkCost + tileCost;
+    const can = p.pts >= total;
+    const btn = document.createElement('div');
+    btn.className = 'rad-btn atk' + (can ? '' : ' cant');
+    btn.style.cssText = `left:${bx}px;top:${by}px;animation-delay:${idx * 0.045}s`;
+    btn.innerHTML = `<span>${types[k].i}</span><span class="rad-lbl">${types[k].n}</span><span class="rad-price">⚔${atkCost} + 🏗${tileCost}</span><span class="rad-price" style="opacity:.85">= ${total} ⚡</span>`;
+    if (can) {
+      btn.onmouseenter = () => {
+        center.innerHTML = `<div style="font-size:.95rem;font-weight:800">${total} ⚡</div><div style="font-size:.5rem;opacity:.6">total</div>`;
+      };
+      btn.onmouseleave = resetCenter;
+      btn.onclick = e => { e.stopPropagation(); doAttack(tileIdx, k); };
+    }
+    menu.appendChild(btn);
+  });
+  menu.classList.add('open');
+}
+
+function doAttack(i, replaceType) {
+  const tile = S.grid[i];
+  const p = S.players[S.cur];
+  const victimId = tile.o;
+  const enemy = S.players[victimId];
+  const atkCost = tileRes(tile);
+  const repCost = replaceType ? buildCostForPlayer(S.cur, replaceType) : 0;
+
+  function clampVictimEconomy() {
+    clampPlayerPts(victimId);
+  }
+
+  if (tile.t === 'citadel') {
+    if (replaceType) {
+      if (p.pts < atkCost + repCost) return;
+    } else {
+      if (p.pts < atkCost) return;
+    }
+    const victim = victimId;
+    const isLastCitadel = countCitadels(victim) <= 1;
+
+    p.pts -= atkCost;
+    closeRadial(); closeM();
+    if (replaceType) {
+      p.pts -= repCost;
+      if (replaceType === 'armory') {
+        const cap = actionsPerTurnForPlayer(S.cur);
+        S.actionsRemaining = Math.min(S.actionsRemaining + 1, cap);
+      }
+      S.grid[i] = { t: replaceType, o: S.cur, lvl: 1, fresh: true };
+      p.tilesPlaced++;
+    } else {
+      S.grid[i] = { t: 'empty', o: 0 };
+    }
+    p.attacks++;
+    clampPlayerPts(S.cur);
+
+    if (isLastCitadel) {
+      eliminatePlayer(victim, replaceType ? i : -1);
+      const alive = S.turnOrder.filter(id => !S.eliminated[id]);
+      if (alive.length === 1) {
+        S.cur = alive[0];
+        win();
+        return;
+      }
+    }
+
+    consumeActionOrEndTurn();
+    return;
+  }
+
+  if (replaceType) {
+    if (p.pts < atkCost + repCost) return;
+  } else {
+    if (p.pts < atkCost) return;
+  }
+
+  p.pts -= atkCost;
+
+  // Stockage : perte = floor(points / (2 + nb stockages restants après perte))
+  if (tile.t === 'storage') {
+    const nAfter = countOwnedTilesOfType(victimId, 'storage') - 1;
+    const loss = Math.floor((enemy.pts || 0) / (2 + Math.max(0, nAfter)));
+    enemy.pts = Math.max(0, (enemy.pts || 0) - loss);
+  }
+
+  if (replaceType) {
+    p.pts -= repCost;
+    if (replaceType === 'armory') {
+      const cap = actionsPerTurnForPlayer(S.cur);
+      S.actionsRemaining = Math.min(S.actionsRemaining + 1, cap);
+    }
+    S.grid[i] = { t: replaceType, o: S.cur, lvl: 1, fresh: true };
+    p.attacks++;
+    p.tilesPlaced++;
+  } else {
+    S.grid[i] = { t: 'empty', o: 0 };
+  }
+  clampPlayerPts(S.cur);
+  clampVictimEconomy();
+  closeRadial(); closeM();
+  consumeActionOrEndTurn();
+}
+
+function showStats() {
+  const secs = Math.floor((Date.now() - S.startTime) / 1000);
+  const mm = String(Math.floor(secs / 60)).padStart(2, '0');
+  const ss = String(secs % 60).padStart(2, '0');
+  const scores = estimateWinScores();
+  const alive = S.turnOrder.filter(id => !S.eliminated[id]);
+  const totScore = alive.reduce((a, id) => a + (scores[id] || 0), 0) || 1;
+
+  const terr = {};
+  alive.forEach(id => (terr[id] = 0));
+  S.grid.forEach(t => {
+    if (t && t.o && !S.eliminated[t.o]) terr[t.o] = (terr[t.o] || 0) + 1;
+  });
+
+  const totalTerr = alive.reduce((a, id) => a + (terr[id] || 0), 0) || 1;
+  const pieHumans = alive.filter(isHuman).sort((a, b) => a - b); // J1 puis J2 (si présent)
+  const pieBots = alive.filter(pid => !isHuman(pid)).sort((a, b) => getBotIndex(a) - getBotIndex(b)); // BOT 1, BOT 2, BOT 3...
+  const pieOrder = [...pieHumans, ...pieBots];
+
+  const bestPid = pieOrder.reduce((best, pid) => ((terr[pid] || 0) > (terr[best] || 0)) ? pid : best, pieOrder[0] || 1);
+  const bestPct = Math.round(100 * (terr[bestPid] || 0) / totalTerr);
+
+  let acc = 0;
+  const pieParts = pieOrder.map((pid, idx) => {
+    const pct = (terr[pid] || 0) / totalTerr * 100;
+    const start = acc;
+    acc += pct;
+    const end = (idx === pieOrder.length - 1) ? 100 : acc;
+    return `var(--p${pid}) ${start.toFixed(2)}% ${end.toFixed(2)}%`;
+  });
+
+  const mkStars = (pid) => {
+    const chance = (scores[pid] || 0) / totScore;
+    const stars = Math.max(0, Math.min(5, Math.floor(chance / 0.2)));
+    return `
+      <div class="win-stars" style="--c:var(--p${pid})">
+        ${Array.from({ length: 5 }, (_, i) => {
+          const on = i < stars;
+          const delay = i * 0.12;
+          return `<span class="star ${on ? 'on' : ''}" style="animation-delay:${delay}s">◆</span>`;
+        }).join('')}
+      </div>`;
+  };
+
+  const totalBuilds = alive.reduce((a, id) => a + (S.players[id]?.tilesPlaced || 0), 0);
+  const totalAttacks = alive.reduce((a, id) => a + (S.players[id]?.attacks || 0), 0);
+  const totalRes = alive.reduce((a, id) => a + sumPlayerReserveIncome(id), 0);
+  const totalArm = alive.reduce((a, id) => a + sumPlayerArmoryLvls(id), 0);
+  const pieLegend = pieOrder.map(pid => {
+    const pct = Math.round(100 * (terr[pid] || 0) / totalTerr);
+    return `<div class="d-flex justify-content-between gap-3"><span class="text-secondary">${playerLabel(pid)}</span><span style="color:var(--p${pid});font-family:'JetBrains Mono',monospace;font-weight:900">${pct}%</span></div>`;
+  }).join('');
+
+  showM('📊 Statistiques', `
+    <div class="row g-3 align-items-center">
+      <div class="col-12 col-md-4">
+        <div class="stat-pie" style="background:conic-gradient(from 90deg, ${pieParts.join(',')});">
+          <div class="stat-pie-inner">${bestPct}%</div>
+        </div>
+      </div>
+      <div class="col-12 col-md-8">
+        <div class="d-flex flex-column gap-2">${pieLegend}</div>
+        <div class="stat-grid mt-3">
+          <span class="stat-key">⏱ Temps</span><span class="stat-val">${mm}:${ss}</span>
+          <span class="stat-key">🔄 Manche</span><span class="stat-val">${S.turn}</span>
+          <span class="stat-key">⚒ Armureries</span><span class="stat-val">${totalArm}</span>
+          <span class="stat-key">◆ Revenus</span><span class="stat-val">${totalRes}</span>
+          <span class="stat-key">🏗 Constructions</span><span class="stat-val">${totalBuilds}</span>
+          <span class="stat-key">⚔ Assauts</span><span class="stat-val">${totalAttacks}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-3 d-flex flex-column gap-2">
+      ${alive.map(pid => {
+        const p = S.players[pid];
+        const chance = (scores[pid] || 0) / totScore;
+        const chanceLabel = Math.round(chance * 100);
+        return `
+          <div class="p-2 rounded border border-secondary border-opacity-25 small d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+              <div style="font-family:'JetBrains Mono',monospace;font-weight:900;color:var(--p${pid})">${playerLabel(pid)}</div>
+              <div class="text-secondary">Terr: ${terr[pid] || 0} • ${Math.round(p.pts)} ⚡ • ${p.tilesPlaced} builds • ${p.attacks} assauts</div>
+            </div>
+            <div class="text-end">
+              <div class="small text-secondary" style="font-family:'JetBrains Mono',monospace">~${chanceLabel}%</div>
+              ${mkStars(pid)}
+            </div>
+          </div>`;
+      }).join('')}
+    </div>
+  `);
+}
+
+function abandon() {
+  if (!confirm('Abandonner ? Les adversaires restants gagnent la partie.')) return;
+  const me = S.cur;
+  eliminatePlayer(me, -1);
+  const alive = S.turnOrder.filter(id => !S.eliminated[id]);
+  if (alive.length === 1) {
+    S.cur = alive[0];
+    win();
+    return;
+  }
+  S.cur = getNextPlayerId(me);
+  startPlayerTurn();
+}
+
+function eco() {
+  if (!S.active || !isHuman(S.cur)) return;
+  const m = CONFIG.pointsMultiplier;
+  const p = S.players[S.cur];
+  const cap = playerEconomyCap(S.cur);
+  const inc = sumPlayerReserveIncome(S.cur);
+  const src = sourceIncomeBonus(S.cur);
+  const gainFull = (1 + inc + src) * m;
+  if (p.pts >= cap) {
+    endTurn();
+    return;
+  }
+  const room = cap - p.pts;
+  p.pts += Math.min(gainFull, room);
+  clampPlayerPts(S.cur);
+  endTurn();
+}
+
+function canPlayerTakeAnyAction(pid) {
+  const p = S.players[pid];
+  if (!p) return false;
+  const pts = p.pts;
+  const citCount = countCitadels(pid);
+  const buildTypes = ['outpost', 'bastion', 'fortress', 'reserve', 'storage', 'armory'];
+
+  const isAdjOfPlayer = (tileIdx) => getAdjPassable(tileIdx).some(a => S.grid[a].o === pid);
+
+  for (let i = 0; i < S.grid.length; i++) {
+    const t = S.grid[i];
+    if (!t) continue;
+
+    // Build on empty cell adjacent to player
+    if (!t.o && isAdjOfPlayer(i)) {
+      if (buildTypes.some(k => pts >= buildCostForPlayer(pid, k))) return true;
+      if (CONFIG.baseShield && pts >= types.citadel.c && citCount < 2) return true;
+    }
+
+    // Overwrite on own tile
+    if (t.o === pid) {
+      if (t.t !== 'citadel') {
+        if (buildTypes.some(k => pts >= buildCostForPlayer(pid, k))) return true;
+        if (tileLvl(t) < MAX_LVL && pts >= upgradeCostForPlayer(pid, t)) return true;
+      }
+      if (CONFIG.baseShield && pts >= types.citadel.c) {
+        const oldT = t.t;
+        const canCitadel = (oldT === 'citadel') ? citCount <= 2 : citCount < 2;
+        if (canCitadel) return true;
+      }
+    }
+
+    // Attack on enemy tile adjacent to player
+    if (t.o && t.o !== pid && isAdjOfPlayer(i)) {
+      const atkCost = tileRes(t);
+      if (buildTypes.some(k => pts >= atkCost + buildCostForPlayer(pid, k))) return true;
+    }
+  }
+
+  return false;
+}
+
+function updateEcoButtonUI() {
+  const btn = document.getElementById('btnEco');
+  const label = document.getElementById('ecoLabel');
+  if (!btn || !label) return;
+
+  if (!S.active || !isHuman(S.cur)) {
+    btn.style.pointerEvents = 'none';
+    btn.classList.remove('passe-tour');
+    return;
+  }
+
+  btn.style.pointerEvents = 'auto';
+  const mult = CONFIG.pointsMultiplier;
+  const p = S.players[S.cur];
+  const cap = playerEconomyCap(S.cur);
+  const atCap = p.pts >= cap - 1e-9;
+  const canAny = canPlayerTakeAnyAction(S.cur);
+
+  let newText;
+  let title;
+  if (atCap) {
+    newText = 'Passer mon tour';
+    title = 'Plafond ⚡ atteint — termine le tour sans gain';
+    btn.classList.add('passe-tour');
+  } else {
+    btn.classList.remove('passe-tour');
+    newText = canAny
+      ? `Économiser (×${mult} + rev.)`
+      : 'Finir mon tour';
+    title = canAny
+      ? `Économie — termine le tour et encaisse (plafond ${Math.round(cap)} ⚡)`
+      : `Finir ton tour — encaisse même sans action finançable`;
+  }
+
+  if (ecoBtnCachedText !== newText) {
+    label.textContent = newText;
+    ecoBtnCachedText = newText;
+  }
+  btn.title = title;
+}
+
+function runBot() {
+  if (!S.active || !isBot(S.cur) || S.actionsRemaining <= 0) return;
+  const pid = S.cur;
+  const p = S.players[pid];
+  const diff = CONFIG.botDifficulty;
+  const hellF = CONFIG.hellMode ? 2 : 1;
+  const scores = estimateWinScores();
+  const myScore = scores[pid] || 1;
+  let sumOther = 0, bestEnemy = null, bestSc = 0;
+  S.turnOrder.forEach(id => {
+    if (id === pid || S.eliminated[id]) return;
+    sumOther += scores[id];
+    if (scores[id] > bestSc) { bestSc = scores[id]; bestEnemy = id; }
+  });
+  const tAll = sumOther + myScore;
+  const myChance = myScore / (tAll || 1);
+  const aggression = diff * 0.55 + (1 - myChance) * 0.45;
+
+  const stratRoll = Math.random();
+  let strategy = 'EXPAND';
+  if (stratRoll < aggression * 0.4) strategy = 'RUSH';
+  else if (stratRoll < aggression * 0.65) strategy = 'HIT';
+  else if (myChance < 0.35 && diff > 0.35) strategy = 'ECO';
+
+  const adj = [];
+  S.grid.forEach((t, i) => {
+    if (!t.o && t.t !== 'mountain' && getAdjPassable(i).some(a => S.grid[a].o === pid)) adj.push(i);
+  });
+
+  const enemyCitadel = (oid) => S.grid.findIndex((t, i) => t.t === 'citadel' && t.o === oid && getAdjPassable(i).some(a => S.grid[a].o === pid));
+
+  if (strategy === 'RUSH' && bestEnemy != null) {
+    const tgt = enemyCitadel(bestEnemy);
+    if (tgt >= 0) {
+      const tr = tileRes(S.grid[tgt]);
+      if (p.pts >= tr) {
+        const rep = botPickReplaceType(p, tr, pid);
+        if (rep) { doAttack(tgt, rep); return; }
+      }
+    }
+  }
+
+  for (const oid of S.turnOrder) {
+    if (oid === pid || S.eliminated[oid]) continue;
+    const tgt = enemyCitadel(oid);
+    if (tgt >= 0) {
+      const tr = tileRes(S.grid[tgt]);
+      if (p.pts >= tr) {
+        const rep = botPickReplaceType(p, tr, pid);
+        if (rep && (strategy !== 'ECO' || diff > 0.75)) {
+          doAttack(tgt, rep);
+          return;
+        }
+      }
+    }
+  }
+
+  let best = null, bestVal = -1;
+  S.grid.forEach((t, i) => {
+    if (t.o && t.o !== pid && t.t !== 'citadel' && getAdjPassable(i).some(a => S.grid[a].o === pid)) {
+      const atk = tileRes(t);
+      const rep = botPickReplaceType(p, atk, pid);
+      if (!rep) return;
+      const rc = buildCostForPlayer(pid, rep);
+      const priority = (t.t === 'storage' ? 6 : t.t === 'reserve' ? 5 : t.t === 'armory' ? 4 : 1) / (atk + rc);
+      const val = priority * (strategy === 'HIT' ? 1.6 : 1) + Math.random() * 0.15 * diff;
+      if (val > bestVal) { bestVal = val; best = i; }
+    }
+  });
+  if (best != null && (strategy === 'HIT' || strategy === 'RUSH' || aggression > 0.42 + diff * 0.2)) {
+    const atkCost = tileRes(S.grid[best]);
+    const rep = botPickReplaceType(p, atkCost, pid);
+    if (rep) { doAttack(best, rep); return; }
+  }
+
+  if (S.actionsRemaining > 0 && strategy !== 'RUSH' && Math.random() < 0.26 + diff * 0.28) {
+    const ups = [];
+    S.grid.forEach((t, i) => {
+      if (!t || t.o !== pid || t.t === 'citadel') return;
+      if (tileLvl(t) >= MAX_LVL) return;
+      const uc = upgradeCostForPlayer(pid, t);
+      if (uc !== Infinity && p.pts >= uc) ups.push(i);
+    });
+    if (ups.length) {
+      const i = ups[Math.floor(Math.random() * ups.length)];
+      const before = tileLvl(S.grid[i]);
+      doUpgrade(i);
+      if (tileLvl(S.grid[i]) > before) return;
+    }
+  }
+
+  if (adj.length && p.pts >= 1 && strategy !== 'ECO') {
+    const move = adj[Math.floor(Math.random() * adj.length)];
+    const citCount = countCitadels(pid);
+    let type = 'outpost';
+    if (
+      CONFIG.baseShield &&
+      citCount < 2 &&
+      p.pts >= types.citadel.c &&
+      strategy !== 'RUSH' &&
+      Math.random() < 0.22 + diff * 0.18
+    ) type = 'citadel';
+    else if (CONFIG.hellMode) {
+      // enfer : copie la compo humaine (mais avec une légère amélioration selon la stratégie)
+      const counts = getHumanTypeCounts();
+      const cand = ['outpost', 'bastion', 'reserve', 'storage', 'armory', 'fortress']
+        .filter(k => p.pts >= buildCostForPlayer(pid, k));
+      if (cand.length) {
+        const weights = cand.map(k => {
+          let w = (counts[k] || 0) + 1;
+          if (strategy === 'HIT' || strategy === 'RUSH') {
+            if (k === 'bastion' || k === 'fortress') w *= 1.35;
+          }
+          if (strategy === 'EXPAND') w *= 1.12;
+          if (k === 'armory') w *= 1.18; // amélioration : plus d'actions
+          if (k === 'reserve') w *= 1.06;
+          // plus la difficulté est haute, plus le bot respecte ses préférences
+          w *= 0.85 + diff * 0.35;
+          return w;
+        });
+        const sum = weights.reduce((a, b) => a + b, 0) || 1;
+        let pick = Math.random() * sum;
+        let chosen = cand[0];
+        for (let idx = 0; idx < cand.length; idx++) {
+          pick -= weights[idx];
+          if (pick <= 0) { chosen = cand[idx]; break; }
+        }
+        type = chosen;
+      }
+    } else if (p.pts >= 8 && Math.random() < 0.22 + diff * 0.33) type = 'armory';
+    else if (p.pts >= 5 && Math.random() < 0.30 + diff * 0.2) type = 'reserve';
+    else if (p.pts >= 5 && Math.random() < 0.18 + diff * 0.15) type = 'storage';
+    else if (p.pts >= 3 && Math.random() < 0.4 + diff * 0.15) type = 'bastion';
+    else if (p.pts >= 5 && Math.random() < diff * 0.3) type = 'fortress';
+    const cost = buildCostForPlayer(pid, type);
+    if (p.pts >= cost) {
+      p.pts -= cost;
+      p.tilesPlaced++;
+      S.grid[move] = { t: type, o: pid, lvl: 1, fresh: true };
+      consumeActionOrEndTurn();
+      return;
+    }
+  }
+
+  if (strategy === 'ECO' || (myChance < 0.4 && diff > 0.3)) {
+    const m = CONFIG.pointsMultiplier;
+    const inc = sumPlayerReserveIncome(pid);
+    const src = sourceIncomeBonus(pid);
+    const cap = playerEconomyCap(pid);
+    const gain = (1 + inc + src) * m * hellF;
+    const room = Math.max(0, cap - p.pts);
+    p.pts += Math.min(gain, room);
+    clampPlayerPts(pid);
+    endTurn();
+    return;
+  }
+
+  if (adj.length && p.pts >= 1) {
+    const move = adj[Math.floor(Math.random() * adj.length)];
+    const type = 'outpost';
+    p.pts -= 1;
+    p.tilesPlaced++;
+    S.grid[move] = { t: type, o: pid, lvl: 1, fresh: true };
+    consumeActionOrEndTurn();
+    return;
+  }
+
+  const m = CONFIG.pointsMultiplier;
+  const inc = sumPlayerReserveIncome(pid);
+  const src = sourceIncomeBonus(pid);
+  const cap = playerEconomyCap(pid);
+  const gain = (1 + inc + src) * m * hellF;
+  const room = Math.max(0, cap - p.pts);
+  p.pts += Math.min(gain, room);
+  clampPlayerPts(pid);
+  endTurn();
+}
+
+let zoom = 1, panX = 0, panY = 0, panning = false, px0, py0;
+
+function applyTransform() {
+  document.getElementById('gridPan').style.transform =
+    `translate(${panX}px,${panY}px) scale(${zoom})`;
+}
+
+(function initZoomPan() {
+  const wrap = document.getElementById('gridWrap');
+  wrap.addEventListener('wheel', e => {
+    e.preventDefault();
+    zoom = Math.max(.25, Math.min(5, zoom * (e.deltaY < 0 ? 1.1 : 0.91)));
+    applyTransform();
+  }, { passive: false });
+  wrap.addEventListener('pointerdown', e => {
+    if (e.target.closest('.tile')) return;
+    panning = true; px0 = e.clientX - panX; py0 = e.clientY - panY;
+    wrap.setPointerCapture(e.pointerId);
+  });
+  wrap.addEventListener('pointermove', e => {
+    if (!panning) return;
+    panX = e.clientX - px0; panY = e.clientY - py0; applyTransform();
+  });
+  const endPan = () => { panning = false; };
+  wrap.addEventListener('pointerup', endPan);
+  wrap.addEventListener('pointercancel', endPan);
+  let lastDist = 0;
+  wrap.addEventListener('touchstart', e => {
+    if (e.touches.length === 2)
+      lastDist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY);
+  });
+  wrap.addEventListener('touchmove', e => {
+    if (e.touches.length !== 2) return;
+    e.preventDefault();
+    const d = Math.hypot(
+      e.touches[0].clientX - e.touches[1].clientX,
+      e.touches[0].clientY - e.touches[1].clientY);
+    zoom = Math.max(.25, Math.min(5, zoom * (d / lastDist)));
+    lastDist = d; applyTransform();
+  }, { passive: false });
+})();
+
+function recordMatch(winnerId) {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    const hist = raw ? JSON.parse(raw) : [];
+    let atk = 0, eco = 0, builds = 0;
+    S.turnOrder.forEach(id => {
+      const pl = S.players[id];
+      atk += pl.attacks;
+      builds += pl.tilesPlaced;
+    });
+    const dur = Math.floor((Date.now() - S.startTime) / 1000);
+    hist.unshift({
+      t: Date.now(),
+      winner: winnerId,
+      vsAI: CONFIG.vsAI,
+      nPlayers: S.turnOrder.length,
+      durationSec: dur,
+      turns: S.turn,
+      mult: CONFIG.pointsMultiplier,
+      totalAttacks: atk,
+      totalBuilds: builds,
+      humanWon: CONFIG.vsAI ? winnerId === 1 : true
+    });
+    localStorage.setItem(LS_KEY, JSON.stringify(hist.slice(0, 50)));
+  } catch (e) { /* ignore */ }
+}
+
+function renderHistory() {
+  const agg = document.getElementById('historyAggregates');
+  const list = document.getElementById('historyList');
+  let hist = [];
+  try {
+    hist = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+  } catch (e) { hist = []; }
+
+  const n = hist.length;
+  const vsAiGames = hist.filter(h => h.vsAI);
+  const humanWins = vsAiGames.filter(h => h.humanWon).length;
+  const winRate = vsAiGames.length ? Math.round(100 * humanWins / vsAiGames.length) : '—';
+  let sumDur = 0, sumAtkPerMin = 0, sumTurns = 0, c = 0;
+  hist.forEach(h => {
+    if (!h.durationSec) return;
+    c++;
+    sumDur += h.durationSec;
+    sumTurns += h.turns || 0;
+    const m = h.durationSec / 60 || 1;
+    sumAtkPerMin += (h.totalAttacks || 0) / m;
+  });
+  agg.innerHTML = `
+    <div class="row row-cols-2 row-cols-md-3 g-2 small">
+      <div><span class="text-secondary">Parties enregistrées</span><br><strong>${n}</strong></div>
+      <div><span class="text-secondary">% victoire vs IA</span><br><strong>${winRate}%</strong> <span class="text-secondary">(${vsAiGames.length} parties)</span></div>
+      <div><span class="text-secondary">Durée moyenne</span><br><strong>${c ? Math.round(sumDur / c) : '—'}s</strong></div>
+      <div><span class="text-secondary">Assauts / min (moy.)</span><br><strong>${c ? (sumAtkPerMin / c).toFixed(2) : '—'}</strong></div>
+      <div><span class="text-secondary">Manches moy.</span><br><strong>${c ? (sumTurns / c).toFixed(1) : '—'}</strong></div>
+      <div><span class="text-secondary">Builds / assaut (moy.)</span><br><strong>${c ? (hist.reduce((a, h) => a + (h.totalBuilds || 0) / Math.max(1, h.totalAttacks || 1), 0) / c).toFixed(2) : '—'}</strong></div>
+    </div>`;
+
+  list.innerHTML = hist.slice(0, 15).map(h => {
+    const d = new Date(h.t);
+    const who = 'J' + h.winner + (h.vsAI && h.winner === 2 ? ' (IA)' : '');
+    return `<div class="p-2 rounded border border-secondary border-opacity-25 small d-flex justify-content-between flex-wrap gap-1">
+      <span>${d.toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' })}</span>
+      <span>Vainqueur: <strong>${who}</strong></span>
+      <span class="text-secondary">${h.durationSec}s · ${h.turns} manches · ×${h.mult}</span>
+    </div>`;
+  }).join('') || '<p class="text-secondary small mb-0">Aucune partie terminée encore.</p>';
+}
+
+function win() {
+  S.active = false;
+  const winner = S.cur;
+  recordMatch(winner);
+  const wt = document.getElementById('winTitle');
+  let msg = 'Victoire ' + playerLabel(winner);
+  if (CONFIG.vsAI) msg = winner === 1 ? 'Victoire !' : 'Défaite';
+  if (S.turnOrder.length > 2) msg = playerLabel(winner) + ' remporte la partie';
+  wt.textContent = msg;
+  wt.className = 'win-title p' + Math.min(4, winner);
+  wt.style.color = `var(--p${winner})`;
+  document.getElementById('winOverlay').classList.add('active');
+  launchParticles(winner);
+}
+
+function closeWin() {
+  document.getElementById('winOverlay').classList.remove('active');
+  if (particleInterval) { clearInterval(particleInterval); particleInterval = null; }
+}
+
+function launchParticles(player) {
+  const canvas = document.getElementById('particleCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+  const col = CONFIG['p' + player + 'Color'] || CONFIG.p1Color;
+  const particles = Array.from({ length: 90 }, () => ({
+    x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+    r: Math.random() * 3.5 + 1, vx: (Math.random() - .5) * 2.5,
+    vy: -Math.random() * 3 - .5, alpha: Math.random()
+  }));
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      const a = Math.floor(p.alpha * 255).toString(16).padStart(2, '0');
+      ctx.fillStyle = col.length === 7 ? col + a : col;
+      ctx.fill();
+      p.x += p.vx; p.y += p.vy; p.alpha -= .003;
+      if (p.alpha <= 0 || p.y < -10) {
+        p.x = Math.random() * canvas.width; p.y = canvas.height + 10;
+        p.alpha = Math.random() * .8 + .2;
+      }
+    });
+  }
+  if (particleInterval) clearInterval(particleInterval);
+  particleInterval = setInterval(draw, 1000 / 60);
+}
+
+function showM(t, b) {
+  const el = document.getElementById('modal');
+  document.getElementById('mTitle').innerText = t;
+  document.getElementById('mBody').innerHTML = b;
+  let m = bootstrap.Modal.getInstance(el);
+  if (!m) m = new bootstrap.Modal(el);
+  m.show();
+}
+
+function closeM() {
+  const m = bootstrap.Modal.getInstance(document.getElementById('modal'));
+  if (m) m.hide();
+}
+
+updateConfigDisplay();
+
+</script>
+</body>
+</html>
