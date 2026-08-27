@@ -2799,7 +2799,7 @@ function isHuman(id) {
   return id <= (CONFIG.humanPlayers || 1);
 }
 function isControllableHuman(id) {
-  return isHuman(id) && (!CONFIG.online || id === ONLINE.localPid);
+  return isHuman(id) && (!CONFIG.online || id === ONLINE.localPid || (ONLINE.isHost && ONLINE.applyingRemote));
 }
 
 function countCitadels(pid) {
