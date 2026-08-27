@@ -1388,6 +1388,7 @@ html,body{background:#080b10;color:var(--txt)}body{background-image:radial-gradi
 .action-module-mark{width:36px;aspect-ratio:1;display:grid;place-items:center;background:#222d39;border:1px solid color-mix(in srgb,var(--radP) 72%,#8794a2);overflow:hidden}.action-module-mark .rad-svg{width:23px!important;height:23px!important}.action-choice[data-module="outpost"] .action-module-mark{clip-path:polygon(50% 3%,98% 94%,2% 94%)}.action-choice[data-module="bastion"] .action-module-mark{clip-path:polygon(25% 3%,75% 3%,98% 50%,75% 97%,25% 97%,2% 50%)}.action-choice[data-module="fortress"] .action-module-mark{clip-path:polygon(14% 0,34% 0,34% 14%,66% 14%,66% 0,86% 0,100% 28%,84% 100%,16% 100%,0 28%)}.action-choice[data-module="reserve"] .action-module-mark{clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}.action-choice[data-module="storage"] .action-module-mark{clip-path:polygon(28% 0,72% 0,100% 28%,100% 72%,72% 100%,28% 100%,0 72%,0 28%)}.action-choice[data-module="armory"] .action-module-mark{clip-path:polygon(35% 0,65% 0,65% 27%,100% 27%,100% 73%,65% 73%,65% 100%,35% 100%,35% 73%,0 73%,0 27%,35% 27%)}.action-choice[data-module="citadel"] .action-module-mark{clip-path:polygon(50% 0,61% 30%,95% 20%,72% 49%,100% 72%,64% 70%,50% 100%,36% 70%,0 72%,28% 49%,5% 20%,39% 30%)}
 .online-card{width:min(94vw,700px)!important}.online-format{margin:16px 0 12px}.online-mode-switch{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.online-mode-btn{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:10px 12px;border:1px solid var(--bdr);border-radius:9px;background:#111822;color:var(--txt-2);text-align:left;cursor:pointer}.online-mode-btn strong{font-size:.72rem;color:var(--txt)}.online-mode-btn small{font:500 .52rem 'JetBrains Mono',monospace;color:var(--txt-3)}.online-mode-btn.active{border-color:var(--p1);background:#17263a;color:var(--p1)}.online-mode-btn.active strong{color:#dcecff}.online-custom-options{padding:11px 12px;border:1px solid var(--bdr);border-radius:10px;background:#0c121a;margin:0 0 14px}.online-option-grid{display:grid;grid-template-columns:112px minmax(0,1fr) 112px minmax(0,1fr);gap:7px 10px;align-items:center}.online-option-grid label{font:700 .56rem 'JetBrains Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--txt-3)}.online-option-grid .form-select{min-width:0}.online-check{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:.68rem;color:var(--txt-2)}.online-check input{accent-color:var(--p1)}.online-format-hint{margin-top:9px;font-size:.56rem;line-height:1.45;color:var(--txt-3)}.online-custom-options[hidden]{display:none!important}.online-card.guest-lock .online-mode-btn,.online-card.guest-lock select,.online-card.guest-lock input{cursor:not-allowed;opacity:.65}
 @media(max-width:640px){.online-mode-btn{display:block}.online-mode-btn small{display:block;margin-top:4px}.online-option-grid{grid-template-columns:1fr;gap:4px}.online-option-grid label{margin-top:5px}.online-custom-options{padding:9px}.online-card{max-height:calc(100vh - 18px);overflow:auto}}
+.module-counter{position:absolute;right:4px;bottom:4px;z-index:5;min-width:22px;padding:2px 4px;border:1px solid rgba(190,224,255,.36);border-radius:4px;background:rgba(10,16,24,.82);color:#c7d8e8;font:700 .48rem 'JetBrains Mono',monospace;letter-spacing:.02em;text-align:center;line-height:1.1;pointer-events:none}.module-counter.ready{border-color:#7be0b0;color:#9ff5c9;background:rgba(17,53,43,.9);box-shadow:0 0 0 1px rgba(123,224,176,.18)}
 </style>
 </head>
 <body>
@@ -1464,9 +1465,17 @@ html,body{background:#080b10;color:var(--txt)}body{background-image:radial-gradi
         <select id="onlinePlayersSelect" class="form-select form-select-sm" onchange="updateOnlineLobbyConfig()">
           <option value="2">2 joueurs</option><option value="3">3 joueurs</option><option value="4">4 joueurs</option><option value="5">5 joueurs</option><option value="6">6 joueurs</option><option value="7">7 joueurs</option><option value="8">8 joueurs</option><option value="9">9 joueurs</option><option value="10">10 joueurs</option><option value="11">11 joueurs</option><option value="12">12 joueurs</option>
         </select>
+        <label for="onlineHumanPlayersSelect">Humains</label>
+        <select id="onlineHumanPlayersSelect" class="form-select form-select-sm" onchange="updateOnlineLobbyConfig()">
+          <option value="1">1 slot humain</option><option value="2">2 slots humains</option><option value="3">3 slots humains</option><option value="4">4 slots humains</option><option value="5">5 slots humains</option><option value="6">6 slots humains</option><option value="7">7 slots humains</option><option value="8">8 slots humains</option><option value="9">9 slots humains</option><option value="10">10 slots humains</option><option value="11">11 slots humains</option><option value="12">12 slots humains</option>
+        </select>
         <label for="onlineMapSelect">Carte</label>
         <select id="onlineMapSelect" class="form-select form-select-sm" onchange="updateOnlineLobbyConfig()">
           <option value="large">Grande · 20×20</option><option value="gigantic">Colossale · 32×32+</option>
+        </select>
+        <label for="onlineTeamModeSelect">Équipes</label>
+        <select id="onlineTeamModeSelect" class="form-select form-select-sm" onchange="updateOnlineLobbyConfig()">
+          <option value="ffa">Chacun pour soi · FFA</option><option value="humans-vs-bots">Humains contre bots</option>
         </select>
         <label for="onlineSpawnSelect">Spawns</label>
         <select id="onlineSpawnSelect" class="form-select form-select-sm" onchange="updateOnlineLobbyConfig()">
@@ -1478,7 +1487,7 @@ html,body{background:#080b10;color:var(--txt)}body{background-image:radial-gradi
         </select>
       </div>
       <label class="online-check"><input type="checkbox" id="onlineShieldCheck" onchange="updateOnlineLobbyConfig()"><span>Citadelles de secours</span></label>
-      <div class="online-format-hint">Le nombre choisi correspond aux places ouvertes : le lancement se débloque quand tout le lobby est prêt.</div>
+      <div class="online-format-hint">Les slots restants sont remplis par des bots contrôlés par l’hôte. Exemple : 10 participants, 5 humains, FFA ou humains contre bots.</div>
     </div>
     <div class="online-fields">
       <label for="onlineName">Pseudo</label><input id="onlineName" maxlength="16" placeholder="PLAYER_01">
@@ -1570,6 +1579,15 @@ html,body{background:#080b10;color:var(--txt)}body{background-image:radial-gradi
       <p class="small text-secondary mt-1 mb-0">Jusqu’à 12 humains et bots sur le même réseau.</p>
     </div>
 
+    <div class="mb-4" id="wrapTeamMode">
+      <label class="form-label fw-semibold mb-2 d-block"><span class="section-icon">◇</span> Composition de la partie</label>
+      <select class="form-select form-select-sm bg-dark text-light border-secondary" id="teamModeSelect" onchange="CONFIG.teamMode=this.value;updateConfigDisplay()">
+        <option value="ffa">Chacun pour soi · FFA</option>
+        <option value="humans-vs-bots">Humains contre bots · équipes</option>
+      </select>
+      <p class="small text-secondary mt-1 mb-0">Exemple : 5 humains + 5 bots en FFA, ou 5 humains contre 5 bots alliés.</p>
+    </div>
+
     <div class="mb-4">
       <label class="form-label fw-semibold mb-2 d-block"><span class="section-icon">⌖</span> Placement initial</label>
       <select class="form-select form-select-sm bg-dark text-light border-secondary" id="spawnModeSelect" onchange="CONFIG.spawnMode=this.value;updateConfigDisplay()">
@@ -1580,7 +1598,7 @@ html,body{background:#080b10;color:var(--txt)}body{background-image:radial-gradi
     <div class="mb-4">
       <label class="form-label fw-semibold mb-2 d-block"><span class="section-icon">◷</span> Rythme économique</label>
       <select class="form-select form-select-sm bg-dark text-light border-secondary" id="economyModeSelect" onchange="CONFIG.economyMode=this.value;updateConfigDisplay()">
-        <option value="turn">Tour par tour · classique</option><option value="pulse">Pulsation · revenus toutes les 5 s</option><option value="realtime">Flux temps réel · rythme 4+1</option>
+        <option value="turn">Tour par tour · classique</option><option value="pulse">Pulsation · 5 s · compteurs indépendants</option><option value="realtime">Flux temps réel · rythme 4+1</option>
       </select>
     </div>
 
@@ -2141,6 +2159,7 @@ let CONFIG = {
   mapSeed: '',
   humanPlayers: 2,
   totalPlayers: 2,
+  teamMode: 'ffa',
   spawnMode: 'mirror',
   economyMode: 'turn',
   gridW: 12,
@@ -2273,8 +2292,8 @@ function setAtelierTab(tab) {
 }
 function onlineDefaultConfig(mode = 'duel') {
   return mode === 'custom'
-    ? { matchPreset:'custom', mapPreset:'large', totalPlayers:4, humanPlayers:4, spawnMode:'mirror', economyMode:'turn', baseShield:false, pointsMultiplier:1 }
-    : { matchPreset:'duel', mapPreset:'normal', totalPlayers:2, humanPlayers:2, spawnMode:'mirror', economyMode:'turn', baseShield:false, pointsMultiplier:1 };
+    ? { matchPreset:'custom', mapPreset:'large', totalPlayers:4, humanPlayers:4, teamMode:'ffa', spawnMode:'mirror', economyMode:'turn', baseShield:false, pointsMultiplier:1 }
+    : { matchPreset:'duel', mapPreset:'normal', totalPlayers:2, humanPlayers:2, teamMode:'ffa', spawnMode:'mirror', economyMode:'turn', baseShield:false, pointsMultiplier:1 };
 }
 function onlineNormalizeConfig(raw, mode = ONLINE.mode || 'duel') {
   const base = onlineDefaultConfig(mode);
@@ -2282,7 +2301,8 @@ function onlineNormalizeConfig(raw, mode = ONLINE.mode || 'duel') {
   cfg.matchPreset = mode === 'custom' ? 'custom' : 'duel';
   cfg.mapPreset = mode === 'custom' && ['large','gigantic'].includes(cfg.mapPreset) ? cfg.mapPreset : (mode === 'custom' ? 'large' : 'normal');
   cfg.totalPlayers = mode === 'custom' ? Math.max(2, Math.min(12, Number(cfg.totalPlayers) || 4)) : 2;
-  cfg.humanPlayers = cfg.totalPlayers;
+  cfg.humanPlayers = mode === 'custom' ? Math.max(1, Math.min(cfg.totalPlayers, Number(cfg.humanPlayers) || cfg.totalPlayers)) : 2;
+  cfg.teamMode = mode === 'custom' && cfg.teamMode === 'humans-vs-bots' ? 'humans-vs-bots' : 'ffa';
   cfg.spawnMode = mode === 'custom' && cfg.spawnMode === 'random' ? 'random' : 'mirror';
   cfg.economyMode = mode === 'custom' && ['pulse','realtime'].includes(cfg.economyMode) ? cfg.economyMode : 'turn';
   cfg.baseShield = mode === 'custom' && !!cfg.baseShield;
@@ -2294,6 +2314,8 @@ function onlineConfigFromControls() {
   if (mode === 'duel') return onlineDefaultConfig('duel');
   return onlineNormalizeConfig({
     totalPlayers: document.getElementById('onlinePlayersSelect')?.value,
+    humanPlayers: document.getElementById('onlineHumanPlayersSelect')?.value,
+    teamMode: document.getElementById('onlineTeamModeSelect')?.value,
     mapPreset: document.getElementById('onlineMapSelect')?.value,
     spawnMode: document.getElementById('onlineSpawnSelect')?.value,
     economyMode: document.getElementById('onlineEconomySelect')?.value,
@@ -2304,16 +2326,23 @@ function applyOnlineConfig(config, mode = ONLINE.mode || 'duel') {
   const cfg = onlineNormalizeConfig(config, mode);
   ONLINE.mode = mode === 'custom' ? 'custom' : 'duel';
   ONLINE.roomConfig = cfg;
-  Object.assign(CONFIG, cfg, { online:CONFIG.online, vsAI:false, humanPlayers:cfg.totalPlayers });
+  Object.assign(CONFIG, cfg, { online:CONFIG.online, vsAI:false, humanPlayers:cfg.humanPlayers, teamMode:cfg.teamMode || 'ffa' });
   const custom = document.getElementById('onlineCustomOptions');
   if (custom) custom.hidden = ONLINE.mode !== 'custom';
   document.querySelectorAll('.online-mode-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.onlineMode === ONLINE.mode));
   const players = document.getElementById('onlinePlayersSelect');
+  const humans = document.getElementById('onlineHumanPlayersSelect');
+  const teams = document.getElementById('onlineTeamModeSelect');
   const map = document.getElementById('onlineMapSelect');
   const spawn = document.getElementById('onlineSpawnSelect');
   const economy = document.getElementById('onlineEconomySelect');
   const shield = document.getElementById('onlineShieldCheck');
   if (players) players.value = String(cfg.totalPlayers);
+  if (humans) {
+    humans.value = String(cfg.humanPlayers);
+    humans.querySelectorAll('option').forEach(option => { option.disabled = +option.value > cfg.totalPlayers; });
+  }
+  if (teams) teams.value = cfg.teamMode || 'ffa';
   if (map) map.value = cfg.mapPreset;
   if (spawn) spawn.value = cfg.spawnMode;
   if (economy) economy.value = cfg.economyMode;
@@ -2321,8 +2350,12 @@ function applyOnlineConfig(config, mode = ONLINE.mode || 'duel') {
 }
 function setOnlineMode(mode) {
   if (!['duel','custom'].includes(mode) || (ONLINE.socket && !ONLINE.isHost)) return;
+  const previousMode = ONLINE.mode;
   ONLINE.mode = mode;
-  applyOnlineConfig(mode === 'custom' ? onlineConfigFromControls() : onlineDefaultConfig('duel'), mode);
+  const nextConfig = mode === 'custom'
+    ? (previousMode === 'custom' ? onlineConfigFromControls() : onlineDefaultConfig('custom'))
+    : onlineDefaultConfig('duel');
+  applyOnlineConfig(nextConfig, mode);
   renderOnline();
   if (ONLINE.isHost && ONLINE.socket?.readyState === WebSocket.OPEN) broadcastOnlineRoom();
 }
@@ -2352,7 +2385,7 @@ function applyOnlineRoomConfig(payload) {
   const mine = ONLINE.roster.get(ONLINE.wireName);
   ONLINE.localPid = mine?.pid || 0;
   renderOnline();
-  if (!ONLINE.gameStarted) setOnlineStatus(`Connecté · salle ${ONLINE.room} · ${ONLINE.roster.size}/${ONLINE.roomConfig.totalPlayers} joueurs`, true);
+  if (!ONLINE.gameStarted) setOnlineStatus(`Connecté · salle ${ONLINE.room} · ${ONLINE.roster.size}/${ONLINE.roomConfig.humanPlayers} humains · ${Math.max(0,ONLINE.roomConfig.totalPlayers - ONLINE.roomConfig.humanPlayers)} bots`, true);
 }
 function renderOnline() {
   const name = localStorage.getItem('gridus_username_v1') || 'PLAYER_01';
@@ -2367,17 +2400,18 @@ function renderOnline() {
   document.querySelectorAll('#online .online-mode-btn,#onlineCustomOptions select,#onlineShieldCheck').forEach(el => { el.disabled = locked; });
   const roomLabel = document.querySelector('#online .online-room .atelier-label');
   const target = ONLINE.roomConfig?.totalPlayers || 2;
+  const humanTarget = ONLINE.roomConfig?.humanPlayers || target;
   const count = ONLINE.roster.size || ONLINE.presences.size || (ONLINE.socket ? 1 : 0);
-  if (roomLabel) roomLabel.textContent = ONLINE.socket ? `Présences détectées · ${Math.min(count,target)}/${target}` : 'Présences détectées';
+  if (roomLabel) roomLabel.textContent = ONLINE.socket ? `Présences détectées · ${Math.min(count,humanTarget)}/${humanTarget} humains · ${Math.max(0,target-humanTarget)} bots` : 'Présences détectées';
   renderPresenceList();
   const start = document.getElementById('onlineStartButton');
   if (start) {
     const connected = ONLINE.roster.size || ONLINE.presences.size || 1;
     const hostReady = ONLINE.isHost && ONLINE.socket?.readyState === WebSocket.OPEN;
     start.style.display = hostReady || ONLINE.pendingSnapshot ? '' : 'none';
-    start.textContent = ONLINE.pendingSnapshot ? 'Entrer dans la partie' : (ONLINE.mode === 'custom' ? `Lancer la custom · ${target} places` : 'Lancer le duel');
-    start.disabled = !!ONLINE.pendingSnapshot && ONLINE.isHost || (hostReady && connected < target);
-    start.title = hostReady && connected < target ? `En attente de ${target - connected} joueur${target - connected > 1 ? 's' : ''}` : '';
+    start.textContent = ONLINE.pendingSnapshot ? 'Entrer dans la partie' : (ONLINE.mode === 'custom' ? `Lancer la custom · ${humanTarget} humains + ${Math.max(0,target-humanTarget)} bots` : 'Lancer le duel');
+    start.disabled = !!ONLINE.pendingSnapshot && ONLINE.isHost || (hostReady && connected < humanTarget);
+    start.title = hostReady && connected < humanTarget ? `En attente de ${humanTarget - connected} joueur${humanTarget - connected > 1 ? 's' : ''}` : '';
   }
 }
 
@@ -2391,7 +2425,7 @@ function decodeNumeric(value) {
   return JSON.parse(text);
 }
 function onlineSnapshotPayload() {
-  return { grid:S.grid, players:S.players, turnOrder:S.turnOrder, eliminated:S.eliminated, cur:S.cur, turn:S.turn, active:S.active, actionsRemaining:S.actionsRemaining, sourceSites:S.sourceSites, mapSeed:CONFIG.mapSeed, gridW:CONFIG.gridW, gridH:CONFIG.gridH, room:onlineRoomPayload() };
+  return { grid:S.grid, players:S.players, turnOrder:S.turnOrder, eliminated:S.eliminated, cur:S.cur, turn:S.turn, active:S.active, actionsRemaining:S.actionsRemaining, sourceSites:S.sourceSites, mapSeed:CONFIG.mapSeed, gridW:CONFIG.gridW, gridH:CONFIG.gridH, economyPhase, room:onlineRoomPayload() };
 }
 function broadcastOnlineState() {
   if (!CONFIG.online || !ONLINE.isHost || ONLINE.socket?.readyState !== WebSocket.OPEN) return;
@@ -2401,6 +2435,7 @@ function broadcastOnlineState() {
 function applyOnlineSnapshot(payload) {
   if (!payload || !payload.grid) return;
   CONFIG.gridW = payload.gridW; CONFIG.gridH = payload.gridH; CONFIG.mapSeed = payload.mapSeed || CONFIG.mapSeed;
+  economyPhase = Number.isFinite(payload.economyPhase) ? payload.economyPhase : economyPhase;
   if (payload.room) applyOnlineRoomConfig(payload.room);
   CONFIG.online = true; CONFIG.vsAI = false;
   S = { grid:payload.grid, players:payload.players, turnOrder:payload.turnOrder, eliminated:payload.eliminated, cur:payload.cur, turn:payload.turn, active:payload.active, actionsRemaining:payload.actionsRemaining, startTime:S.startTime || Date.now(), botMode:'MIX', sourceSites:payload.sourceSites || [] };
@@ -2423,14 +2458,15 @@ function startOrJoinOnlineGame() {
   if (!ONLINE.isHost || !ONLINE.socket) return;
   const cfg = onlineConfigFromControls();
   const target = cfg.totalPlayers;
+  const humanTarget = cfg.humanPlayers;
   const connected = ONLINE.roster.size || ONLINE.presences.size || 1;
-  if (connected < target) {
-    setOnlineStatus(`En attente · ${connected}/${target} joueurs connectés`, true);
+  if (connected < humanTarget) {
+    setOnlineStatus(`En attente · ${connected}/${humanTarget} humains connectés · ${target - humanTarget} bots prêts`, true);
     renderOnline();
     return;
   }
   applyOnlineConfig(cfg, ONLINE.mode);
-  CONFIG.online = true; CONFIG.vsAI = false; CONFIG.humanPlayers = target; CONFIG.totalPlayers = target; ONLINE.gameStarted = true;
+  CONFIG.online = true; CONFIG.vsAI = false; CONFIG.humanPlayers = humanTarget; CONFIG.totalPlayers = target; ONLINE.gameStarted = true;
   go('game'); broadcastOnlineState();
 }
 function sendOnlineAction(action) {
@@ -2448,11 +2484,11 @@ function applyOnlineAction(action) {
     if (existing) {
       existing.name = String(action.name || existing.name || 'PLAYER').slice(0,16);
       existing.presence = action.presence || existing.presence;
-    } else if (ONLINE.roster.size < cfg.totalPlayers && !ONLINE.gameStarted) {
+    } else if (ONLINE.roster.size < cfg.humanPlayers && !ONLINE.gameStarted) {
       const used = new Set([...ONLINE.roster.values()].map(item => item.pid));
       let pid = 2;
       while (used.has(pid) && pid <= 12) pid++;
-      if (pid <= cfg.totalPlayers) ONLINE.roster.set(wire, {wire, pid, name:String(action.name || 'PLAYER').slice(0,16), presence:action.presence || null});
+      if (pid <= cfg.humanPlayers) ONLINE.roster.set(wire, {wire, pid, name:String(action.name || 'PLAYER').slice(0,16), presence:action.presence || null});
     }
     broadcastOnlineRoom();
     return;
@@ -2491,6 +2527,11 @@ function renderPresenceList() {
   const names = ONLINE.roster.size
     ? [...ONLINE.roster.values()].sort((a,b) => a.pid - b.pid).map(item => ({ ...(item.presence || {}), name:item.name, pid:item.pid }))
     : [...ONLINE.presences.values()];
+  const cfg = ONLINE.roomConfig;
+  if (cfg && ONLINE.mode === 'custom') {
+    const botCount = Math.max(0, cfg.totalPlayers - cfg.humanPlayers);
+    for (let i = 0; i < botCount; i++) names.push({ name:'BOT ' + (i + 1), pid:cfg.humanPlayers + i + 1, isBot:true });
+  }
   const safe = value => String(value || '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
   target.innerHTML = names.length ? names.map(p => {
     const item = typeof p === 'string' ? { name:p } : p;
@@ -2689,6 +2730,8 @@ function openSetup(vsAI) {
   if (w) w.style.display = vsAI ? '' : 'none';
   const humans = document.getElementById('wrapHumanSlots');
   if (humans) humans.style.display = vsAI ? 'none' : '';
+  const teamMode = document.getElementById('wrapTeamMode');
+  if (teamMode) teamMode.style.display = vsAI ? 'none' : '';
   go('setup');
 }
 
@@ -2700,9 +2743,9 @@ function startGameFromSetup() {
 
 function applyMatchPreset(name) {
   const presets = {
-    duel: { mapPreset:'normal', pointsMultiplier:1, totalPlayers:2, spawnMode:'mirror', economyMode:'turn', baseShield:false },
-    blitz: { mapPreset:'small', pointsMultiplier:2, totalPlayers:2, spawnMode:'mirror', economyMode:'pulse', baseShield:false },
-    front: { mapPreset:'large', pointsMultiplier:1, totalPlayers:4, spawnMode:'mirror', economyMode:'turn', baseShield:true }
+    duel: { mapPreset:'normal', pointsMultiplier:1, totalPlayers:2, humanPlayers:2, teamMode:'ffa', spawnMode:'mirror', economyMode:'turn', baseShield:false },
+    blitz: { mapPreset:'small', pointsMultiplier:2, totalPlayers:2, humanPlayers:2, teamMode:'ffa', spawnMode:'mirror', economyMode:'pulse', baseShield:false },
+    front: { mapPreset:'large', pointsMultiplier:1, totalPlayers:4, humanPlayers:4, teamMode:'ffa', spawnMode:'mirror', economyMode:'turn', baseShield:true }
   };
   const preset = presets[name] || presets.duel;
   CONFIG.matchPreset = name in presets ? name : 'duel';
@@ -2722,9 +2765,9 @@ function toggleAdvancedMatchSettings(button) {
 function updateConfigDisplay() {
   derivePlayerColors();
   const presetChecks = {
-    duel: CONFIG.mapPreset === 'normal' && CONFIG.pointsMultiplier === 1 && CONFIG.totalPlayers === 2 && CONFIG.spawnMode === 'mirror' && CONFIG.economyMode === 'turn' && !CONFIG.baseShield,
-    blitz: CONFIG.mapPreset === 'small' && CONFIG.pointsMultiplier === 2 && CONFIG.totalPlayers === 2 && CONFIG.spawnMode === 'mirror' && CONFIG.economyMode === 'pulse' && !CONFIG.baseShield,
-    front: CONFIG.mapPreset === 'large' && CONFIG.pointsMultiplier === 1 && CONFIG.totalPlayers === 4 && CONFIG.spawnMode === 'mirror' && CONFIG.economyMode === 'turn' && CONFIG.baseShield
+    duel: CONFIG.mapPreset === 'normal' && CONFIG.pointsMultiplier === 1 && CONFIG.totalPlayers === 2 && CONFIG.humanPlayers === 2 && CONFIG.teamMode === 'ffa' && CONFIG.spawnMode === 'mirror' && CONFIG.economyMode === 'turn' && !CONFIG.baseShield,
+    blitz: CONFIG.mapPreset === 'small' && CONFIG.pointsMultiplier === 2 && CONFIG.totalPlayers === 2 && CONFIG.humanPlayers === 2 && CONFIG.teamMode === 'ffa' && CONFIG.spawnMode === 'mirror' && CONFIG.economyMode === 'pulse' && !CONFIG.baseShield,
+    front: CONFIG.mapPreset === 'large' && CONFIG.pointsMultiplier === 1 && CONFIG.totalPlayers === 4 && CONFIG.humanPlayers === 4 && CONFIG.teamMode === 'ffa' && CONFIG.spawnMode === 'mirror' && CONFIG.economyMode === 'turn' && CONFIG.baseShield
   };
   CONFIG.matchPreset = Object.keys(presetChecks).find(k => presetChecks[k]) || 'custom';
   const dSl = document.getElementById('diffSlider');
@@ -2734,9 +2777,11 @@ function updateConfigDisplay() {
   const totalSl = document.getElementById('totalPlayersSelect');
   const spawnSl = document.getElementById('spawnModeSelect');
   const economySl = document.getElementById('economyModeSelect');
+  const teamSl = document.getElementById('teamModeSelect');
   if (totalSl) totalSl.value = String(CONFIG.totalPlayers);
   if (spawnSl) spawnSl.value = CONFIG.spawnMode;
   if (economySl) economySl.value = CONFIG.economyMode;
+  if (teamSl) teamSl.value = CONFIG.teamMode || 'ffa';
   const hSl = document.getElementById('humanPlayersSelect');
   if (hSl) {
     hSl.value = String(CONFIG.humanPlayers || 2);
@@ -2797,6 +2842,20 @@ function isBot(id) {
 
 function isHuman(id) {
   return id <= (CONFIG.humanPlayers || 1);
+}
+function teamForPlayer(id) {
+  if (CONFIG.teamMode === 'humans-vs-bots') return isHuman(id) ? 'humans' : 'bots';
+  return 'player-' + id;
+}
+function areAllies(a, b) {
+  if (!a || !b) return false;
+  return a === b || teamForPlayer(a) === teamForPlayer(b);
+}
+function winningPlayerForTeams() {
+  const alive = S.turnOrder.filter(id => !S.eliminated[id]);
+  if (!alive.length) return null;
+  const teams = new Set(alive.map(teamForPlayer));
+  return teams.size === 1 ? alive[0] : null;
 }
 function isControllableHuman(id) {
   return isHuman(id) && (!CONFIG.online || id === ONLINE.localPid || (ONLINE.isHost && ONLINE.applyingRemote));
@@ -2956,6 +3015,24 @@ function grantEconomy(pid, amount) {
   clampPlayerPts(pid);
 }
 
+function moduleCounterSeed(index = 0) {
+  // Un compteur indépendant par module : les veines ne paient jamais toutes
+  // la même seconde, même quand elles ont été posées dans le même tour.
+  return Math.floor(gameRandom() * 5) % 5;
+}
+
+function runReserveModuleTicks(pid) {
+  let gain = 0;
+  S.grid.forEach((tile, index) => {
+    if (!tile || tile.o !== pid || tile.t !== 'reserve') return;
+    let counter = Number.isFinite(tile.ecoCounter) ? tile.ecoCounter : moduleCounterSeed(index);
+    counter = (counter + 1) % 5;
+    tile.ecoCounter = counter;
+    if (counter === 0) gain += tileLvl(tile);
+  });
+  return gain;
+}
+
 function runEconomyPulse() {
   if (!S.active || CONFIG.economyMode === 'turn') return;
   economyPhase = (economyPhase + 1) % 5;
@@ -2963,18 +3040,18 @@ function runEconomyPulse() {
     if (S.eliminated[pid]) return;
     const network = sumPlayerReserveIncome(pid) + sourceIncomeBonus(pid);
     const gain = CONFIG.economyMode === 'pulse'
-      ? (1 + network) * CONFIG.pointsMultiplier
+      ? (runReserveModuleTicks(pid) + (economyPhase === 0 ? 1 + sourceIncomeBonus(pid) : 0)) * CONFIG.pointsMultiplier
       : (economyPhase === 0 ? 1 : Math.max(1,network)) * CONFIG.pointsMultiplier;
     grantEconomy(pid,gain);
   });
-  renderHudStrip();
-  updateEcoButtonUI();
+  render();
+  if (CONFIG.online && ONLINE.isHost) broadcastOnlineState();
 }
 
 function startEconomyClock() {
   stopEconomyClock();
   if (CONFIG.economyMode === 'turn') return;
-  economyInterval = setInterval(runEconomyPulse,CONFIG.economyMode === 'pulse' ? 5000 : 1000);
+  economyInterval = setInterval(runEconomyPulse,1000);
 }
 
 function initGame() {
@@ -3137,6 +3214,10 @@ function showTileInspector(i, pin = false) {
     name = def.n; description = def.d; role = def.role; owner = playerLabel(tile.o);
     level = String(tileLvl(tile)); resistance = String(tileRes(tile)); cost = String(def.c);
     icon = tileIconSvg(tile.t);
+    if (tile.t === 'reserve' && CONFIG.economyMode === 'pulse') {
+      const counter = Number.isFinite(tile.ecoCounter) ? ((tile.ecoCounter % 5) + 5) % 5 : 0;
+      description += ` Production indépendante : prochaine pulsation dans ${5 - counter} s.`;
+    }
   } else if (zone) {
     const sourceLvl = sourceLevelAt(i);
     name = `Veine riche · Niveau ${sourceLvl}`; description = sourceLvl === 2 ? 'Cœur dense de la veine : rapporte +2 lorsqu’il est contrôlé.' : 'Bord de veine : rapporte +1 lorsqu’il est contrôlé.';
@@ -3150,6 +3231,10 @@ function showTileInspector(i, pin = false) {
   const tags = [`<span class="tile-info-tag">${role}</span>`];
   if (zone) tags.push(`<span class="tile-info-tag boost">Ressource N${sourceLevelAt(i)}</span>`);
   if (tile.t === 'mountain') tags.push('<span class="tile-info-tag danger">Infranchissable</span>');
+  if (tile.t === 'reserve' && tile.o && CONFIG.economyMode === 'pulse') {
+    const counter = Number.isFinite(tile.ecoCounter) ? ((tile.ecoCounter % 5) + 5) % 5 : 0;
+    tags.push(`<span class="tile-info-tag boost">Compteur ${counter}/5</span>`);
+  }
   document.getElementById('tileInspectorTags').innerHTML = tags.join('');
   document.getElementById('tileInspectorStats').innerHTML = `
     <div class="tile-inspector-stat"><span>Niveau</span><strong>${level}</strong></div>
@@ -3182,7 +3267,7 @@ function render() {
     if (t.fresh) { cls += ' just-placed'; t.fresh = false; }
     if (t.captured) { cls += ' conquered'; t.captured = false; }
     if (!t.o && t.t !== 'mountain' && isAdj) cls += ' playable';
-    else if (t.o && t.o !== S.cur && isAdj) cls += ' attackable';
+    else if (t.o && t.o !== S.cur && !areAllies(t.o, S.cur) && isAdj) cls += ' attackable';
     div.className = cls;
     div.dataset.index = String(i);
     div.dataset.owner = t.o ? String(t.o) : 'neutral';
@@ -3206,12 +3291,16 @@ function render() {
       const lvl = tileLvl(t);
       const tint = TILE_TINT[t.t] || 'transparent';
       const levelNodes = Array.from({length:Math.max(0,lvl - 1)},() => '<i></i>').join('');
+      const moduleCounterValue = Number.isFinite(t.ecoCounter) ? ((t.ecoCounter % 5) + 5) % 5 : 0;
+      const moduleCounter = CONFIG.economyMode === 'pulse' && t.t === 'reserve'
+        ? `<span class="module-counter ${moduleCounterValue === 4 ? 'ready' : ''}" title="Production indépendante · prochaine dans ${5 - moduleCounterValue} s">${moduleCounterValue}/5</span>`
+        : '';
       div.style.setProperty('--tile-tint', tint);
       div.innerHTML = `
         <span class="tile-type-tint"></span>
         ${gradeMarksHTML(lvl)}
         <span class="module-shell" aria-hidden="true"><span class="module-shell-ring"></span>${tileIconSvg(t.t)}</span>
-        <span class="module-level-nodes" aria-hidden="true">${levelNodes}</span>`;
+        <span class="module-level-nodes" aria-hidden="true">${levelNodes}</span>${moduleCounter}`;
     }
     div.onmouseenter = () => previewTileInspector(i);
     div.onmouseleave = leaveTileInspector;
@@ -3265,7 +3354,7 @@ function onTile(i) {
   const isAdj = getAdjPassable(i).some(a => S.grid[a].o === S.cur);
   if (tile.o === S.cur) showOverwriteRadial(i, cx, cy, rect.width);
   else if (!tile.o && tile.t !== 'mountain' && isAdj) showRadial(i, cx, cy, rect.width);
-  else if (tile.o && tile.o !== S.cur && isAdj) attackMenu(i);
+  else if (tile.o && tile.o !== S.cur && !areAllies(tile.o, S.cur) && isAdj) attackMenu(i);
 }
 
 function showActionPopover({ title, subtitle, items, cx, cy, accent = 'var(--p1)' }) {
@@ -3446,7 +3535,7 @@ function doOverwrite(tileIdx, newType) {
     S.actionsRemaining = Math.min(S.actionsRemaining + 1, cap);
   }
 
-  S.grid[tileIdx] = { t: newType, o: S.cur, lvl: 1, fresh: true };
+  S.grid[tileIdx] = { t: newType, o: S.cur, lvl: 1, ecoCounter: newType === 'reserve' ? moduleCounterSeed(tileIdx) : 0, fresh: true };
 
   flashBoard('build');
   closeRadial();
@@ -3470,7 +3559,7 @@ function doBuild(t, i) {
     S.actionsRemaining = Math.min(S.actionsRemaining + 1, cap);
   }
   p.tilesPlaced++;
-  S.grid[i] = { t, o: S.cur, lvl: 1, fresh: true };
+  S.grid[i] = { t, o: S.cur, lvl: 1, ecoCounter: t === 'reserve' ? moduleCounterSeed(i) : 0, fresh: true };
   flashBoard('build');
   closeRadial();
   consumeActionOrEndTurn();
@@ -3528,6 +3617,7 @@ function doAttack(i, replaceType) {
   if (sendOnlineAction({type:'attack', tile:i, building:replaceType})) return;
   const tile = S.grid[i];
   const p = S.players[S.cur];
+  if (!tile || !tile.o || areAllies(S.cur, tile.o)) return;
   const victimId = tile.o;
   const enemy = S.players[victimId];
   const atkCost = tileRes(tile);
@@ -3554,7 +3644,7 @@ function doAttack(i, replaceType) {
         const cap = actionsPerTurnForPlayer(S.cur);
         S.actionsRemaining = Math.min(S.actionsRemaining + 1, cap);
       }
-      S.grid[i] = { t: replaceType, o: S.cur, lvl: 1, fresh: true, captured: true };
+      S.grid[i] = { t: replaceType, o: S.cur, lvl: 1, ecoCounter: replaceType === 'reserve' ? moduleCounterSeed(i) : 0, fresh: true, captured: true };
       p.tilesPlaced++;
     } else {
       S.grid[i] = { t: 'empty', o: 0 };
@@ -3565,9 +3655,9 @@ function doAttack(i, replaceType) {
 
     if (isLastCitadel) {
       eliminatePlayer(victim, replaceType ? i : -1);
-      const alive = S.turnOrder.filter(id => !S.eliminated[id]);
-      if (alive.length === 1) {
-        S.cur = alive[0];
+      const winner = winningPlayerForTeams();
+      if (winner) {
+        S.cur = winner;
         win();
         return;
       }
@@ -3598,7 +3688,7 @@ function doAttack(i, replaceType) {
       const cap = actionsPerTurnForPlayer(S.cur);
       S.actionsRemaining = Math.min(S.actionsRemaining + 1, cap);
     }
-    S.grid[i] = { t: replaceType, o: S.cur, lvl: 1, fresh: true, captured: true };
+    S.grid[i] = { t: replaceType, o: S.cur, lvl: 1, ecoCounter: replaceType === 'reserve' ? moduleCounterSeed(i) : 0, fresh: true, captured: true };
     p.attacks++;
     p.tilesPlaced++;
   } else {
@@ -3703,9 +3793,9 @@ function abandon() {
   if (!confirm('Abandonner ? Les adversaires restants gagnent la partie.')) return;
   const me = S.cur;
   eliminatePlayer(me, -1);
-  const alive = S.turnOrder.filter(id => !S.eliminated[id]);
-  if (alive.length === 1) {
-    S.cur = alive[0];
+  const winner = winningPlayerForTeams();
+  if (winner) {
+    S.cur = winner;
     win();
     return;
   }
@@ -3766,7 +3856,7 @@ function canPlayerTakeAnyAction(pid) {
     }
 
     // Attack on enemy tile adjacent to player
-    if (t.o && t.o !== pid && isAdjOfPlayer(i)) {
+    if (t.o && t.o !== pid && !areAllies(t.o, pid) && isAdjOfPlayer(i)) {
       const atkCost = tileRes(t);
       if (buildTypes.some(k => pts >= atkCost + buildCostForPlayer(pid, k))) return true;
     }
@@ -3854,16 +3944,16 @@ function runBot() {
   const alive = S.turnOrder.filter(id => !S.eliminated[id]);
   const totalScore = alive.reduce((sum,id) => sum + (scores[id] || 0),0) || 1;
   const myChance = (scores[pid] || 0) / totalScore;
-  const strongestEnemy = alive.filter(id => id !== pid).sort((a,b) => (scores[b] || 0) - (scores[a] || 0))[0];
+  const strongestEnemy = alive.filter(id => id !== pid && !areAllies(pid, id)).sort((a,b) => (scores[b] || 0) - (scores[a] || 0))[0];
   const own = [], emptyFront = [], enemyFront = [], threatened = [];
   S.grid.forEach((tile,i) => {
     const adj = getAdjPassable(i);
     if (tile.o === pid) {
       own.push(i);
-      const enemyAdj = adj.filter(j => S.grid[j].o && S.grid[j].o !== pid);
+      const enemyAdj = adj.filter(j => S.grid[j].o && S.grid[j].o !== pid && !areAllies(pid, S.grid[j].o));
       if (enemyAdj.length) threatened.push({i,pressure:enemyAdj.length + (tile.t === 'citadel' ? 4 : 0)});
     } else if (!tile.o && tile.t !== 'mountain' && adj.some(j => S.grid[j].o === pid)) emptyFront.push(i);
-    else if (tile.o && tile.o !== pid && adj.some(j => S.grid[j].o === pid)) enemyFront.push(i);
+    else if (tile.o && tile.o !== pid && !areAllies(pid, tile.o) && adj.some(j => S.grid[j].o === pid)) enemyFront.push(i);
   });
   const threatRatio = threatened.length / Math.max(1,own.length);
   const developmentFloor = Math.max(6,Math.round((CONFIG.gridW + CONFIG.gridH) / 4));
@@ -3898,7 +3988,7 @@ function runBot() {
   const attacks = [];
   enemyFront.forEach(i => {
     const tile = S.grid[i], atkCost = tileRes(tile);
-    const enemyPressure = getAdjPassable(i).filter(j => S.grid[j].o && S.grid[j].o !== pid).length;
+    const enemyPressure = getAdjPassable(i).filter(j => S.grid[j].o && S.grid[j].o !== pid && !areAllies(pid, S.grid[j].o)).length;
     const replacement = botCaptureType(pid,i,atkCost,enemyPressure);
     if (!replacement) return;
     const buildCost = buildCostForPlayer(pid,replacement), total = atkCost + buildCost;
@@ -3921,7 +4011,7 @@ function runBot() {
     if (tile.t === 'citadel' || tileLvl(tile) >= MAX_LVL) return;
     const cost = upgradeCostForPlayer(pid,tile);
     if (cost === Infinity || p.pts < cost) return;
-    const front = getAdjPassable(i).some(j => S.grid[j].o && S.grid[j].o !== pid);
+    const front = getAdjPassable(i).some(j => S.grid[j].o && S.grid[j].o !== pid && !areAllies(pid, S.grid[j].o));
     const usefulCap = tile.t === 'armory' ? 4 : tile.t === 'reserve' || tile.t === 'storage' ? 3 : front ? 3 : 1;
     if (tileLvl(tile) >= usefulCap) return;
     const roleScore = tile.t === 'armory' ? 15 : tile.t === 'reserve' ? 13 : tile.t === 'storage' ? 10 : front ? 12 : 3;
@@ -3931,11 +4021,11 @@ function runBot() {
   if (upgrade && (strategy === 'CONSOLIDATE' || (strategy === 'DEFEND' && gameRandom() < .35))) { doUpgrade(upgrade.i); return; }
 
   /* 4. Expansion connectée : zones riches, fronts épais et direction du leader. */
-  const enemyCitadels = S.grid.map((t,i) => t.t === 'citadel' && t.o && t.o !== pid ? i : -1).filter(i => i >= 0);
+  const enemyCitadels = S.grid.map((t,i) => t.t === 'citadel' && t.o && t.o !== pid && !areAllies(pid, t.o) ? i : -1).filter(i => i >= 0);
   const expansions = emptyFront.map(i => {
     const r = Math.floor(i / CONFIG.gridW), c = i % CONFIG.gridW;
     const ownAdj = getAdjPassable(i).filter(j => S.grid[j].o === pid).length;
-    const enemyAdj = getAdjPassable(i).filter(j => S.grid[j].o && S.grid[j].o !== pid).length;
+    const enemyAdj = getAdjPassable(i).filter(j => S.grid[j].o && S.grid[j].o !== pid && !areAllies(pid, S.grid[j].o)).length;
     const nearestCitadel = enemyCitadels.length ? Math.min(...enemyCitadels.map(j => Math.abs(r - Math.floor(j / CONFIG.gridW)) + Math.abs(c - (j % CONFIG.gridW)))) : 20;
     const zone = sourceZoneAt(i);
     return {i,ownAdj,enemyAdj,zone,score:ownAdj * 5 + enemyAdj * 3 + (zone ? 18 + zone.I * 3 : 0) + Math.max(0,12 - nearestCitadel) * (strategy === 'EXPAND' ? .6 : .25) + gameRandom() * (1 - diff) * 5};
@@ -3950,7 +4040,7 @@ function runBot() {
     else if (!ownedArmories && own.length >= 5 && p.pts >= buildCostForPlayer(pid,'armory') && diff > .45) type = 'armory';
     else if (energyRatio > .76 && p.pts >= buildCostForPlayer(pid,'storage')) type = 'storage';
     const cost = buildCostForPlayer(pid,type);
-    if (p.pts >= cost) { p.pts -= cost; p.tilesPlaced++; S.grid[expansion.i] = {t:type,o:pid,lvl:1,fresh:true}; consumeActionOrEndTurn(); return; }
+    if (p.pts >= cost) { p.pts -= cost; p.tilesPlaced++; S.grid[expansion.i] = {t:type,o:pid,lvl:1,ecoCounter:type === 'reserve' ? moduleCounterSeed(expansion.i) : 0,fresh:true}; consumeActionOrEndTurn(); return; }
   }
 
   /* L’IA ne triche plus sur les revenus : la difficulté vient du choix des actions. */
@@ -4016,6 +4106,7 @@ function recordMatch(winnerId) {
       winner: winnerId,
       vsAI: CONFIG.vsAI,
       nPlayers: S.turnOrder.length,
+      teamMode: CONFIG.teamMode || 'ffa',
       durationSec: dur,
       turns: S.turn,
       mult: CONFIG.pointsMultiplier,
@@ -4078,7 +4169,8 @@ function win() {
   const wt = document.getElementById('winTitle');
   let msg = 'Victoire ' + playerLabel(winner);
   if (CONFIG.vsAI) msg = winner === 1 ? 'Victoire !' : 'Défaite';
-  if (S.turnOrder.length > 2) msg = playerLabel(winner) + ' remporte la partie';
+  else if (CONFIG.teamMode === 'humans-vs-bots') msg = isHuman(winner) ? 'Les humains remportent la partie' : 'Les bots remportent la partie';
+  else if (S.turnOrder.length > 2) msg = playerLabel(winner) + ' remporte la partie';
   wt.textContent = msg;
   wt.className = 'win-title p' + Math.min(4, winner);
   wt.style.color = `var(--p${winner})`;
