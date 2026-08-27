@@ -4135,7 +4135,7 @@ function runBotCore() {
 }
 
 let zoom = 1, panX = 0, panY = 0, panning = false, px0, py0;
-let pointerMoved = false, suppressTileClick = false, panPointerId = null;
+let pointerMoved = false, suppressTileClickUntil = 0, panPointerId = null;
 
 function boardMetrics() {
   const wrap = document.getElementById('gridWrap');
@@ -4201,15 +4201,15 @@ function zoomAt(clientX, clientY, nextZoom) {
   });
   const endPan = e => {
     if (!panning || (e?.pointerId != null && e.pointerId !== panPointerId)) return;
-    if (pointerMoved) suppressTileClick = true;
+    if (pointerMoved) suppressTileClickUntil = performance.now() + 220;
     panning = false; panPointerId = null; wrap.classList.remove('is-panning');
   };
   wrap.addEventListener('pointerup', endPan);
   wrap.addEventListener('pointercancel', endPan);
   // A drag that began on a tile must not turn into a tile action on release.
   wrap.addEventListener('click', e => {
-    if (!suppressTileClick) return;
-    suppressTileClick = false;
+    if (performance.now() > suppressTileClickUntil) { suppressTileClickUntil = 0; return; }
+    suppressTileClickUntil = 0;
     e.preventDefault(); e.stopPropagation();
   }, true);
   let lastDist = 0;
