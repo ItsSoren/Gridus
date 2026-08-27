@@ -1386,6 +1386,8 @@ html,body{background:#080b10;color:var(--txt)}body{background-image:radial-gradi
 
 @media(max-width:760px){.grid{gap:2px!important}.module-shell{width:72%}.tile[data-level="4"] .module-shell,.tile[data-level="5"] .module-shell,.tile[data-level="6"] .module-shell{width:88%}.module-level-nodes i{width:4px;height:4px}.action-detail{background:#0b1119!important}.many-players .hud-chip{flex-basis:58px}.many-players .hud-bar{display:none}}
 .action-module-mark{width:36px;aspect-ratio:1;display:grid;place-items:center;background:#222d39;border:1px solid color-mix(in srgb,var(--radP) 72%,#8794a2);overflow:hidden}.action-module-mark .rad-svg{width:23px!important;height:23px!important}.action-choice[data-module="outpost"] .action-module-mark{clip-path:polygon(50% 3%,98% 94%,2% 94%)}.action-choice[data-module="bastion"] .action-module-mark{clip-path:polygon(25% 3%,75% 3%,98% 50%,75% 97%,25% 97%,2% 50%)}.action-choice[data-module="fortress"] .action-module-mark{clip-path:polygon(14% 0,34% 0,34% 14%,66% 14%,66% 0,86% 0,100% 28%,84% 100%,16% 100%,0 28%)}.action-choice[data-module="reserve"] .action-module-mark{clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}.action-choice[data-module="storage"] .action-module-mark{clip-path:polygon(28% 0,72% 0,100% 28%,100% 72%,72% 100%,28% 100%,0 72%,0 28%)}.action-choice[data-module="armory"] .action-module-mark{clip-path:polygon(35% 0,65% 0,65% 27%,100% 27%,100% 73%,65% 73%,65% 100%,35% 100%,35% 73%,0 73%,0 27%,35% 27%)}.action-choice[data-module="citadel"] .action-module-mark{clip-path:polygon(50% 0,61% 30%,95% 20%,72% 49%,100% 72%,64% 70%,50% 100%,36% 70%,0 72%,28% 49%,5% 20%,39% 30%)}
+.online-card{width:min(94vw,700px)!important}.online-format{margin:16px 0 12px}.online-mode-switch{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.online-mode-btn{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:10px 12px;border:1px solid var(--bdr);border-radius:9px;background:#111822;color:var(--txt-2);text-align:left;cursor:pointer}.online-mode-btn strong{font-size:.72rem;color:var(--txt)}.online-mode-btn small{font:500 .52rem 'JetBrains Mono',monospace;color:var(--txt-3)}.online-mode-btn.active{border-color:var(--p1);background:#17263a;color:var(--p1)}.online-mode-btn.active strong{color:#dcecff}.online-custom-options{padding:11px 12px;border:1px solid var(--bdr);border-radius:10px;background:#0c121a;margin:0 0 14px}.online-option-grid{display:grid;grid-template-columns:112px minmax(0,1fr) 112px minmax(0,1fr);gap:7px 10px;align-items:center}.online-option-grid label{font:700 .56rem 'JetBrains Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--txt-3)}.online-option-grid .form-select{min-width:0}.online-check{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:.68rem;color:var(--txt-2)}.online-check input{accent-color:var(--p1)}.online-format-hint{margin-top:9px;font-size:.56rem;line-height:1.45;color:var(--txt-3)}.online-custom-options[hidden]{display:none!important}.online-card.guest-lock .online-mode-btn,.online-card.guest-lock select,.online-card.guest-lock input{cursor:not-allowed;opacity:.65}
+@media(max-width:640px){.online-mode-btn{display:block}.online-mode-btn small{display:block;margin-top:4px}.online-option-grid{grid-template-columns:1fr;gap:4px}.online-option-grid label{margin-top:5px}.online-custom-options{padding:9px}.online-card{max-height:calc(100vh - 18px);overflow:auto}}
 </style>
 </head>
 <body>
@@ -1449,6 +1451,35 @@ html,body{background:#080b10;color:var(--txt)}body{background-image:radial-gradi
   <div class="card-wrap card border-secondary shadow screen-card online-card mx-auto">
     <div class="online-head"><div><div class="card-title">Salon en ligne</div><div class="card-sub">INTERZONE · SIGNAL PUBLIC</div></div><div class="online-led" id="onlineLed"></div></div>
     <div class="online-note"><span>◎</span><span>Les salons utilisent le transport cloud TurboWarp. Les parties sont temporaires : aucun classement n’est encore enregistré.</span></div>
+    <div class="online-format">
+      <div class="atelier-label">Format de partie</div>
+      <div class="online-mode-switch" role="group" aria-label="Format de partie">
+        <button type="button" class="online-mode-btn active" data-online-mode="duel" onclick="setOnlineMode('duel')"><strong>Duel</strong><small>1v1 · 14×14 carré</small></button>
+        <button type="button" class="online-mode-btn" data-online-mode="custom" onclick="setOnlineMode('custom')"><strong>Custom</strong><small>2–12 joueurs · grande carte</small></button>
+      </div>
+    </div>
+    <div id="onlineCustomOptions" class="online-custom-options" hidden>
+      <div class="online-option-grid">
+        <label for="onlinePlayersSelect">Participants</label>
+        <select id="onlinePlayersSelect" class="form-select form-select-sm" onchange="updateOnlineLobbyConfig()">
+          <option value="2">2 joueurs</option><option value="3">3 joueurs</option><option value="4">4 joueurs</option><option value="5">5 joueurs</option><option value="6">6 joueurs</option><option value="7">7 joueurs</option><option value="8">8 joueurs</option><option value="9">9 joueurs</option><option value="10">10 joueurs</option><option value="11">11 joueurs</option><option value="12">12 joueurs</option>
+        </select>
+        <label for="onlineMapSelect">Carte</label>
+        <select id="onlineMapSelect" class="form-select form-select-sm" onchange="updateOnlineLobbyConfig()">
+          <option value="large">Grande · 20×20</option><option value="gigantic">Colossale · 32×32+</option>
+        </select>
+        <label for="onlineSpawnSelect">Spawns</label>
+        <select id="onlineSpawnSelect" class="form-select form-select-sm" onchange="updateOnlineLobbyConfig()">
+          <option value="mirror">Miroir · compétitif</option><option value="random">Aléatoires · chaos</option>
+        </select>
+        <label for="onlineEconomySelect">Économie</label>
+        <select id="onlineEconomySelect" class="form-select form-select-sm" onchange="updateOnlineLobbyConfig()">
+          <option value="turn">Tour par tour</option><option value="pulse">Pulsation · 5 s</option><option value="realtime">Flux temps réel · 4+1</option>
+        </select>
+      </div>
+      <label class="online-check"><input type="checkbox" id="onlineShieldCheck" onchange="updateOnlineLobbyConfig()"><span>Citadelles de secours</span></label>
+      <div class="online-format-hint">Le nombre choisi correspond aux places ouvertes : le lancement se débloque quand tout le lobby est prêt.</div>
+    </div>
     <div class="online-fields">
       <label for="onlineName">Pseudo</label><input id="onlineName" maxlength="16" placeholder="PLAYER_01">
       <label for="roomCode">Code salon</label><div class="room-input"><input id="roomCode" maxlength="8" placeholder="AUTO"><button type="button" class="btn btn-outline-secondary" onclick="randomizeRoomCode()">Créer</button></div>
@@ -2173,7 +2204,7 @@ const COSMETICS = {
   ]
 };
 let VISUALS = { background:'default', tiles:'default', name:'terminal' };
-let ONLINE = { socket:null, room:'', displayName:'', wireName:'', presenceKey:'', heartbeat:null, presences:new Map(), isHost:false, localPid:1, pendingSnapshot:null, gameStarted:false, applyingRemote:false, seq:0 };
+let ONLINE = { socket:null, room:'', displayName:'', wireName:'', presenceKey:'', heartbeat:null, presences:new Map(), roster:new Map(), isHost:false, localPid:0, mode:'duel', roomConfig:null, pendingSnapshot:null, gameStarted:false, applyingRemote:false, seq:0 };
 let ATELIER_TAB = 'backgrounds';
 function loadCosmetics() {
   try { VISUALS = { ...VISUALS, ...(JSON.parse(localStorage.getItem('gridus_cosmetics_v1') || '{}')) }; } catch (_) {}
@@ -2240,18 +2271,113 @@ function setAtelierTab(tab) {
   ATELIER_TAB = tab;
   renderAtelier();
 }
+function onlineDefaultConfig(mode = 'duel') {
+  return mode === 'custom'
+    ? { matchPreset:'custom', mapPreset:'large', totalPlayers:4, humanPlayers:4, spawnMode:'mirror', economyMode:'turn', baseShield:false, pointsMultiplier:1 }
+    : { matchPreset:'duel', mapPreset:'normal', totalPlayers:2, humanPlayers:2, spawnMode:'mirror', economyMode:'turn', baseShield:false, pointsMultiplier:1 };
+}
+function onlineNormalizeConfig(raw, mode = ONLINE.mode || 'duel') {
+  const base = onlineDefaultConfig(mode);
+  const cfg = { ...base, ...(raw || {}) };
+  cfg.matchPreset = mode === 'custom' ? 'custom' : 'duel';
+  cfg.mapPreset = mode === 'custom' && ['large','gigantic'].includes(cfg.mapPreset) ? cfg.mapPreset : (mode === 'custom' ? 'large' : 'normal');
+  cfg.totalPlayers = mode === 'custom' ? Math.max(2, Math.min(12, Number(cfg.totalPlayers) || 4)) : 2;
+  cfg.humanPlayers = cfg.totalPlayers;
+  cfg.spawnMode = mode === 'custom' && cfg.spawnMode === 'random' ? 'random' : 'mirror';
+  cfg.economyMode = mode === 'custom' && ['pulse','realtime'].includes(cfg.economyMode) ? cfg.economyMode : 'turn';
+  cfg.baseShield = mode === 'custom' && !!cfg.baseShield;
+  cfg.pointsMultiplier = mode === 'custom' ? Math.max(.5, Math.min(10, Number(cfg.pointsMultiplier) || 1)) : 1;
+  return cfg;
+}
+function onlineConfigFromControls() {
+  const mode = ONLINE.mode === 'custom' ? 'custom' : 'duel';
+  if (mode === 'duel') return onlineDefaultConfig('duel');
+  return onlineNormalizeConfig({
+    totalPlayers: document.getElementById('onlinePlayersSelect')?.value,
+    mapPreset: document.getElementById('onlineMapSelect')?.value,
+    spawnMode: document.getElementById('onlineSpawnSelect')?.value,
+    economyMode: document.getElementById('onlineEconomySelect')?.value,
+    baseShield: document.getElementById('onlineShieldCheck')?.checked
+  }, mode);
+}
+function applyOnlineConfig(config, mode = ONLINE.mode || 'duel') {
+  const cfg = onlineNormalizeConfig(config, mode);
+  ONLINE.mode = mode === 'custom' ? 'custom' : 'duel';
+  ONLINE.roomConfig = cfg;
+  Object.assign(CONFIG, cfg, { online:CONFIG.online, vsAI:false, humanPlayers:cfg.totalPlayers });
+  const custom = document.getElementById('onlineCustomOptions');
+  if (custom) custom.hidden = ONLINE.mode !== 'custom';
+  document.querySelectorAll('.online-mode-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.onlineMode === ONLINE.mode));
+  const players = document.getElementById('onlinePlayersSelect');
+  const map = document.getElementById('onlineMapSelect');
+  const spawn = document.getElementById('onlineSpawnSelect');
+  const economy = document.getElementById('onlineEconomySelect');
+  const shield = document.getElementById('onlineShieldCheck');
+  if (players) players.value = String(cfg.totalPlayers);
+  if (map) map.value = cfg.mapPreset;
+  if (spawn) spawn.value = cfg.spawnMode;
+  if (economy) economy.value = cfg.economyMode;
+  if (shield) shield.checked = cfg.baseShield;
+}
+function setOnlineMode(mode) {
+  if (!['duel','custom'].includes(mode) || (ONLINE.socket && !ONLINE.isHost)) return;
+  ONLINE.mode = mode;
+  applyOnlineConfig(mode === 'custom' ? onlineConfigFromControls() : onlineDefaultConfig('duel'), mode);
+  renderOnline();
+  if (ONLINE.isHost && ONLINE.socket?.readyState === WebSocket.OPEN) broadcastOnlineRoom();
+}
+function updateOnlineLobbyConfig() {
+  if (ONLINE.socket && !ONLINE.isHost) return;
+  const cfg = onlineConfigFromControls();
+  applyOnlineConfig(cfg, ONLINE.mode);
+  renderOnline();
+  if (ONLINE.isHost && ONLINE.socket?.readyState === WebSocket.OPEN) broadcastOnlineRoom();
+}
+function onlineRoomPayload() {
+  const cfg = ONLINE.isHost ? onlineConfigFromControls() : onlineNormalizeConfig(ONLINE.roomConfig, ONLINE.mode);
+  const roster = [...ONLINE.roster.values()].sort((a,b) => a.pid - b.pid).map(item => ({ wire:item.wire, pid:item.pid, name:item.name, presence:item.presence || null }));
+  return { mode:ONLINE.mode, config:cfg, roster };
+}
+function broadcastOnlineRoom() {
+  if (!ONLINE.isHost || ONLINE.socket?.readyState !== WebSocket.OPEN) return;
+  applyOnlineConfig(onlineConfigFromControls(), ONLINE.mode);
+  cloudSend('☁ room_config', onlineRoomPayload());
+  renderOnline();
+}
+function applyOnlineRoomConfig(payload) {
+  if (!payload || !payload.config) return;
+  const mode = payload.mode === 'custom' ? 'custom' : 'duel';
+  applyOnlineConfig(payload.config, mode);
+  ONLINE.roster = new Map((payload.roster || []).map(item => [item.wire, item]));
+  const mine = ONLINE.roster.get(ONLINE.wireName);
+  ONLINE.localPid = mine?.pid || 0;
+  renderOnline();
+  if (!ONLINE.gameStarted) setOnlineStatus(`Connecté · salle ${ONLINE.room} · ${ONLINE.roster.size}/${ONLINE.roomConfig.totalPlayers} joueurs`, true);
+}
 function renderOnline() {
   const name = localStorage.getItem('gridus_username_v1') || 'PLAYER_01';
   const nameInput = document.getElementById('onlineName');
   if (nameInput && !nameInput.value) nameInput.value = name;
   const roomInput = document.getElementById('roomCode');
   if (roomInput && ONLINE.room) roomInput.value = ONLINE.room;
+  if (!ONLINE.roomConfig) applyOnlineConfig(onlineDefaultConfig(ONLINE.mode), ONLINE.mode);
+  const locked = !!(ONLINE.socket && !ONLINE.isHost);
+  const card = document.querySelector('#online .online-card');
+  if (card) card.classList.toggle('guest-lock', locked);
+  document.querySelectorAll('#online .online-mode-btn,#onlineCustomOptions select,#onlineShieldCheck').forEach(el => { el.disabled = locked; });
+  const roomLabel = document.querySelector('#online .online-room .atelier-label');
+  const target = ONLINE.roomConfig?.totalPlayers || 2;
+  const count = ONLINE.roster.size || ONLINE.presences.size || (ONLINE.socket ? 1 : 0);
+  if (roomLabel) roomLabel.textContent = ONLINE.socket ? `Présences détectées · ${Math.min(count,target)}/${target}` : 'Présences détectées';
   renderPresenceList();
   const start = document.getElementById('onlineStartButton');
   if (start) {
-    start.style.display = (ONLINE.isHost && ONLINE.socket?.readyState === WebSocket.OPEN) || ONLINE.pendingSnapshot ? '' : 'none';
-    start.textContent = ONLINE.pendingSnapshot ? 'Entrer dans la partie' : 'Lancer le duel';
-    start.disabled = !!ONLINE.pendingSnapshot && ONLINE.isHost;
+    const connected = ONLINE.roster.size || ONLINE.presences.size || 1;
+    const hostReady = ONLINE.isHost && ONLINE.socket?.readyState === WebSocket.OPEN;
+    start.style.display = hostReady || ONLINE.pendingSnapshot ? '' : 'none';
+    start.textContent = ONLINE.pendingSnapshot ? 'Entrer dans la partie' : (ONLINE.mode === 'custom' ? `Lancer la custom · ${target} places` : 'Lancer le duel');
+    start.disabled = !!ONLINE.pendingSnapshot && ONLINE.isHost || (hostReady && connected < target);
+    start.title = hostReady && connected < target ? `En attente de ${target - connected} joueur${target - connected > 1 ? 's' : ''}` : '';
   }
 }
 
@@ -2265,7 +2391,7 @@ function decodeNumeric(value) {
   return JSON.parse(text);
 }
 function onlineSnapshotPayload() {
-  return { grid:S.grid, players:S.players, turnOrder:S.turnOrder, eliminated:S.eliminated, cur:S.cur, turn:S.turn, active:S.active, actionsRemaining:S.actionsRemaining, sourceSites:S.sourceSites, mapSeed:CONFIG.mapSeed, gridW:CONFIG.gridW, gridH:CONFIG.gridH };
+  return { grid:S.grid, players:S.players, turnOrder:S.turnOrder, eliminated:S.eliminated, cur:S.cur, turn:S.turn, active:S.active, actionsRemaining:S.actionsRemaining, sourceSites:S.sourceSites, mapSeed:CONFIG.mapSeed, gridW:CONFIG.gridW, gridH:CONFIG.gridH, room:onlineRoomPayload() };
 }
 function broadcastOnlineState() {
   if (!CONFIG.online || !ONLINE.isHost || ONLINE.socket?.readyState !== WebSocket.OPEN) return;
@@ -2275,12 +2401,17 @@ function broadcastOnlineState() {
 function applyOnlineSnapshot(payload) {
   if (!payload || !payload.grid) return;
   CONFIG.gridW = payload.gridW; CONFIG.gridH = payload.gridH; CONFIG.mapSeed = payload.mapSeed || CONFIG.mapSeed;
+  if (payload.room) applyOnlineRoomConfig(payload.room);
+  CONFIG.online = true; CONFIG.vsAI = false;
   S = { grid:payload.grid, players:payload.players, turnOrder:payload.turnOrder, eliminated:payload.eliminated, cur:payload.cur, turn:payload.turn, active:payload.active, actionsRemaining:payload.actionsRemaining, startTime:S.startTime || Date.now(), botMode:'MIX', sourceSites:payload.sourceSites || [] };
   ONLINE.gameStarted = !!payload.active;
   render(); updateTurnBanner();
 }
 function initOnlineWaiting() {
-  S = { grid:Array(144).fill(null).map(() => ({t:'empty',o:0,fresh:false})), players:{1:{pts:0},2:{pts:0}}, turnOrder:[1,2], eliminated:{1:false,2:false}, cur:1, turn:1, active:false, actionsRemaining:0, startTime:Date.now(), botMode:'MIX', sourceSites:[] };
+  const waitingCfg = ONLINE.roomConfig || onlineDefaultConfig(ONLINE.mode);
+  const waitingSize = waitingCfg.mapPreset === 'gigantic' ? 32 : waitingCfg.mapPreset === 'large' ? 20 : 14;
+  const waitingPlayers = waitingCfg.totalPlayers || 2;
+  S = { grid:Array(waitingSize * waitingSize).fill(null).map(() => ({t:'empty',o:0,fresh:false})), players:Object.fromEntries(Array.from({length:waitingPlayers},(_,i)=>[i+1,{pts:0}])), turnOrder:Array.from({length:waitingPlayers},(_,i)=>i+1), eliminated:Object.fromEntries(Array.from({length:waitingPlayers},(_,i)=>[i+1,false])), cur:1, turn:1, active:false, actionsRemaining:0, startTime:Date.now(), botMode:'MIX', sourceSites:[] };
   render();
   const hint = document.getElementById('boardHint');
   if (hint) hint.textContent = 'En attente du signal de l’hôte…';
@@ -2290,7 +2421,17 @@ function startOrJoinOnlineGame() {
     CONFIG.online = true; go('game'); applyOnlineSnapshot(ONLINE.pendingSnapshot); ONLINE.pendingSnapshot = null; return;
   }
   if (!ONLINE.isHost || !ONLINE.socket) return;
-  CONFIG.online = true; CONFIG.humanPlayers = 2; CONFIG.totalPlayers = 2; CONFIG.economyMode = 'turn'; go('game'); broadcastOnlineState();
+  const cfg = onlineConfigFromControls();
+  const target = cfg.totalPlayers;
+  const connected = ONLINE.roster.size || ONLINE.presences.size || 1;
+  if (connected < target) {
+    setOnlineStatus(`En attente · ${connected}/${target} joueurs connectés`, true);
+    renderOnline();
+    return;
+  }
+  applyOnlineConfig(cfg, ONLINE.mode);
+  CONFIG.online = true; CONFIG.vsAI = false; CONFIG.humanPlayers = target; CONFIG.totalPlayers = target; ONLINE.gameStarted = true;
+  go('game'); broadcastOnlineState();
 }
 function sendOnlineAction(action) {
   if (!CONFIG.online || ONLINE.isHost || ONLINE.applyingRemote) return false;
@@ -2298,7 +2439,30 @@ function sendOnlineAction(action) {
   return true;
 }
 function applyOnlineAction(action) {
-  if (!ONLINE.isHost || !action || action.from !== 2 || S.cur !== 2) return;
+  if (!ONLINE.isHost || !action) return;
+  if (action.type === 'join') {
+    const wire = String(action.wire || '').replace(/[^a-zA-Z0-9]/g,'').slice(0,16);
+    if (!wire || wire === ONLINE.wireName) return;
+    const cfg = onlineConfigFromControls();
+    const existing = ONLINE.roster.get(wire);
+    if (existing) {
+      existing.name = String(action.name || existing.name || 'PLAYER').slice(0,16);
+      existing.presence = action.presence || existing.presence;
+    } else if (ONLINE.roster.size < cfg.totalPlayers && !ONLINE.gameStarted) {
+      const used = new Set([...ONLINE.roster.values()].map(item => item.pid));
+      let pid = 2;
+      while (used.has(pid) && pid <= 12) pid++;
+      if (pid <= cfg.totalPlayers) ONLINE.roster.set(wire, {wire, pid, name:String(action.name || 'PLAYER').slice(0,16), presence:action.presence || null});
+    }
+    broadcastOnlineRoom();
+    return;
+  }
+  if (action.type === 'leave') {
+    if (!ONLINE.gameStarted) ONLINE.roster.delete(String(action.wire || ''));
+    broadcastOnlineRoom();
+    return;
+  }
+  if (action.from !== S.cur || !S.players[action.from]) return;
   ONLINE.applyingRemote = true;
   try {
     if (action.type === 'build') doBuild(action.tile, action.building);
@@ -2324,11 +2488,13 @@ function randomizeRoomCode() {
 function renderPresenceList() {
   const target = document.getElementById('presenceList');
   if (!target) return;
-  const names = [...ONLINE.presences.values()];
+  const names = ONLINE.roster.size
+    ? [...ONLINE.roster.values()].sort((a,b) => a.pid - b.pid).map(item => ({ ...(item.presence || {}), name:item.name, pid:item.pid }))
+    : [...ONLINE.presences.values()];
   const safe = value => String(value || '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
   target.innerHTML = names.length ? names.map(p => {
     const item = typeof p === 'string' ? { name:p } : p;
-    return `<span class="presence-pill"><strong>◉ ${safe(item.name)}${item.level ? ` · N${safe(item.level)}` : ''}</strong>${item.nameCosmetic ? `<small>✦ ${safe(item.nameCosmetic)}</small>` : ''}${item.tilePack || item.background ? `<small>▣ ${safe(item.tilePack || '—')} · ▧ ${safe(item.background || '—')}</small>` : ''}</span>`;
+    return `<span class="presence-pill"><strong>${item.pid ? `J${safe(item.pid)} · ` : '◉ '}${safe(item.name)}${item.level ? ` · N${safe(item.level)}` : ''}</strong>${item.nameCosmetic ? `<small>✦ ${safe(item.nameCosmetic)}</small>` : ''}${item.tilePack || item.background ? `<small>▣ ${safe(item.tilePack || '—')} · ▧ ${safe(item.background || '—')}</small>` : ''}</span>`;
   }).join('') : '<span class="presence-empty">Aucun autre signal</span>';
 }
 function equippedPresence() {
@@ -2340,34 +2506,48 @@ function equippedPresence() {
 }
 function cloudSend(name, value) {
   if (!ONLINE.socket || ONLINE.socket.readyState !== WebSocket.OPEN) return;
-  const encoded = name === '☁ action' || String(name).startsWith('☁ presence_') ? encodeNumeric(value) : String(value);
+  const encoded = name === '☁ action' || name === '☁ room_config' || String(name).startsWith('☁ presence_') ? encodeNumeric(value) : String(value);
   ONLINE.socket.send(JSON.stringify({ method:'set', name, value:encoded }));
 }
 function disconnectOnline() {
   if (ONLINE.heartbeat) clearInterval(ONLINE.heartbeat);
   ONLINE.heartbeat = null;
+  if (ONLINE.socket?.readyState === WebSocket.OPEN && !ONLINE.isHost && ONLINE.wireName) cloudSend('☁ action', {type:'leave', wire:ONLINE.wireName});
   if (ONLINE.socket) ONLINE.socket.close();
-  ONLINE.socket = null; ONLINE.presences.clear(); renderPresenceList();
+  ONLINE.socket = null; ONLINE.presences.clear(); ONLINE.roster.clear(); ONLINE.roomConfig = null; ONLINE.localPid = 0; ONLINE.mode = 'duel'; renderPresenceList();
   setOnlineStatus('Signal hors ligne', false);
+  renderOnline();
 }
 function connectOnline(role = 'guest') {
+  const selectedMode = ONLINE.mode || 'duel';
+  const selectedConfig = onlineConfigFromControls();
   disconnectOnline();
+  ONLINE.mode = selectedMode;
+  applyOnlineConfig(selectedConfig, selectedMode);
   const nameInput = document.getElementById('onlineName');
   const roomInput = document.getElementById('roomCode');
   const displayName = String(nameInput?.value || localStorage.getItem('gridus_username_v1') || 'PLAYER_01').replace(/[^a-zA-Z0-9_\-]/g,'').slice(0,16).toUpperCase() || 'PLAYER_01';
   const room = String(roomInput?.value || '').replace(/[^a-zA-Z0-9]/g,'').slice(0,8).toUpperCase() || (randomizeRoomCode(), ONLINE.room);
-  ONLINE.room = room; ONLINE.displayName = displayName; ONLINE.wireName = 'player' + Math.floor(10 + Math.random() * 90); ONLINE.presenceKey = '☁ presence_' + displayName + '_' + ONLINE.wireName.slice(-2);
-  ONLINE.isHost = role === 'host'; ONLINE.localPid = ONLINE.isHost ? 1 : 2; ONLINE.pendingSnapshot = null; ONLINE.gameStarted = false; ONLINE.seq = 0;
+  ONLINE.room = room; ONLINE.displayName = displayName; ONLINE.wireName = 'player' + Math.floor(100000 + Math.random() * 900000); ONLINE.presenceKey = '☁ presence_' + displayName + '_' + ONLINE.wireName.slice(-6);
+  ONLINE.isHost = role === 'host'; ONLINE.localPid = ONLINE.isHost ? 1 : 0; ONLINE.pendingSnapshot = null; ONLINE.gameStarted = false; ONLINE.seq = 0; ONLINE.roster.clear(); ONLINE.roomConfig = null;
   localStorage.setItem('gridus_username_v1', displayName);
   setOnlineStatus(`Connexion à la salle ${room}…`, false);
   try { ONLINE.socket = new WebSocket('wss://clouddata.turbowarp.org/'); } catch (_) { setOnlineStatus('WebSocket indisponible dans ce navigateur', false); return; }
   ONLINE.socket.addEventListener('open', () => {
     const projectId = `itssoren.github.io/Gridus/room/${room}`;
     ONLINE.socket.send(JSON.stringify({method:'handshake', project_id:projectId, user:ONLINE.wireName}));
-    ONLINE.presences.set(ONLINE.wireName, equippedPresence()); renderPresenceList();
+    const myPresence = equippedPresence();
+    ONLINE.presences.set(ONLINE.wireName, myPresence); renderPresenceList();
     cloudSend(ONLINE.presenceKey, equippedPresence());
+    if (ONLINE.isHost) {
+      ONLINE.roster.set(ONLINE.wireName, {wire:ONLINE.wireName, pid:1, name:displayName, presence:myPresence});
+      applyOnlineConfig(onlineConfigFromControls(), ONLINE.mode);
+      broadcastOnlineRoom();
+    } else {
+      cloudSend('☁ action', {type:'join', from:0, wire:ONLINE.wireName, name:displayName, presence:myPresence});
+    }
     ONLINE.heartbeat = setInterval(() => cloudSend(ONLINE.presenceKey, equippedPresence()), 4500);
-    setOnlineStatus(ONLINE.isHost ? `Connecté · salle ${room} · invite ton adversaire` : `Connecté · salle ${room} · en attente de l’hôte`, true);
+    setOnlineStatus(ONLINE.isHost ? `Connecté · salle ${room} · invite les joueurs` : `Connecté · salle ${room} · en attente de l’hôte`, true);
     renderOnline();
   });
   ONLINE.socket.addEventListener('message', event => {
@@ -2384,12 +2564,15 @@ function connectOnline(role = 'guest') {
         if (msg.method === 'set' && msg.name === '☁ action' && ONLINE.isHost) {
           try { applyOnlineAction(decodeNumeric(msg.value)); } catch (_) {}
         }
+        if (msg.method === 'set' && msg.name === '☁ room_config' && !ONLINE.isHost) {
+          try { applyOnlineRoomConfig(decodeNumeric(msg.value)); } catch (_) {}
+        }
         if (msg.method === 'set' && msg.name === '☁ snapshot' && !ONLINE.isHost) {
           try {
             const raw = String(msg.value || '');
             const payload = decodeNumeric(raw.slice(8));
             if (document.getElementById('game')?.classList.contains('active')) applyOnlineSnapshot(payload);
-            else { ONLINE.pendingSnapshot = payload; renderOnline(); setOnlineStatus(`Partie prête · salle ${room} · entre dans le duel`, true); }
+            else { ONLINE.pendingSnapshot = payload; renderOnline(); setOnlineStatus(`Partie prête · salle ${room} · entre dans la ${payload.room?.mode === 'custom' ? 'custom' : 'partie'}`, true); }
           } catch (_) {}
         }
       } catch (_) { /* les trames multiples restent tolérantes */ }
@@ -2596,6 +2779,10 @@ function randomizeMapSeed() {
 }
 
 function playerLabel(id) {
+  if (CONFIG.online) {
+    const onlineEntry = [...ONLINE.roster.values()].find(item => item.pid === id);
+    if (onlineEntry?.name) return onlineEntry.name;
+  }
   if (id === 1) return 'J1';
   if (id <= (CONFIG.humanPlayers || 1)) return 'J' + id;
   // Bots nommés BOT 1, BOT 2, BOT 3...
