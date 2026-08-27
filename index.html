@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GRID WARS</title>
+<title>GRIDUS · INTERZONE</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -419,6 +419,12 @@ body {
   line-height:1;pointer-events:none;
   filter:drop-shadow(0 1px 2px rgba(0,0,0,.6));
 }
+.tile-svg{
+  position:relative;z-index:2;width:clamp(1.35rem,calc(var(--tile-px,64px) * .58),4.5rem);
+  height:auto;fill:none;stroke:rgba(248,251,255,.92);stroke-width:3.3;stroke-linecap:round;stroke-linejoin:round;
+  filter:drop-shadow(0 2px 2px rgba(0,0,0,.62));pointer-events:none;
+}
+.tile.citadel .tile-svg{stroke:#fff8c7;stroke-width:3.1;filter:drop-shadow(0 0 5px color-mix(in srgb,var(--pc) 75%,#fff));}
 
 /* Grades : △ (haut), ◁▷ (côtés), ◤◥◣◢ (niveau max) */
 .tile-grade-marks{
@@ -631,6 +637,7 @@ body {
 }
 .rad-center{z-index:5;}
 .rad-center:hover{border-color:var(--danger);color:var(--danger)}
+.mobile-action-sheet{display:none;}
 
 /* ═══════════════════════════════════════════════
    MODAL
@@ -726,6 +733,71 @@ body {
 
 /* ─ util */
 .mt3{margin-top:14px!important}
+
+/* ══ ATELIER / PROFIL ====================================================== */
+.atelier-card{width:min(94vw,760px);max-height:92vh;overflow:auto;}
+.online-card{width:min(94vw,560px);}
+.online-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
+.online-led{width:11px;height:11px;border-radius:50%;background:var(--danger);box-shadow:0 0 0 4px rgba(232,85,85,.12);margin:7px 4px 0 0;}
+.online-led.live{background:var(--good);box-shadow:0 0 0 4px rgba(76,175,125,.15),0 0 12px var(--good);}
+.mbtn.online .ico{background:#173a43;color:#63e1d0;}
+.online-note{display:flex;gap:9px;padding:11px 12px;border:1px solid rgba(99,225,208,.18);border-radius:8px;background:rgba(30,104,104,.1);color:var(--txt-2);font-size:.7rem;line-height:1.45;margin-bottom:18px;}
+.online-note>span:first-child{font-size:1.1rem;color:#63e1d0;line-height:1;}
+.online-fields{display:grid;grid-template-columns:100px 1fr;gap:9px 12px;align-items:center;}
+.online-fields label{font:700 .58rem 'JetBrains Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--txt-3);}
+.online-fields input{width:100%;min-width:0;padding:9px 10px;border:1px solid var(--bdr-md);border-radius:7px;background:var(--surface);color:var(--txt);font:600 .72rem 'JetBrains Mono',monospace;letter-spacing:.06em;}
+.room-input{display:flex;gap:7px;}.room-input button{white-space:nowrap;}
+.online-actions{display:flex;gap:8px;margin-top:18px;}
+.online-status{margin-top:14px;padding:9px 11px;border-radius:7px;background:rgba(0,0,0,.2);font:600 .62rem 'JetBrains Mono',monospace;color:var(--txt-2);}
+.online-status.live{color:var(--good);border:1px solid rgba(76,175,125,.25);}
+.online-room{margin-top:20px;padding-top:16px;border-top:1px solid var(--bdr);}
+.presence-list{display:flex;flex-wrap:wrap;gap:7px;min-height:26px;}.presence-pill{display:flex;flex-direction:column;gap:2px;padding:7px 10px;border-radius:10px;border:1px solid rgba(99,225,208,.3);background:rgba(30,104,104,.16);font:700 .58rem 'JetBrains Mono',monospace;color:#9cf5e8;}.presence-pill small{font:500 .5rem 'JetBrains Mono',monospace;color:var(--txt-3);white-space:nowrap;}.presence-empty{font-size:.68rem;color:var(--txt-3);}
+@media (max-width:640px){.online-fields{grid-template-columns:1fr;gap:5px;}.online-fields label{margin-top:5px;}.online-actions{flex-direction:column;}.atelier-card{width:calc(100% - 20px);}}
+.atelier-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:16px;}
+.profile-level{display:flex;flex-direction:column;align-items:flex-end;color:var(--gold);font-family:'JetBrains Mono',monospace;}
+.profile-level-kicker{font-size:.48rem;letter-spacing:.18em;color:var(--txt-3);}
+.profile-level strong{font-size:1.6rem;line-height:1;}
+.profile-preview{position:relative;overflow:hidden;flex-shrink:0;min-height:96px;border:1px solid rgba(91,156,246,.5);border-radius:12px;padding:20px 22px;margin-bottom:22px;background:linear-gradient(115deg,#172338,#2b1d38 54%,#10151e);box-shadow:inset 0 0 35px rgba(91,156,246,.1),0 12px 26px rgba(0,0,0,.25);}
+.profile-scan{position:absolute;inset:0;pointer-events:none;opacity:.25;background:repeating-linear-gradient(180deg,transparent 0 4px,rgba(255,255,255,.08) 5px 6px);}
+.profile-name{position:relative;font:800 clamp(1.4rem,5vw,2.4rem) 'JetBrains Mono',monospace;letter-spacing:.08em;color:#b9d7ff;text-shadow:0 0 16px rgba(91,156,246,.75);}
+.profile-meta{position:relative;display:flex;gap:8px;margin-top:8px;font:600 .62rem 'JetBrains Mono',monospace;letter-spacing:.1em;color:var(--txt-2);}
+.profile-edit{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:center;margin:-12px 0 20px;flex-shrink:0;}
+.profile-edit label{font:700 .56rem 'JetBrains Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--txt-3);}
+.profile-edit input{width:100%;min-width:0;padding:7px 9px;border:1px solid var(--bdr-md);border-radius:7px;background:var(--surface);color:var(--txt);font:700 .7rem 'JetBrains Mono',monospace;letter-spacing:.08em;}
+.profile-edit span{grid-column:2;font-size:.52rem;color:var(--txt-3);}
+.atelier-section{flex-shrink:0;margin:18px 0;}
+.atelier-label{font:800 .64rem 'JetBrains Mono',monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--txt-2);margin-bottom:9px;}
+.cosmetic-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;}
+.cosmetic-card{position:relative;min-height:84px;border:1px solid var(--bdr-md);border-radius:9px;padding:9px;background:linear-gradient(150deg,var(--bg3),var(--surface));cursor:pointer;text-align:left;color:var(--txt);transition:transform .16s,border-color .16s,box-shadow .16s;overflow:hidden;}
+.cosmetic-card:hover{transform:translateY(-2px);border-color:var(--p1);}
+.cosmetic-card.selected{border-color:var(--gold);box-shadow:0 0 0 2px rgba(232,184,75,.18),0 8px 18px rgba(0,0,0,.22);}
+.cosmetic-card .cosmetic-swatch{height:30px;border-radius:5px;margin-bottom:8px;background:var(--swatch,#252840);box-shadow:inset 0 1px 0 rgba(255,255,255,.16);}
+.cosmetic-card .cosmetic-name{display:block;font-size:.63rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cosmetic-card .cosmetic-rarity{display:block;font:600 .47rem 'JetBrains Mono',monospace;letter-spacing:.08em;color:var(--rarity,var(--txt-3));text-transform:uppercase;margin-top:3px;}
+.atelier-actions{display:flex;justify-content:space-between;gap:10px;border-top:1px solid var(--bdr);padding-top:16px;margin-top:4px;}
+body[data-bg="poolside"] .grid-wrap{background:radial-gradient(ellipse at 50% 35%,rgba(58,189,196,.2),transparent 58%),linear-gradient(180deg,#0d2430,#111a2b 60%,#091015);}
+body[data-bg="nightmall"] .grid-wrap{background:radial-gradient(ellipse at 75% 30%,rgba(228,88,174,.14),transparent 54%),linear-gradient(180deg,#21172d,#171624 58%,#0b0d15);}
+body[data-bg="sunset"] .grid-wrap{background:radial-gradient(ellipse at 30% 20%,rgba(252,164,93,.18),transparent 55%),linear-gradient(180deg,#2a1d2a,#1d1b2b 56%,#0d1018);}
+body[data-tiles="poolside"] .tile{border-radius:clamp(9px,calc(var(--tile-px,64px) * .2),20px);}
+body[data-tiles="poolside"] .tile::before{background:linear-gradient(135deg,rgba(151,246,236,.17),transparent 45%,rgba(20,99,126,.2));}
+body[data-tiles="arcade"] .tile{border-radius:clamp(5px,calc(var(--tile-px,64px) * .1),12px);}
+body[data-tiles="arcade"] .tile::before{background:repeating-linear-gradient(135deg,rgba(255,255,255,.08) 0 2px,transparent 2px 8px);}
+body[data-tiles="office"] .tile::before{background:linear-gradient(135deg,rgba(252,220,169,.12),transparent 48%,rgba(78,68,48,.2));}
+body[data-name="pager"] .profile-name{color:#ffc18f;text-shadow:0 0 16px rgba(240,99,58,.7);}
+body[data-name="archive"] .profile-name{color:#d4c4ff;text-shadow:0 0 16px rgba(185,142,255,.75);}
+body[data-name="gridzero"] .profile-name{color:#8affdc;text-shadow:0 0 16px rgba(54,231,180,.75);letter-spacing:.16em;}
+body::after{content:'';position:fixed;inset:0;z-index:5;pointer-events:none;opacity:.055;background:repeating-linear-gradient(180deg,rgba(255,255,255,.12) 0 1px,transparent 1px 5px);mix-blend-mode:screen;}
+.card-wrap,.modal-content{background:linear-gradient(145deg,rgba(36,40,62,.97),rgba(18,21,32,.98))!important;box-shadow:0 18px 55px rgba(0,0,0,.58),inset 0 1px 0 rgba(255,255,255,.06);}
+.mbtn{background:linear-gradient(145deg,rgba(35,39,59,.96),rgba(22,25,39,.96));box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 7px 18px rgba(0,0,0,.16);}
+.mbtn:hover{background:linear-gradient(145deg,rgba(47,54,81,.98),rgba(27,31,48,.98));}
+.logo-name{text-shadow:0 0 24px rgba(91,156,246,.2);}
+.logo-tag{color:#64708b;}
+@media (max-width:640px){
+  .atelier-card{padding:16px!important;}
+  .cosmetic-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .cosmetic-card{min-height:76px;}
+  .atelier-actions{position:sticky;bottom:-16px;background:var(--bg2);padding-bottom:4px;}
+}
 
 /* ══ TINTS UNITÉS (reflet / volume par type, --pc = joueur) ═════════════════ */
 .tile.t-outpost{background:linear-gradient(145deg,color-mix(in srgb,var(--pc) 95%,#fff),color-mix(in srgb,var(--pc) 60%,#ccc))!important}
@@ -940,6 +1012,119 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;b
 .hud-center.is-bot-turn .bot-turn-hud{
   display:flex;
 }
+.rad-svg{width:clamp(1.15rem,calc(var(--tile-px,64px) * .38),2rem);height:auto;fill:none;stroke:currentColor;stroke-width:3.3;stroke-linecap:round;stroke-linejoin:round;pointer-events:none;}
+
+/* ══ 2.5D / LIMINAL RETRO PASS ============================================= */
+:root{
+  --grid-glow:rgba(110,154,255,.12);
+  --grid-shadow:rgba(0,0,0,.58);
+}
+
+/* Une scène qui donne de la profondeur sans sacrifier la précision des cases. */
+.grid-wrap{
+  isolation:isolate;
+  background:
+    radial-gradient(ellipse 72% 52% at 50% 42%,var(--grid-glow),transparent 68%),
+    linear-gradient(180deg,#0d1019 0%,#151927 58%,#0a0d14 100%);
+}
+.grid-wrap::before,
+.grid-wrap::after{
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:1;
+}
+.grid-wrap::before{
+  opacity:.22;
+  background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:100% 4px;
+  mix-blend-mode:screen;
+}
+.grid-wrap::after{
+  background:radial-gradient(ellipse at center,transparent 48%,rgba(0,0,0,.44) 100%);
+}
+#gridPan{position:relative;z-index:2;filter:drop-shadow(0 18px 28px var(--grid-shadow));}
+.grid{
+  gap:2px;
+  padding:3px;
+  background:linear-gradient(135deg,rgba(255,255,255,.09),rgba(0,0,0,.42));
+  box-shadow:0 0 0 1px rgba(255,255,255,.08),inset 0 0 0 1px rgba(0,0,0,.7);
+}
+.tile{
+  border-width:3px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.09),0 3px 0 rgba(0,0,0,.28);
+  transition:filter .16s,box-shadow .16s,translate .16s,background .16s;
+}
+.tile::before{
+  content:'';position:absolute;inset:3px;border-radius:inherit;pointer-events:none;z-index:0;
+  background:linear-gradient(145deg,rgba(255,255,255,.11),transparent 42%,rgba(0,0,0,.16));
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);
+}
+.tile:hover:not(.t-mountain){translate:0 -3px;z-index:8;}
+.tile.t-mountain{box-shadow:inset 0 0 0 1px rgba(255,255,255,.03),0 3px 0 #05060a!important;}
+.tile.p1,.tile.p2,.tile.p3,.tile.p4{box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 4px 0 color-mix(in srgb,var(--pc) 28%,#000),0 0 13px color-mix(in srgb,var(--pc) 18%,transparent);}
+.tile.citadel{box-shadow:inset 0 0 0 2px var(--pc),0 4px 0 color-mix(in srgb,var(--pc) 32%,#000),0 0 22px color-mix(in srgb,var(--pc) 55%,transparent)!important;}
+.tile-source-zone{background:linear-gradient(145deg,rgba(247,202,94,.3),rgba(232,184,75,.08) 52%,rgba(100,60,18,.22));}
+.grid-wrap.board-flash-build{animation:boardBuildFlash .38s ease-out;}
+.grid-wrap.board-flash-attack{animation:boardAttackFlash .42s ease-out;}
+@keyframes boardBuildFlash{0%{box-shadow:inset 0 0 0 0 rgba(91,156,246,0)}45%{box-shadow:inset 0 0 0 3px rgba(91,156,246,.28)}100%{box-shadow:inset 0 0 0 0 rgba(91,156,246,0)}}
+@keyframes boardAttackFlash{0%{box-shadow:inset 0 0 0 0 rgba(240,99,58,0)}35%{box-shadow:inset 0 0 0 4px rgba(240,99,58,.38)}100%{box-shadow:inset 0 0 0 0 rgba(240,99,58,0)}}
+
+/* Légende discrète : les états sont lisibles sans consulter les règles. */
+.board-legend{
+  position:absolute;left:14px;top:14px;z-index:5;display:flex;align-items:center;gap:8px;
+  padding:7px 10px;border:1px solid rgba(255,255,255,.12);border-radius:999px;
+  background:rgba(12,15,24,.74);backdrop-filter:blur(9px);box-shadow:0 8px 22px rgba(0,0,0,.3);
+  font:600 .62rem 'JetBrains Mono',monospace;color:var(--txt-2);letter-spacing:.04em;
+}
+.board-legend .legend-pip{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 9px var(--gold);}
+.board-legend .legend-hint{color:var(--txt-3);}
+
+@media (max-width:640px){
+  .hud{min-height:88px;overflow:hidden;}
+  #hudStrip{overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none;}
+  #hudStrip::-webkit-scrollbar{display:none;}
+  .hud-chip{flex:0 0 43vw;min-width:0;padding:8px 10px;gap:4px;}
+  .hud-chip .hud-row{gap:5px;}
+  .hud-res{font-size:.58rem;max-width:25vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .hud-center{padding:8px 9px;min-width:72px;gap:3px;}
+  .hud-turn{font-size:.6rem;}
+  .hud-who{font-size:.66rem;}
+  .grid-wrap{min-height:0;}
+  /* En portrait, on dimensionne le plateau sur la hauteur disponible : la carte
+     reste lisible et se parcourt horizontalement au lieu de laisser un vide géant. */
+  #gridPan{width:fit-content;min-width:100%;height:100%;display:flex;justify-content:center;}
+  #gridPan .grid{height:100%;width:auto;min-width:0;}
+  .board-legend{left:8px;top:8px;padding:6px 8px;font-size:.55rem;}
+  .board-legend .legend-hint{display:none;}
+  .action-bar{width:calc(100% - 16px);bottom:10px;justify-content:stretch;}
+  .action-bar::before{inset:-5px;border-radius:34px;}
+  .abtn,.abtn-eco{flex:1 1 0;min-width:0;padding:9px 5px!important;font-size:.62rem;gap:3px;overflow:hidden;}
+  .abtn span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .abtn:first-child{padding-left:8px!important;}
+  .abtn:last-child{padding-right:8px!important;}
+  /* Le radial devient une palette basse, donc aucune option ne sort du téléphone. */
+  #radialMenu.open .rad-btn{width:74px;height:64px;border-radius:9px;font-size:1.25rem;}
+  #radialMenu.open .rad-btn .rad-lbl{font-size:.42rem;}
+  #radialMenu.open .rad-btn .rad-price{font-size:.44rem;}
+  #radialMenu.open .rad-center{width:34px;height:34px;}
+  #radialMenu.open .mobile-action-sheet{
+    display:block;position:fixed;left:8px;right:8px;bottom:68px;z-index:4;
+    padding:12px;border:1px solid var(--bdr-hi);border-radius:16px;
+    background:rgba(24,27,42,.96);backdrop-filter:blur(16px);box-shadow:0 16px 42px rgba(0,0,0,.72);
+  }
+  .mobile-action-sheet .sheet-title{font:800 .7rem 'JetBrains Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--txt-2);margin:0 0 9px 2px;}
+  .mobile-action-sheet .sheet-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+  .mobile-action-sheet .sheet-btn{min-height:56px;padding:6px 3px;border-radius:9px;border:1px solid var(--bdr-hi);background:var(--bg3);color:var(--txt);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:1.1rem;}
+  .mobile-action-sheet .sheet-btn .tile-svg{width:25px;height:25px;stroke:currentColor;}
+  .mobile-action-sheet .sheet-btn small{font:600 .43rem 'Inter',sans-serif;color:var(--txt-2);}
+  .mobile-action-sheet .sheet-btn em{font:700 .43rem 'JetBrains Mono',monospace;color:var(--gold);font-style:normal;}
+  .mobile-action-sheet .sheet-btn.cant{opacity:.38;filter:saturate(.45);}
+  .mobile-action-sheet .sheet-btn:not(.cant):active{background:color-mix(in srgb,var(--radP) 34%,var(--bg3));border-color:var(--radP);}
+  .mobile-action-sheet .sheet-close{width:100%;margin-top:8px;padding:7px;border:1px solid var(--bdr);border-radius:8px;background:transparent;color:var(--txt-3);font:600 .58rem 'Inter',sans-serif;}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .tile,.tile:hover:not(.t-mountain),.tile.citadel,.tile.playable,.tile.attackable{animation:none!important;transition:none!important;translate:0!important;}
+  .grid-wrap::before{display:none;}
+}
 </style>
 </head>
 <body>
@@ -959,8 +1144,8 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;b
       <span class="c cb"></span><span class="c cp2"></span><span class="c ca"></span><span class="c cb"></span><span class="c ca"></span>
     </div>
 
-    <div class="logo-name"><em>Grid</em> Wars</div>
-    <div class="logo-tag">Stratégie · carte procédurale · v7</div>
+    <div class="logo-name"><em>Grid</em>us</div>
+    <div class="logo-tag">Stratégie · réseau liminal · v2.5</div>
 
     <div class="divider"></div>
 
@@ -975,6 +1160,16 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;b
         <span class="lbl">Contre l'IA</span>
         <span class="arr">›</span>
       </button>
+      <button class="mbtn info" onclick="go('atelier')">
+        <span class="ico">✦</span>
+        <span class="lbl">Atelier & profil</span>
+        <span class="arr">›</span>
+      </button>
+      <button class="mbtn online" onclick="go('online')">
+        <span class="ico">◉</span>
+        <span class="lbl">Salon en ligne</span>
+        <span class="arr">›</span>
+      </button>
       <button class="mbtn info" onclick="go('history')">
         <span class="ico">📈</span>
         <span class="lbl">Historique & stats</span>
@@ -986,6 +1181,42 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;b
         <span class="arr">›</span>
       </button>
     </div>
+  </div>
+</div>
+
+<!-- ═══════ SALON EN LIGNE ═══════ -->
+<div id="online" class="screen">
+  <div class="card-wrap card border-secondary shadow screen-card online-card mx-auto">
+    <div class="online-head"><div><div class="card-title">Salon en ligne</div><div class="card-sub">INTERZONE · SIGNAL PUBLIC</div></div><div class="online-led" id="onlineLed"></div></div>
+    <div class="online-note"><span>◎</span><span>Les salons utilisent le transport cloud TurboWarp. Les parties sont temporaires : aucun classement n’est encore enregistré.</span></div>
+    <div class="online-fields">
+      <label for="onlineName">Pseudo</label><input id="onlineName" maxlength="16" placeholder="PLAYER_01">
+      <label for="roomCode">Code salon</label><div class="room-input"><input id="roomCode" maxlength="8" placeholder="AUTO"><button type="button" class="btn btn-outline-secondary" onclick="randomizeRoomCode()">Créer</button></div>
+    </div>
+    <div class="online-actions"><button type="button" class="btn btn-primary flex-grow-1" onclick="connectOnline('host')">Créer la salle</button><button type="button" class="btn btn-outline-info flex-grow-1" onclick="connectOnline('guest')">Rejoindre</button><button type="button" class="btn btn-outline-danger" onclick="disconnectOnline()">Couper</button></div>
+    <div class="online-status" id="onlineStatus">Signal hors ligne</div>
+    <button type="button" class="btn btn-success w-100 mt-2" id="onlineStartButton" onclick="startOrJoinOnlineGame()" style="display:none"></button>
+    <div class="online-room"><div class="atelier-label">Présences détectées</div><div class="presence-list" id="presenceList"><span class="presence-empty">Aucun autre signal</span></div></div>
+    <button type="button" class="btn btn-outline-secondary w-100 mt-3" onclick="go('mMenu')">← Menu</button>
+  </div>
+</div>
+
+<!-- ═══════ ATELIER COSMÉTIQUE ═══════ -->
+<div id="atelier" class="screen">
+  <div class="card-wrap card border-secondary shadow screen-card mx-auto atelier-card">
+    <div class="atelier-head">
+      <div><div class="card-title">Atelier Gridus</div><div class="card-sub">Personnalise ton signal</div></div>
+      <div class="profile-level"><span class="profile-level-kicker">NIVEAU</span><strong id="profileLevel">01</strong></div>
+    </div>
+    <div class="profile-preview" id="profilePreview">
+      <div class="profile-scan"></div><div class="profile-name" id="profileNamePreview">PLAYER_01</div>
+      <div class="profile-meta"><span id="profileFramePreview">TERMINAL CYAN</span><span>·</span><span>ÉCLAIREUR</span></div>
+    </div>
+    <div class="profile-edit"><label for="profileNameInput">Identifiant public</label><input id="profileNameInput" maxlength="16" value="PLAYER_01" oninput="previewProfileName(this.value)" placeholder="PLAYER_01"><span>Visible dans les salons et les replays</span></div>
+    <div class="atelier-section"><div class="atelier-label">Fonds</div><div class="cosmetic-grid" id="backgroundCosmetics"></div></div>
+    <div class="atelier-section"><div class="atelier-label">Packs de cases</div><div class="cosmetic-grid" id="tileCosmetics"></div></div>
+    <div class="atelier-section"><div class="atelier-label">Cosmétiques de pseudo</div><div class="cosmetic-grid" id="nameCosmetics"></div></div>
+    <div class="atelier-actions"><button type="button" class="btn btn-outline-secondary" onclick="go('mMenu')">← Menu</button><button type="button" class="btn btn-primary" onclick="saveCosmetics();go('mMenu')">Enregistrer le signal</button></div>
   </div>
 </div>
 
@@ -1003,6 +1234,20 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;b
         <button type="button" class="btn btn-outline-secondary btn-sm map-preset-btn" data-preset="large" onclick="CONFIG.mapPreset='large';updateConfigDisplay()">Grand ×2</button>
       </div>
       <p class="small text-secondary mt-2 mb-0" id="mapPresetHint">Normal : dimensions aléatoires ~10–20 (rectangle), puis symétrie selon le nombre de joueurs.</p>
+    </div>
+
+    <div class="mb-4" id="wrapHumanSlots">
+      <label class="form-label fw-semibold mb-2 d-block">👥 Places humaines</label>
+      <select class="form-select form-select-sm bg-dark text-light border-secondary" id="humanPlayersSelect" onchange="CONFIG.humanPlayers=+this.value;updateConfigDisplay()">
+        <option value="2">2 joueurs humains</option><option value="3">3 joueurs humains</option><option value="4">4 joueurs humains</option>
+      </select>
+      <p class="small text-secondary mt-1 mb-0">Les autres coins sont remplis par des bots.</p>
+    </div>
+
+    <div class="mb-4">
+      <label class="form-label fw-semibold mb-2 d-block">⌁ Seed de la carte</label>
+      <div class="input-group input-group-sm"><input class="form-control bg-dark text-light border-secondary font-monospace" id="mapSeedInput" maxlength="24" placeholder="aléatoire" oninput="CONFIG.mapSeed=this.value"><button type="button" class="btn btn-outline-secondary" onclick="randomizeMapSeed()">Nouvelle</button></div>
+      <p class="small text-secondary mt-1 mb-0">Partage la seed pour rejouer exactement la même carte.</p>
     </div>
 
     <div class="mb-4" id="wrapDiffIA">
@@ -1124,6 +1369,11 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;b
   </div>
 
   <div class="grid-wrap" id="gridWrap">
+    <div class="board-legend" aria-live="polite">
+      <span class="legend-pip" aria-hidden="true"></span>
+      <span id="boardHint">Zone riche · énergie bonus</span>
+      <span class="legend-hint">Clique une case adjacente pour agir</span>
+    </div>
     <div id="gridPan">
       <div class="grid" id="grid"></div>
     </div>
@@ -1188,9 +1438,37 @@ const types = {
   mountain: { n:'Roc',        c:0,  r:0,  i:'', progressive:false }
 };
 
+/* Icônes vectorielles natives : la silhouette reste nette à toute taille et
+   ne dépend plus des polices/emoji installés sur la machine. */
+const ICON_PATHS = {
+  outpost: '<path d="M32 10 52 49H12Z"/><path d="M32 22v18M23 40h18"/>',
+  bastion: '<path d="m32 8 22 14v20L32 56 10 42V22Z"/><path d="m32 18 12 8v12l-12 8-12-8V26Z"/>',
+  fortress: '<path d="M20 8h24l12 16-12 32H20L8 24Z"/><path d="M24 22h16v21H24zM28 28h8"/>',
+  reserve: '<path d="m32 7 22 25-22 25L10 32Z"/><circle cx="32" cy="32" r="9"/><path d="M32 18v28M18 32h28"/>',
+  storage: '<path d="M10 18 32 8l22 10-22 10Z"/><path d="M10 18v27l22 11 22-11V18M32 28v28"/><path d="m18 23 14 7 14-7"/>',
+  armory: '<path d="m14 50 36-36M14 14l36 36"/><path d="M10 18 18 10l8 8-8 8ZM46 46l8-8 8 8-8 8Z"/><circle cx="32" cy="32" r="5"/>',
+  citadel: '<path d="m32 6 7 17 19 1-15 12 5 19-16-10-16 10 5-19L6 24l19-1Z"/><circle cx="32" cy="32" r="5"/>'
+};
+function tileIconSvg(typeKey, extraClass = '') {
+  const path = ICON_PATHS[typeKey] || ICON_PATHS.outpost;
+  return `<svg class="tile-svg ${extraClass}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">${path}</svg>`;
+}
+
 // Plafond points sans stockage ; stockage ajoute +10 / lvl au plafond (types.storage.capPerLvl)
 const BASE_ECO_CAP = 10;
 const MAP_AREA_MULT = { small: 0.5, normal: 1, large: 2 };
+
+let rngState = 0x9e3779b9;
+function seedRng(seed) {
+  const text = String(seed ?? Date.now());
+  rngState = 2166136261;
+  for (let i = 0; i < text.length; i++) rngState = Math.imul(rngState ^ text.charCodeAt(i), 16777619);
+  rngState >>>= 0;
+}
+function gameRandom() {
+  rngState = (Math.imul(1664525, rngState) + 1013904223) >>> 0;
+  return rngState / 4294967296;
+}
 
 // Niveau 1 posé + 5 upgrades => niveau max 6
 const MAX_LVL = 6;
@@ -1348,8 +1626,8 @@ function fourFoldIdx(r, c, W, H) {
 
 function rollBoardSize() {
   const m = MAP_AREA_MULT[CONFIG.mapPreset] || 1;
-  const w0 = 10 + Math.floor(Math.random() * 11);
-  const h0 = 10 + Math.floor(Math.random() * 11);
+  const w0 = 10 + Math.floor(gameRandom() * 11);
+  const h0 = 10 + Math.floor(gameRandom() * 11);
   return {
     w: Math.max(8, Math.round(w0 * m)),
     h: Math.max(8, Math.round(h0 * m))
@@ -1360,7 +1638,7 @@ function rollBoardSize() {
  * Génération : symétrie centrale (1v1) ou 4 quarts (3–4 joueurs). Sources = zones symétrisées.
  */
 function generateMirroredTerrain(W, H, nPlayers, cornerSet) {
-  const rng = Math.random;
+  const rng = gameRandom;
   S.sourceSites = [];
 
   const paintMount = (indices) => {
@@ -1547,6 +1825,8 @@ let ecoBtnCachedText = null;
 
 let CONFIG = {
   mapPreset: 'normal',
+  mapSeed: '',
+  humanPlayers: 2,
   gridW: 12,
   gridH: 12,
   botDifficulty: 0.5,
@@ -1558,9 +1838,270 @@ let CONFIG = {
   p3Color: '#4ade80',
   p4Color: '#c084fc',
   extraBots: 0,
-  vsAI: false
+  vsAI: false,
+  online: false
 };
 // extraBots synchronisé avec le <select> au 1er chargement
+
+const COSMETICS = {
+  backgrounds: [
+    { id:'default', name:'Signal neutre', rarity:'Base', swatch:'linear-gradient(135deg,#1a2032,#11141d)' },
+    { id:'desktop', name:'Quiet Desktop', rarity:'Rare', swatch:'linear-gradient(135deg,#23374b,#607d9c)' },
+    { id:'corridor', name:'Service Corridor', rarity:'Rare', swatch:'linear-gradient(135deg,#39443d,#9caa91)' },
+    { id:'rooftop', name:'Rooftop Dawn', rarity:'Rare', swatch:'linear-gradient(135deg,#263a54,#edaa78)' },
+    { id:'poolside', name:'Poolside 1998', rarity:'Épique', swatch:'linear-gradient(135deg,#164858,#2dc0c0)' },
+    { id:'nightmall', name:'Night Mall', rarity:'Épique', swatch:'linear-gradient(135deg,#25162f,#d05da8)' },
+    { id:'foodcourt', name:'Empty Food Court', rarity:'Épique', swatch:'linear-gradient(135deg,#6a4a43,#d39b71)' },
+    { id:'carpark', name:'Endless Carpark', rarity:'Mythique', swatch:'linear-gradient(135deg,#111c31,#6c87ad)' },
+    { id:'lavender', name:'Lavender Offices', rarity:'Mythique', swatch:'linear-gradient(135deg,#312748,#b18cc4)' },
+    { id:'arcademoon', name:'Moonlit Arcade', rarity:'Mythique', swatch:'linear-gradient(135deg,#101f35,#6f8dd6)' },
+    { id:'sunset', name:'Sunset Hardware', rarity:'Légendaire', swatch:'linear-gradient(135deg,#532b2d,#f4a064)' },
+    { id:'atrium', name:'Infinite Atrium', rarity:'Légendaire', swatch:'linear-gradient(135deg,#3f4654,#d8bd91)' },
+    { id:'horizon', name:'HORIZON.EXE', rarity:'Légendaire', swatch:'linear-gradient(135deg,#071b25,#73e4d3)' }
+  ],
+  tiles: [
+    { id:'default', name:'Grille classique', rarity:'Base', swatch:'linear-gradient(135deg,#414961,#171b27)' },
+    { id:'office', name:'Office Beige', rarity:'Rare', swatch:'linear-gradient(135deg,#8e816f,#3e4350)' },
+    { id:'plastic', name:'Frosted Plastic', rarity:'Rare', swatch:'linear-gradient(135deg,#a8c0ca,#445266)' },
+    { id:'moss', name:'Moss Monitor', rarity:'Rare', swatch:'linear-gradient(135deg,#375844,#a7ba73)' },
+    { id:'poolside', name:'Poolside 1998', rarity:'Épique', swatch:'linear-gradient(135deg,#2a9da3,#15455b)' },
+    { id:'nightmall', name:'Night Mall', rarity:'Épique', swatch:'linear-gradient(135deg,#6b3e78,#20152f)' },
+    { id:'hardware', name:'Sunset Hardware', rarity:'Épique', swatch:'linear-gradient(135deg,#9e5f45,#3a2733)' },
+    { id:'arcade', name:'Arcade Teal', rarity:'Mythique', swatch:'repeating-linear-gradient(135deg,#1e6f82 0 4px,#312357 4px 8px)' },
+    { id:'terminal', name:'Dream Terminal', rarity:'Mythique', swatch:'linear-gradient(135deg,#253d67,#7774d6)' },
+    { id:'broadcast', name:'Broadcast Ghost', rarity:'Mythique', swatch:'repeating-linear-gradient(0deg,#25424b 0 3px,#12222d 3px 6px)' },
+    { id:'origin', name:'GRID//ORIGIN', rarity:'Légendaire', swatch:'linear-gradient(135deg,#113a42,#77f2c5)' },
+    { id:'station', name:'The Last Station', rarity:'Légendaire', swatch:'linear-gradient(135deg,#4d3a36,#d8a76d)' },
+    { id:'lobby', name:'Eternal Lobby', rarity:'Légendaire', swatch:'linear-gradient(135deg,#756b63,#d4c19c)' }
+  ],
+  names: [
+    { id:'terminal', name:'Terminal Cyan', rarity:'Rare', swatch:'linear-gradient(135deg,#12354a,#5b9cf6)' },
+    { id:'pager', name:'Pager Sunset', rarity:'Rare', swatch:'linear-gradient(135deg,#5c2938,#ed8b67)' },
+    { id:'moss', name:'Moss Monitor', rarity:'Rare', swatch:'linear-gradient(135deg,#1b4b38,#81c784)' },
+    { id:'poolrooms', name:'Poolrooms', rarity:'Épique', swatch:'linear-gradient(135deg,#164858,#56dfd2)' },
+    { id:'quietmall', name:'Quiet Mall', rarity:'Épique', swatch:'linear-gradient(135deg,#54364c,#df9eb7)' },
+    { id:'neonrain', name:'Neon Rain', rarity:'Épique', swatch:'linear-gradient(135deg,#16284c,#4cb5ff)' },
+    { id:'archive', name:'Dream Archive', rarity:'Mythique', swatch:'linear-gradient(135deg,#241c5c,#b4a3ff)' },
+    { id:'afterimage', name:'Afterimage', rarity:'Mythique', swatch:'linear-gradient(135deg,#44245d,#e681e8)' },
+    { id:'broadcast', name:'Midnight Broadcast', rarity:'Mythique', swatch:'linear-gradient(135deg,#101a2c,#7285ad)' },
+    { id:'gridzero', name:'GRID//ZERO', rarity:'Légendaire', swatch:'linear-gradient(135deg,#071213,#76f6d4)' },
+    { id:'sunrise', name:'Last Sunrise', rarity:'Légendaire', swatch:'linear-gradient(135deg,#713c38,#ffd18b)' },
+    { id:'atrium', name:'Endless Atrium', rarity:'Légendaire', swatch:'linear-gradient(135deg,#2a3144,#e1c4a4)' }
+  ]
+};
+let VISUALS = { background:'default', tiles:'default', name:'terminal' };
+let ONLINE = { socket:null, room:'', displayName:'', wireName:'', presenceKey:'', heartbeat:null, presences:new Map(), isHost:false, localPid:1, pendingSnapshot:null, gameStarted:false, applyingRemote:false, seq:0 };
+function loadCosmetics() {
+  try { VISUALS = { ...VISUALS, ...(JSON.parse(localStorage.getItem('gridus_cosmetics_v1') || '{}')) }; } catch (_) {}
+  applyCosmetics();
+}
+function applyCosmetics() {
+  document.body.dataset.bg = VISUALS.background || 'default';
+  document.body.dataset.tiles = VISUALS.tiles || 'default';
+  document.body.dataset.name = VISUALS.name || 'terminal';
+  if (ONLINE?.socket && ONLINE.socket.readyState === WebSocket.OPEN) {
+    ONLINE.presences.set(ONLINE.wireName, equippedPresence());
+    renderPresenceList();
+    cloudSend(ONLINE.presenceKey, equippedPresence());
+  }
+  const frame = COSMETICS.names.find(x => x.id === VISUALS.name) || COSMETICS.names[0];
+  const preview = document.getElementById('profileFramePreview');
+  if (preview) preview.textContent = frame.name.toUpperCase();
+  if (S && S.active) render();
+}
+function saveCosmetics() {
+  localStorage.setItem('gridus_cosmetics_v1', JSON.stringify(VISUALS));
+  applyCosmetics();
+}
+function selectCosmetic(category, id) {
+  VISUALS[category] = id;
+  renderAtelier();
+  applyCosmetics();
+}
+function previewProfileName(value) {
+  const safe = String(value || 'PLAYER_01').replace(/[^a-zA-Z0-9_\-]/g,'').slice(0,16).toUpperCase() || 'PLAYER_01';
+  const preview = document.getElementById('profileNamePreview');
+  if (preview) preview.textContent = safe;
+  localStorage.setItem('gridus_username_v1', safe);
+}
+function renderCosmeticGroup(targetId, category, entries) {
+  const target = document.getElementById(targetId);
+  if (!target) return;
+  target.innerHTML = entries.map(item => `
+    <button type="button" class="cosmetic-card ${VISUALS[category] === item.id ? 'selected' : ''}" style="--swatch:${item.swatch};--rarity:${item.rarity === 'Légendaire' ? '#f7c85f' : item.rarity === 'Mythique' ? '#d59cff' : item.rarity === 'Épique' ? '#7bc7ff' : '#8fa0b9'}" onclick="selectCosmetic('${category}','${item.id}')">
+      <span class="cosmetic-swatch"></span><span class="cosmetic-name">${item.name}</span><span class="cosmetic-rarity">${item.rarity}</span>
+    </button>`).join('');
+}
+function renderAtelier() {
+  renderCosmeticGroup('backgroundCosmetics','background',COSMETICS.backgrounds);
+  renderCosmeticGroup('tileCosmetics','tiles',COSMETICS.tiles);
+  renderCosmeticGroup('nameCosmetics','name',COSMETICS.names);
+  const level = Math.max(1, Math.min(999, 1 + Math.floor((JSON.parse(localStorage.getItem(LS_KEY) || '[]').length || 0) * 1.5)));
+  const levelEl = document.getElementById('profileLevel');
+  if (levelEl) levelEl.textContent = String(level).padStart(2,'0');
+  const nameEl = document.getElementById('profileNamePreview');
+  if (nameEl) nameEl.textContent = localStorage.getItem('gridus_username_v1') || 'PLAYER_01';
+  const nameInput = document.getElementById('profileNameInput');
+  if (nameInput) nameInput.value = localStorage.getItem('gridus_username_v1') || 'PLAYER_01';
+}
+function renderOnline() {
+  const name = localStorage.getItem('gridus_username_v1') || 'PLAYER_01';
+  const nameInput = document.getElementById('onlineName');
+  if (nameInput && !nameInput.value) nameInput.value = name;
+  const roomInput = document.getElementById('roomCode');
+  if (roomInput && ONLINE.room) roomInput.value = ONLINE.room;
+  renderPresenceList();
+  const start = document.getElementById('onlineStartButton');
+  if (start) {
+    start.style.display = (ONLINE.isHost && ONLINE.socket?.readyState === WebSocket.OPEN) || ONLINE.pendingSnapshot ? '' : 'none';
+    start.textContent = ONLINE.pendingSnapshot ? 'Entrer dans la partie' : 'Lancer le duel';
+    start.disabled = !!ONLINE.pendingSnapshot && ONLINE.isHost;
+  }
+}
+
+function encodeNumeric(value) {
+  return Array.from(JSON.stringify(value)).map(ch => String(ch.charCodeAt(0)).padStart(5,'0')).join('');
+}
+function decodeNumeric(value) {
+  const raw = String(value || '');
+  let text = '';
+  for (let i = 0; i + 5 <= raw.length; i += 5) text += String.fromCharCode(Number(raw.slice(i,i+5)));
+  return JSON.parse(text);
+}
+function onlineSnapshotPayload() {
+  return { grid:S.grid, players:S.players, turnOrder:S.turnOrder, eliminated:S.eliminated, cur:S.cur, turn:S.turn, active:S.active, actionsRemaining:S.actionsRemaining, sourceSites:S.sourceSites, mapSeed:CONFIG.mapSeed, gridW:CONFIG.gridW, gridH:CONFIG.gridH };
+}
+function broadcastOnlineState() {
+  if (!CONFIG.online || !ONLINE.isHost || ONLINE.socket?.readyState !== WebSocket.OPEN) return;
+  ONLINE.seq++;
+  cloudSend('☁ snapshot', String(ONLINE.seq).padStart(8,'0') + encodeNumeric(onlineSnapshotPayload()));
+}
+function applyOnlineSnapshot(payload) {
+  if (!payload || !payload.grid) return;
+  CONFIG.gridW = payload.gridW; CONFIG.gridH = payload.gridH; CONFIG.mapSeed = payload.mapSeed || CONFIG.mapSeed;
+  S = { grid:payload.grid, players:payload.players, turnOrder:payload.turnOrder, eliminated:payload.eliminated, cur:payload.cur, turn:payload.turn, active:payload.active, actionsRemaining:payload.actionsRemaining, startTime:S.startTime || Date.now(), botMode:'MIX', sourceSites:payload.sourceSites || [] };
+  ONLINE.gameStarted = !!payload.active;
+  render(); updateTurnBanner();
+}
+function initOnlineWaiting() {
+  S = { grid:Array(144).fill(null).map(() => ({t:'empty',o:0,fresh:false})), players:{1:{pts:0},2:{pts:0}}, turnOrder:[1,2], eliminated:{1:false,2:false}, cur:1, turn:1, active:false, actionsRemaining:0, startTime:Date.now(), botMode:'MIX', sourceSites:[] };
+  render();
+  const hint = document.getElementById('boardHint');
+  if (hint) hint.textContent = 'En attente du signal de l’hôte…';
+}
+function startOrJoinOnlineGame() {
+  if (ONLINE.pendingSnapshot && !ONLINE.isHost) {
+    CONFIG.online = true; go('game'); applyOnlineSnapshot(ONLINE.pendingSnapshot); ONLINE.pendingSnapshot = null; return;
+  }
+  if (!ONLINE.isHost || !ONLINE.socket) return;
+  CONFIG.online = true; CONFIG.humanPlayers = 2; CONFIG.extraBots = 0; go('game'); broadcastOnlineState();
+}
+function sendOnlineAction(action) {
+  if (!CONFIG.online || ONLINE.isHost || ONLINE.applyingRemote) return false;
+  cloudSend('☁ action', { ...action, from:ONLINE.localPid, nonce:Date.now() });
+  return true;
+}
+function applyOnlineAction(action) {
+  if (!ONLINE.isHost || !action || action.from !== 2 || S.cur !== 2) return;
+  ONLINE.applyingRemote = true;
+  try {
+    if (action.type === 'build') doBuild(action.tile, action.building);
+    else if (action.type === 'overwrite') doOverwrite(action.tile, action.building);
+    else if (action.type === 'upgrade') doUpgrade(action.tile);
+    else if (action.type === 'attack') doAttack(action.tile, action.building);
+    else if (action.type === 'eco') eco();
+    else if (action.type === 'abandon') abandon();
+  } finally { ONLINE.applyingRemote = false; }
+}
+function setOnlineStatus(text, live = false) {
+  const status = document.getElementById('onlineStatus');
+  const led = document.getElementById('onlineLed');
+  if (status) { status.textContent = text; status.classList.toggle('live', live); }
+  if (led) led.classList.toggle('live', live);
+}
+function randomizeRoomCode() {
+  const code = Math.random().toString(36).slice(2, 8).toUpperCase();
+  const input = document.getElementById('roomCode');
+  if (input) input.value = code;
+  ONLINE.room = code;
+}
+function renderPresenceList() {
+  const target = document.getElementById('presenceList');
+  if (!target) return;
+  const names = [...ONLINE.presences.values()];
+  const safe = value => String(value || '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  target.innerHTML = names.length ? names.map(p => {
+    const item = typeof p === 'string' ? { name:p } : p;
+    return `<span class="presence-pill"><strong>◉ ${safe(item.name)}${item.level ? ` · N${safe(item.level)}` : ''}</strong>${item.nameCosmetic ? `<small>✦ ${safe(item.nameCosmetic)}</small>` : ''}${item.tilePack || item.background ? `<small>▣ ${safe(item.tilePack || '—')} · ▧ ${safe(item.background || '—')}</small>` : ''}</span>`;
+  }).join('') : '<span class="presence-empty">Aucun autre signal</span>';
+}
+function equippedPresence() {
+  const frame = COSMETICS.names.find(x => x.id === VISUALS.name) || COSMETICS.names[0];
+  const tiles = COSMETICS.tiles.find(x => x.id === VISUALS.tiles) || COSMETICS.tiles[0];
+  const background = COSMETICS.backgrounds.find(x => x.id === VISUALS.background) || COSMETICS.backgrounds[0];
+  const games = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+  return { name:ONLINE.displayName || localStorage.getItem('gridus_username_v1') || 'PLAYER_01', level:Math.max(1, 1 + Math.floor((games.length || 0) * 1.5)), nameCosmetic:frame.name, tilePack:tiles.name, background:background.name };
+}
+function cloudSend(name, value) {
+  if (!ONLINE.socket || ONLINE.socket.readyState !== WebSocket.OPEN) return;
+  const encoded = name === '☁ action' || String(name).startsWith('☁ presence_') ? encodeNumeric(value) : String(value);
+  ONLINE.socket.send(JSON.stringify({ method:'set', name, value:encoded }));
+}
+function disconnectOnline() {
+  if (ONLINE.heartbeat) clearInterval(ONLINE.heartbeat);
+  ONLINE.heartbeat = null;
+  if (ONLINE.socket) ONLINE.socket.close();
+  ONLINE.socket = null; ONLINE.presences.clear(); renderPresenceList();
+  setOnlineStatus('Signal hors ligne', false);
+}
+function connectOnline(role = 'guest') {
+  disconnectOnline();
+  const nameInput = document.getElementById('onlineName');
+  const roomInput = document.getElementById('roomCode');
+  const displayName = String(nameInput?.value || localStorage.getItem('gridus_username_v1') || 'PLAYER_01').replace(/[^a-zA-Z0-9_\-]/g,'').slice(0,16).toUpperCase() || 'PLAYER_01';
+  const room = String(roomInput?.value || '').replace(/[^a-zA-Z0-9]/g,'').slice(0,8).toUpperCase() || (randomizeRoomCode(), ONLINE.room);
+  ONLINE.room = room; ONLINE.displayName = displayName; ONLINE.wireName = 'player' + Math.floor(10 + Math.random() * 90); ONLINE.presenceKey = '☁ presence_' + displayName + '_' + ONLINE.wireName.slice(-2);
+  ONLINE.isHost = role === 'host'; ONLINE.localPid = ONLINE.isHost ? 1 : 2; ONLINE.pendingSnapshot = null; ONLINE.gameStarted = false; ONLINE.seq = 0;
+  localStorage.setItem('gridus_username_v1', displayName);
+  setOnlineStatus(`Connexion à la salle ${room}…`, false);
+  try { ONLINE.socket = new WebSocket('wss://clouddata.turbowarp.org/'); } catch (_) { setOnlineStatus('WebSocket indisponible dans ce navigateur', false); return; }
+  ONLINE.socket.addEventListener('open', () => {
+    const projectId = `itssoren.github.io/Gridus/room/${room}`;
+    ONLINE.socket.send(JSON.stringify({method:'handshake', project_id:projectId, user:ONLINE.wireName}));
+    ONLINE.presences.set(ONLINE.wireName, equippedPresence()); renderPresenceList();
+    cloudSend(ONLINE.presenceKey, equippedPresence());
+    ONLINE.heartbeat = setInterval(() => cloudSend(ONLINE.presenceKey, equippedPresence()), 4500);
+    setOnlineStatus(ONLINE.isHost ? `Connecté · salle ${room} · invite ton adversaire` : `Connecté · salle ${room} · en attente de l’hôte`, true);
+    renderOnline();
+  });
+  ONLINE.socket.addEventListener('message', event => {
+    String(event.data).split('\n').forEach(raw => {
+      try {
+        const msg = JSON.parse(raw);
+        if (msg.method === 'set' && String(msg.name).startsWith('☁ presence_')) {
+          const prefix = '☁ presence_';
+          let presence;
+          try { presence = decodeNumeric(msg.value); } catch (_) { presence = { name:String(msg.name).slice(prefix.length).replace(/_\d{2}$/,'') }; }
+          ONLINE.presences.set(String(msg.name), presence); renderPresenceList();
+          setOnlineStatus(`Connecté · salle ${room} · ${ONLINE.presences.size} signal${ONLINE.presences.size > 1 ? 's' : ''}`, true);
+        }
+        if (msg.method === 'set' && msg.name === '☁ action' && ONLINE.isHost) {
+          try { applyOnlineAction(decodeNumeric(msg.value)); } catch (_) {}
+        }
+        if (msg.method === 'set' && msg.name === '☁ snapshot' && !ONLINE.isHost) {
+          try {
+            const raw = String(msg.value || '');
+            const payload = decodeNumeric(raw.slice(8));
+            if (document.getElementById('game')?.classList.contains('active')) applyOnlineSnapshot(payload);
+            else { ONLINE.pendingSnapshot = payload; renderOnline(); setOnlineStatus(`Partie prête · salle ${room} · entre dans le duel`, true); }
+          } catch (_) {}
+        }
+      } catch (_) { /* les trames multiples restent tolérantes */ }
+    });
+  });
+  ONLINE.socket.addEventListener('close', () => { if (ONLINE.heartbeat) clearInterval(ONLINE.heartbeat); ONLINE.heartbeat=null; setOnlineStatus('Signal interrompu · reconnecte-toi pour reprendre', false); renderOnline(); });
+  ONLINE.socket.addEventListener('error', () => setOnlineStatus('Impossible de joindre le signal cloud', false));
+}
 
 const sqClass = i => {
   const t = S.grid && S.grid[i];
@@ -1643,21 +2184,31 @@ function go(id) {
   document.getElementById(id).classList.add('active');
   if (id === 'setup') updateConfigDisplay();
   if (id === 'history') renderHistory();
-  if (id === 'game') initGame();
+  if (id === 'atelier') renderAtelier();
+  if (id === 'online') renderOnline();
+  if (id === 'game') {
+    if (CONFIG.online && !ONLINE.isHost) initOnlineWaiting();
+    else initGame();
+  }
 }
 
 function openSetup(vsAI) {
   CONFIG.vsAI = !!vsAI;
+  CONFIG.humanPlayers = vsAI ? 1 : Math.max(2, CONFIG.humanPlayers || 2);
   const t = document.getElementById('setupTitle');
   const sub = document.getElementById('setupSub');
   const w = document.getElementById('wrapDiffIA');
   if (t) t.textContent = vsAI ? 'Contre l\'IA' : '2 joueurs';
   if (sub) sub.textContent = vsAI ? 'Affrontez le bot' : 'Local (+ bots aux autres coins)';
   if (w) w.style.display = vsAI ? '' : 'none';
+  const humans = document.getElementById('wrapHumanSlots');
+  if (humans) humans.style.display = vsAI ? 'none' : '';
   go('setup');
 }
 
 function startGameFromSetup() {
+  CONFIG.online = false;
+  if (ONLINE.socket) disconnectOnline();
   go('game');
 }
 
@@ -1667,6 +2218,10 @@ function updateConfigDisplay() {
   const eSl = document.getElementById('extraBotsSelect');
   if (dSl) dSl.value = CONFIG.botDifficulty;
   if (eSl) eSl.value = String(CONFIG.extraBots);
+  const hSl = document.getElementById('humanPlayersSelect');
+  if (hSl) hSl.value = String(CONFIG.humanPlayers || 2);
+  const seedInput = document.getElementById('mapSeedInput');
+  if (seedInput && document.activeElement !== seedInput) seedInput.value = CONFIG.mapSeed || '';
 
   document.querySelectorAll('.map-preset-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.preset === CONFIG.mapPreset);
@@ -1691,9 +2246,14 @@ function updateConfigDisplay() {
   document.getElementById('p4ColorPreview').style.background = CONFIG.p4Color;
 }
 
+function randomizeMapSeed() {
+  CONFIG.mapSeed = Math.random().toString(36).slice(2, 10).toUpperCase();
+  updateConfigDisplay();
+}
+
 function playerLabel(id) {
   if (id === 1) return 'J1';
-  if (id === 2 && !CONFIG.vsAI) return 'J2';
+  if (id <= (CONFIG.humanPlayers || 1)) return 'J' + id;
   // Bots nommés BOT 1, BOT 2, BOT 3...
   const bots = (S.turnOrder || []).filter(pid => isBot(pid));
   const idx = bots.indexOf(id);
@@ -1701,15 +2261,14 @@ function playerLabel(id) {
 }
 
 function isBot(id) {
-  if (id >= 3) return true;
-  if (id === 2) return CONFIG.vsAI;
-  return false;
+  return id > (CONFIG.humanPlayers || 1);
 }
 
 function isHuman(id) {
-  if (id === 1) return true;
-  if (id === 2) return !CONFIG.vsAI;
-  return false;
+  return id <= (CONFIG.humanPlayers || 1);
+}
+function isControllableHuman(id) {
+  return isHuman(id) && (!CONFIG.online || id === ONLINE.localPid);
 }
 
 function countCitadels(pid) {
@@ -1853,11 +2412,13 @@ function botPickReplaceType(p, atkCost, pid) {
 }
 
 function initGame() {
+  CONFIG.mapSeed = String(CONFIG.mapSeed || Math.floor(Date.now() / 1000));
+  seedRng(CONFIG.mapSeed);
   const { w: GW, h: GH } = rollBoardSize();
   CONFIG.gridW = GW;
   CONFIG.gridH = GH;
   const totalCells = GW * GH;
-  const n = 2 + CONFIG.extraBots;
+  const n = Math.min(4, Math.max(2, (CONFIG.humanPlayers || 1) + CONFIG.extraBots));
   S.grid = Array(totalCells).fill(null).map(() => ({ t: 'empty', o: 0, fresh: false }));
   S.turnOrder = Array.from({ length: n }, (_, i) => i + 1);
   S.eliminated = { 1: false, 2: false, 3: false, 4: false };
@@ -1891,9 +2452,11 @@ function initGame() {
   requestAnimationFrame(() => {
     const wrap = document.getElementById('gridWrap');
     const pan = document.getElementById('gridPan');
-    const gH = pan.offsetWidth;
+    const gW = pan.offsetWidth;
+    const aW = wrap.offsetWidth;
     const aH = wrap.offsetHeight;
-    if (gH > aH) panY = -(gH - aH) / 2;
+    if (gW > aW) panX = isCompactViewport() ? 0 : -(gW - aW) / 2;
+    if (gW > aH) panY = -(pan.offsetHeight - aH) / 2;
     applyTransform();
   });
   startPlayerTurn();
@@ -1911,6 +2474,7 @@ function consumeActionOrEndTurn() {
   S.actionsRemaining--;
   if (S.actionsRemaining > 0) {
     render();
+    broadcastOnlineState();
     if (isBot(S.cur)) setTimeout(runBot, 350);
   } else {
     endTurn();
@@ -1922,6 +2486,7 @@ function endTurn() {
   S.cur = next;
   S.turn++;
   startPlayerTurn();
+  broadcastOnlineState();
 }
 
 function injectDynamicColors() {
@@ -1984,7 +2549,7 @@ function render() {
 
   S.grid.forEach((t, i) => {
     const div = document.createElement('div');
-    const human = S.active && isHuman(S.cur);
+    const human = S.active && isControllableHuman(S.cur);
     const isAdj = human && getAdjPassable(i).some(a => S.grid[a].o === S.cur);
     let cls = 'tile ' + sqClass(i);
     if (t.o) cls += ' p' + t.o;
@@ -1994,6 +2559,12 @@ function render() {
     if (!t.o && t.t !== 'mountain' && isAdj) cls += ' playable';
     else if (t.o && t.o !== S.cur && isAdj) cls += ' attackable';
     div.className = cls;
+    div.dataset.index = String(i);
+    div.dataset.owner = t.o ? String(t.o) : 'neutral';
+    div.dataset.tileType = t.t || 'empty';
+    if (t.t === 'mountain') div.setAttribute('aria-label', 'Roc infranchissable');
+    else if (t.o) div.setAttribute('aria-label', `${types[t.t]?.n || 'Territoire'} — ${playerLabel(t.o)} — niveau ${tileLvl(t)}`);
+    else div.setAttribute('aria-label', isAdj ? 'Case adjacente — construire' : 'Case vide');
     if (t.t === 'mountain') {
       div.innerHTML = '';
     } else if (!t.o) {
@@ -2009,7 +2580,7 @@ function render() {
       div.innerHTML = `
         <span class="tile-type-tint"></span>
         ${gradeMarksHTML(lvl)}
-        <span class="tile-ico">${types[t.t].i}</span>`;
+        ${tileIconSvg(t.t)}`;
     }
     div.onclick = () => onTile(i);
     g.appendChild(div);
@@ -2023,6 +2594,12 @@ function render() {
   }
 
   renderHudStrip();
+  const boardHint = document.getElementById('boardHint');
+  if (boardHint) {
+    boardHint.textContent = isBot(S.cur)
+      ? `${playerLabel(S.cur)} analyse le réseau…`
+      : `${S.actionsRemaining} action${S.actionsRemaining > 1 ? 's' : ''} · énergie ${Math.round(S.players[S.cur]?.pts || 0)}`;
+  }
   document.getElementById('turnInfo').textContent = 'Manche ' + S.turn;
   document.getElementById('turnPlayer').textContent = playerLabel(S.cur);
   const hudActions = document.getElementById('hudActions');
@@ -2041,7 +2618,7 @@ function render() {
 }
 
 function onTile(i) {
-  if (!S.active || !isHuman(S.cur) || S.actionsRemaining <= 0) return;
+  if (!S.active || !isControllableHuman(S.cur) || S.actionsRemaining <= 0) return;
   const tile = S.grid[i];
   if (isMountainCell(tile)) return;
   const el = document.querySelectorAll('.tile')[i];
@@ -2059,6 +2636,15 @@ function showRadial(tileIdx, cx, cy, tileSize) {
   const citCount = countCitadels(S.cur);
   const items = ['outpost', 'bastion', 'fortress', 'reserve', 'storage', 'armory'];
   if (CONFIG.baseShield) items.push('citadel');
+  if (isCompactViewport()) {
+    showMobileActionSheet('Construire', items.map(k => ({
+      icon: tileIconSvg(k), label: types[k].n,
+      price: `${k === 'citadel' ? types.citadel.c : buildCostForPlayer(S.cur, k)} ⚡`,
+      can: k === 'citadel' ? (p.pts >= types.citadel.c && citCount < 2) : (p.pts >= buildCostForPlayer(S.cur, k)),
+      action: () => doBuild(k, tileIdx)
+    })));
+    return;
+  }
   const menu = document.getElementById('radialMenu');
   menu.innerHTML = '';
   menu.style.setProperty('--radP', 'var(--p' + S.cur + ')');
@@ -2087,7 +2673,7 @@ function showRadial(tileIdx, cx, cy, tileSize) {
     const btn = document.createElement('div');
     btn.className = 'rad-btn' + (can ? '' : ' cant');
     btn.style.cssText = `left:${bx}px;top:${by}px;animation-delay:${idx * 0.045}s`;
-    btn.innerHTML = `<span>${types[k].i}</span><span class="rad-lbl">${types[k].n}</span><span class="rad-price">${cost} ⚡</span>`;
+    btn.innerHTML = `${tileIconSvg(k, 'rad-svg')}<span class="rad-lbl">${types[k].n}</span><span class="rad-price">${cost} ⚡</span>`;
     btn.title = `${types[k].n} — ${cost} ⚡`;
     btn.onmouseenter = () => {
       center.innerHTML = `<div style="font-size:.95rem;line-height:1">✕</div><span class="rad-cost">${k === 'citadel' ? 'Secours' : 'Construire'} · ${cost} ⚡</span>`;
@@ -2101,6 +2687,44 @@ function showRadial(tileIdx, cx, cy, tileSize) {
 
 function closeRadial() {
   document.getElementById('radialMenu').classList.remove('open');
+}
+
+function flashBoard(kind = 'build') {
+  const wrap = document.getElementById('gridWrap');
+  if (!wrap) return;
+  wrap.classList.remove('board-flash-build', 'board-flash-attack');
+  void wrap.offsetWidth;
+  wrap.classList.add(kind === 'attack' ? 'board-flash-attack' : 'board-flash-build');
+  setTimeout(() => wrap.classList.remove('board-flash-build', 'board-flash-attack'), 520);
+}
+
+function isCompactViewport() {
+  return window.matchMedia && window.matchMedia('(max-width: 640px)').matches;
+}
+
+function showMobileActionSheet(title, items, accent = 'var(--p1)') {
+  const menu = document.getElementById('radialMenu');
+  menu.innerHTML = '';
+  menu.style.setProperty('--radP', accent);
+  const ov = document.createElement('div');
+  ov.className = 'rad-overlay';
+  ov.onclick = closeRadial;
+  menu.appendChild(ov);
+  const sheet = document.createElement('div');
+  sheet.className = 'mobile-action-sheet';
+  sheet.innerHTML = `<div class="sheet-title">${title}</div><div class="sheet-grid"></div><button type="button" class="sheet-close">Fermer</button>`;
+  const grid = sheet.querySelector('.sheet-grid');
+  items.forEach(item => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'sheet-btn' + (item.can ? '' : ' cant');
+    btn.innerHTML = `<span>${item.icon}</span><small>${item.label}</small><em>${item.price || ''}</em>`;
+    if (item.can) btn.onclick = e => { e.stopPropagation(); item.action(); };
+    grid.appendChild(btn);
+  });
+  sheet.querySelector('.sheet-close').onclick = closeRadial;
+  menu.appendChild(sheet);
+  menu.classList.add('open');
 }
 
 function showOverwriteRadial(tileIdx, cx, cy, tileSize) {
@@ -2120,6 +2744,25 @@ function showOverwriteRadial(tileIdx, cx, cy, tileSize) {
 
   const items = ['outpost', 'bastion', 'fortress', 'reserve', 'storage', 'armory'];
   if (CONFIG.baseShield) items.push('citadel');
+  if (isCompactViewport()) {
+    const upCost = upgradeCostForPlayer(S.cur, oldTile);
+    const sheetItems = [];
+    if (tileLvl(oldTile) < MAX_LVL) sheetItems.push({
+      icon:'▲', label:'Améliorer', price:`${upCost} ⚡`, can:upCost !== Infinity && p.pts >= upCost,
+      action:() => doUpgrade(tileIdx)
+    });
+    items.forEach(k => {
+      const cost = k === 'citadel' ? types.citadel.c : buildCostForPlayer(S.cur, k);
+      const canCitadel = k === 'citadel' ? (oldT === 'citadel' ? citCount <= 2 : citCount < 2) : true;
+      sheetItems.push({
+        icon:tileIconSvg(k), label:types[k].n, price:`${cost} ⚡`,
+        can:canCitadel && p.pts >= cost,
+        action:() => doOverwrite(tileIdx, k)
+      });
+    });
+    showMobileActionSheet('Modifier · ' + types[oldT].n, sheetItems);
+    return;
+  }
 
   const menu = document.getElementById('radialMenu');
   menu.innerHTML = '';
@@ -2177,7 +2820,7 @@ function showOverwriteRadial(tileIdx, cx, cy, tileSize) {
     const btn = document.createElement('div');
     btn.className = 'rad-btn' + (can ? '' : ' cant');
     btn.style.cssText = `left:${bx}px;top:${by}px;animation-delay:${(idx + 1) * 0.045}s`;
-    btn.innerHTML = `<span>${types[k].i || types.citadel.i}</span><span class="rad-lbl">${types[k].n || types.citadel.n}</span><span class="rad-price">${cost} ⚡</span>`;
+    btn.innerHTML = `${tileIconSvg(k, 'rad-svg')}<span class="rad-lbl">${types[k].n || types.citadel.n}</span><span class="rad-price">${cost} ⚡</span>`;
     btn.title = `${types[k].n} — ${cost} ⚡`;
 
     if (can) {
@@ -2196,6 +2839,7 @@ function showOverwriteRadial(tileIdx, cx, cy, tileSize) {
 }
 
 function doOverwrite(tileIdx, newType) {
+  if (sendOnlineAction({type:'overwrite', tile:tileIdx, building:newType})) return;
   const tile = S.grid[tileIdx];
   if (!tile || tile.o !== S.cur) return;
 
@@ -2229,11 +2873,13 @@ function doOverwrite(tileIdx, newType) {
 
   S.grid[tileIdx] = { t: newType, o: S.cur, lvl: 1, fresh: true };
 
+  flashBoard('build');
   closeRadial();
   consumeActionOrEndTurn();
 }
 
 function doBuild(t, i) {
+  if (sendOnlineAction({type:'build', tile:i, building:t})) return;
   const p = S.players[S.cur];
   if (t === 'citadel') {
     const citCount = countCitadels(S.cur);
@@ -2250,11 +2896,13 @@ function doBuild(t, i) {
   }
   p.tilesPlaced++;
   S.grid[i] = { t, o: S.cur, lvl: 1, fresh: true };
+  flashBoard('build');
   closeRadial();
   consumeActionOrEndTurn();
 }
 
 function doUpgrade(tileIdx) {
+  if (sendOnlineAction({type:'upgrade', tile:tileIdx})) return;
   const tile = S.grid[tileIdx];
   if (!tile || tile.o !== S.cur || tile.t === 'empty' || tile.t === 'citadel') return;
   const lvl = tileLvl(tile);
@@ -2271,6 +2919,7 @@ function doUpgrade(tileIdx) {
     const cap = actionsPerTurnForPlayer(S.cur);
     S.actionsRemaining = Math.min(S.actionsRemaining + 1, cap);
   }
+  flashBoard('build');
   consumeActionOrEndTurn();
 }
 
@@ -2286,6 +2935,17 @@ function showAttackRadial(tileIdx, cx, cy, tileSize, targetTile) {
   const items = ['outpost', 'bastion', 'fortress', 'reserve', 'storage', 'armory'];
   const menu = document.getElementById('radialMenu');
   const atkCost = tileRes(targetTile);
+  if (isCompactViewport()) {
+    showMobileActionSheet(`Assaut · ${atkCost} ⚡`, items.map(k => {
+      const tileCost = buildCostForPlayer(S.cur, k);
+      const total = atkCost + tileCost;
+      return {
+        icon:tileIconSvg(k), label:types[k].n, price:`${total} ⚡`,
+        can:p.pts >= total, action:() => doAttack(tileIdx, k)
+      };
+    }), 'var(--p2)');
+    return;
+  }
   menu.innerHTML = '';
   const ov = document.createElement('div');
   ov.className = 'rad-overlay';
@@ -2310,7 +2970,7 @@ function showAttackRadial(tileIdx, cx, cy, tileSize, targetTile) {
     const btn = document.createElement('div');
     btn.className = 'rad-btn atk' + (can ? '' : ' cant');
     btn.style.cssText = `left:${bx}px;top:${by}px;animation-delay:${idx * 0.045}s`;
-    btn.innerHTML = `<span>${types[k].i}</span><span class="rad-lbl">${types[k].n}</span><span class="rad-price">⚔${atkCost} + 🏗${tileCost}</span><span class="rad-price" style="opacity:.85">= ${total} ⚡</span>`;
+    btn.innerHTML = `${tileIconSvg(k, 'rad-svg')}<span class="rad-lbl">${types[k].n}</span><span class="rad-price">⚔${atkCost} + 🏗${tileCost}</span><span class="rad-price" style="opacity:.85">= ${total} ⚡</span>`;
     if (can) {
       btn.onmouseenter = () => {
         center.innerHTML = `<div style="font-size:.95rem;font-weight:800">${total} ⚡</div><div style="font-size:.5rem;opacity:.6">total</div>`;
@@ -2324,6 +2984,7 @@ function showAttackRadial(tileIdx, cx, cy, tileSize, targetTile) {
 }
 
 function doAttack(i, replaceType) {
+  if (sendOnlineAction({type:'attack', tile:i, building:replaceType})) return;
   const tile = S.grid[i];
   const p = S.players[S.cur];
   const victimId = tile.o;
@@ -2357,6 +3018,7 @@ function doAttack(i, replaceType) {
     } else {
       S.grid[i] = { t: 'empty', o: 0 };
     }
+    flashBoard('attack');
     p.attacks++;
     clampPlayerPts(S.cur);
 
@@ -2401,6 +3063,7 @@ function doAttack(i, replaceType) {
   } else {
     S.grid[i] = { t: 'empty', o: 0 };
   }
+  flashBoard('attack');
   clampPlayerPts(S.cur);
   clampVictimEconomy();
   closeRadial(); closeM();
@@ -2472,6 +3135,7 @@ function showStats() {
         <div class="stat-grid mt-3">
           <span class="stat-key">⏱ Temps</span><span class="stat-val">${mm}:${ss}</span>
           <span class="stat-key">🔄 Manche</span><span class="stat-val">${S.turn}</span>
+          <span class="stat-key">⌁ Seed</span><span class="stat-val">${CONFIG.mapSeed || '—'}</span>
           <span class="stat-key">⚒ Armureries</span><span class="stat-val">${totalArm}</span>
           <span class="stat-key">◆ Revenus</span><span class="stat-val">${totalRes}</span>
           <span class="stat-key">🏗 Constructions</span><span class="stat-val">${totalBuilds}</span>
@@ -2502,6 +3166,8 @@ function showStats() {
 }
 
 function abandon() {
+  if (sendOnlineAction({type:'abandon'})) return;
+  if (CONFIG.online && !isControllableHuman(S.cur)) return;
   if (!confirm('Abandonner ? Les adversaires restants gagnent la partie.')) return;
   const me = S.cur;
   eliminatePlayer(me, -1);
@@ -2516,7 +3182,8 @@ function abandon() {
 }
 
 function eco() {
-  if (!S.active || !isHuman(S.cur)) return;
+  if (sendOnlineAction({type:'eco'})) return;
+  if (!S.active || !isControllableHuman(S.cur)) return;
   const m = CONFIG.pointsMultiplier;
   const p = S.players[S.cur];
   const cap = playerEconomyCap(S.cur);
@@ -2580,7 +3247,7 @@ function updateEcoButtonUI() {
   const label = document.getElementById('ecoLabel');
   if (!btn || !label) return;
 
-  if (!S.active || !isHuman(S.cur)) {
+  if (!S.active || !isControllableHuman(S.cur)) {
     btn.style.pointerEvents = 'none';
     btn.classList.remove('passe-tour');
     return;
@@ -2909,6 +3576,7 @@ function renderHistory() {
 
 function win() {
   S.active = false;
+  broadcastOnlineState();
   const winner = S.cur;
   recordMatch(winner);
   const wt = document.getElementById('winTitle');
@@ -2969,6 +3637,7 @@ function closeM() {
   if (m) m.hide();
 }
 
+loadCosmetics();
 updateConfigDisplay();
 
 </script>
