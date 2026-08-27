@@ -1391,12 +1391,19 @@ html,body{background:#080b10;color:var(--txt)}body{background-image:radial-gradi
 .module-counter{position:absolute;right:4px;bottom:4px;z-index:5;min-width:22px;padding:2px 4px;border:1px solid rgba(190,224,255,.36);border-radius:4px;background:rgba(10,16,24,.82);color:#c7d8e8;font:700 .48rem 'JetBrains Mono',monospace;letter-spacing:.02em;text-align:center;line-height:1.1;pointer-events:none}.module-counter.ready{border-color:#7be0b0;color:#9ff5c9;background:rgba(17,53,43,.9);box-shadow:0 0 0 1px rgba(123,224,176,.18)}
 .action-choice:hover:not(:disabled):not(.cant),.action-choice.focused{background:#182333!important;color:var(--txt)!important;border-color:var(--radP);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--radP) 28%,transparent);transform:translateY(-1px)}.action-choice:hover:not(:disabled):not(.cant) .action-choice-copy strong,.action-choice.focused .action-choice-copy strong{color:var(--txt)!important}.action-choice:hover:not(:disabled):not(.cant) .action-choice-copy span,.action-choice.focused .action-choice-copy span{color:#edc56e!important}.action-choice:hover:not(:disabled):not(.cant) .action-choice-copy small,.action-choice.focused .action-choice-copy small{color:var(--txt-2)!important}.action-choice.cant:hover{background:#151e29!important;color:var(--txt)!important}
 .grid-wrap{overscroll-behavior:none;user-select:none}.grid-wrap.is-panning{cursor:grabbing!important}.grid-wrap.is-panning .tile{cursor:grabbing!important}
+.tile-objective{position:absolute;inset:14%;z-index:2;display:grid;place-items:center;border:1px solid #ca9c45;border-radius:50%;background:repeating-radial-gradient(circle,rgba(205,158,63,.2) 0 2px,transparent 3px 7px),#2a2111;color:#f0c76a;box-shadow:inset 0 0 0 2px rgba(240,199,106,.14),0 0 14px rgba(214,164,69,.18);font-family:'JetBrains Mono',monospace}.tile-objective>span{font-size:clamp(1rem,calc(var(--tile-px,64px) * .34),2.2rem);line-height:1}.tile-objective>b{position:absolute;right:3%;bottom:3%;font-size:clamp(.42rem,calc(var(--tile-px,64px) * .1),.7rem);background:#100d08;border:1px solid #ca9c45;border-radius:4px;padding:2px 3px}.tile.objective-relay{border-color:#9f7c39!important}.tile.objective-relay.playable{border-color:var(--pc,var(--p1))!important;box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--pc,var(--p1)) 55%,transparent),0 0 16px color-mix(in srgb,var(--pc,var(--p1)) 22%,transparent)!important}.tile.objective-held .tile-objective{opacity:.18;filter:grayscale(.5)}
 /* Les niveaux sont une silhouette qui évolue, pas une constellation de losanges
    posés par-dessus la carte. Chaque upgrade garde le type reconnaissable et
    ajoute une couronne/une jauge mate clairement lisible. */
 .module-level-nodes{display:none!important}
 .module-shell{width:58%!important;border-width:2px!important;box-shadow:0 0 0 2px color-mix(in srgb,var(--pc) 22%,transparent),0 6px 14px rgba(0,0,0,.34)!important}
 .module-shell-ring{inset:18%!important;border-width:2px!important;opacity:.58!important}
+.tile[data-upgrade-path]{--path-ink:rgba(255,255,255,.2)}
+.tile[data-upgrade-path] .module-shell{border-style:double!important;background-blend-mode:screen}
+.tile[data-upgrade-path="yield"] .module-shell,.tile[data-upgrade-path="vault"] .module-shell{background-image:repeating-radial-gradient(circle,var(--path-ink) 0 2px,transparent 3px 8px)!important}
+.tile[data-upgrade-path="tempo"] .module-shell,.tile[data-upgrade-path="vanguard"] .module-shell{background-image:repeating-linear-gradient(90deg,var(--path-ink) 0 2px,transparent 2px 8px)!important}
+.tile[data-upgrade-path="bulwark"] .module-shell,.tile[data-upgrade-path="anchor"] .module-shell,.tile[data-upgrade-path="bastion"] .module-shell{background-image:linear-gradient(45deg,var(--path-ink) 25%,transparent 25% 75%,var(--path-ink) 75%)!important;background-size:10px 10px!important}
+.tile[data-upgrade-path="relay"] .module-shell,.tile[data-upgrade-path="buffer"] .module-shell,.tile[data-upgrade-path="arsenal"] .module-shell{background-image:repeating-linear-gradient(135deg,var(--path-ink) 0 3px,transparent 3px 9px)!important}
 .tile[data-level="2"] .module-shell{width:63%!important}.tile[data-level="3"] .module-shell{width:68%!important}.tile[data-level="4"] .module-shell{width:73%!important}.tile[data-level="5"] .module-shell{width:78%!important}.tile[data-level="6"] .module-shell{width:83%!important}
 .tile[data-level="2"] .module-shell-ring{inset:15%!important;opacity:.68!important}.tile[data-level="3"] .module-shell-ring{inset:13%!important;opacity:.75!important}.tile[data-level="4"] .module-shell-ring{inset:11%!important;opacity:.82!important}.tile[data-level="5"] .module-shell-ring{inset:9%!important;opacity:.88!important}.tile[data-level="6"] .module-shell-ring{inset:7%!important;opacity:.94!important}
 .tile-level-badge{right:5px!important;top:5px!important;min-width:24px!important;height:18px!important;padding:0 5px!important;border-radius:6px!important;font-size:.48rem!important;letter-spacing:.04em!important;background:#0b121b!important;box-shadow:0 2px 5px rgba(0,0,0,.32)!important}
@@ -1803,6 +1810,15 @@ const types = {
   mountain: { n:'Mur rocheux', c:0, r:0, i:'', progressive:false, role:'Obstacle', d:'Terrain infranchissable qui canalise les fronts et protège les flancs.' }
 };
 
+const UPGRADE_PATHS = {
+  outpost: { reach:{name:'Relais', short:'pression sur les objectifs', d:'Renforce les revenus des relais et accélère les prises de position.'}, vanguard:{name:'Avant-garde', short:'front plus agressif', d:'Donne un bonus de résistance aux fronts qui partent de cet avant-poste.'} },
+  bastion: { bulwark:{name:'Rempart', short:'+résistance', d:'Transforme le bastion en verrou défensif : résistance supplémentaire.'}, anchor:{name:'Ancre', short:'tenir la ligne', d:'Réduit les pertes économiques quand ce bastion est attaqué.'} },
+  fortress: { bastion:{name:'Bunker', short:'défense maximale', d:'Une forteresse compacte, encore plus difficile à renverser.'}, siege:{name:'Siège', short:'pression offensive', d:'Prépare les assauts contre les cases ennemies adjacentes.'} },
+  reserve: { yield:{name:'Rendement', short:'+revenus', d:'Chaque pulsation de cette réserve produit un revenu supplémentaire.'}, relay:{name:'Relais', short:'chaîne économique', d:'La réserve connectée aux relais centraux amplifie leur bonus.'} },
+  storage: { vault:{name:'Coffre', short:'+capacité', d:'Augmente fortement le plafond d’énergie de ton réseau.'}, buffer:{name:'Tampon', short:'résister aux pertes', d:'Protège une partie de l’énergie lors de la destruction d’un stockage.'} },
+  armory: { tempo:{name:'Tempo', short:'+actions', d:'Ajoute une action supplémentaire au plafond de ton tour.'}, arsenal:{name:'Arsenal', short:'front offensif', d:'Donne plus de poids aux assauts lancés depuis un front armé.'} }
+};
+
 /* Icônes vectorielles natives : la silhouette reste nette à toute taille et
    ne dépend plus des polices/emoji installés sur la machine. */
 const ICON_PATHS = {
@@ -1820,7 +1836,7 @@ function tileIconSvg(typeKey, extraClass = '') {
 }
 
 // Plafond points sans stockage ; stockage ajoute +10 / lvl au plafond (types.storage.capPerLvl)
-const BASE_ECO_CAP = 10;
+const BASE_ECO_CAP = 12;
 const MAP_AREA_MULT = { small: 0.5, normal: 1, large: 2, gigantic: 4 };
 
 let rngState = 0x9e3779b9;
@@ -1837,14 +1853,16 @@ function gameRandom() {
 
 // Niveau 1 posé + 5 upgrades => niveau max 6
 const MAX_LVL = 6;
-const MAX_ACTIONS_PER_TURN = 3; // cap global (base incluse)
+const BASE_ACTIONS_PER_TURN = 2; // Gridus démarre avec une vraie décision, pas une seule pose
+const MAX_ACTIONS_PER_TURN = 4; // les armureries peuvent créer un tempo offensif
 const PROG_STEPS = [1, 0.5, 0.25, 0.12]; // +100% puis +50% puis +25% puis +12% puis stagnation
 
 function tileLvl(t) { return Math.max(1, Math.min(MAX_LVL, t?.lvl || 1)); }
 
 function tileRes(t) {
   if (!t || !t.t || t.t === 'empty' || t.t === 'mountain') return 0;
-  return (types[t.t]?.r || 0) * tileLvl(t);
+  const base = (types[t.t]?.r || 0) * tileLvl(t);
+  return base + (['bulwark','bastion','anchor','bunker'].includes(t.path) ? 2 : 0);
 }
 
 function isMountainCell(t) { return t && t.t === 'mountain'; }
@@ -1901,19 +1919,20 @@ function sumPlayerArmoryLvls(pid) {
 
 function actionsPerTurnForPlayer(pid) {
   const bonus = Math.min(MAX_ACTIONS_PER_TURN - 1, sumPlayerArmoryLvls(pid));
-  return 1 + Math.max(0, bonus);
+  const tempo = [...S.grid].some(tile => tile?.o === pid && tile.t === 'armory' && tile.path === 'tempo') ? 1 : 0;
+  return Math.min(MAX_ACTIONS_PER_TURN, BASE_ACTIONS_PER_TURN + Math.min(MAX_ACTIONS_PER_TURN - BASE_ACTIONS_PER_TURN, Math.max(0, bonus)) + tempo);
 }
 
 function sumPlayerReserveIncome(pid) {
   let inc = 0;
-  for (const tt of S.grid) if (tt && tt.o === pid && tt.t === 'reserve') inc += tileLvl(tt);
+  for (const tt of S.grid) if (tt && tt.o === pid && tt.t === 'reserve') inc += tileLvl(tt) + (tt.path === 'yield' ? 1 : 0);
   return inc;
 }
 
 /** Bonus de plafond apporté par les tuiles stockage (+10 par niveau). */
 function playerStorageCap(pid) {
   let cap = 0;
-  for (const tt of S.grid) if (tt && tt.o === pid && tt.t === 'storage') cap += (types.storage.capPerLvl || 10) * tileLvl(tt);
+  for (const tt of S.grid) if (tt && tt.o === pid && tt.t === 'storage') cap += ((types.storage.capPerLvl || 10) + (tt.path === 'vault' ? 8 : 0)) * tileLvl(tt);
   return cap;
 }
 
@@ -1943,9 +1962,8 @@ function manhattanMinDistFromPlayer(pid, idx) {
 }
 
 function sourceIncomeBonus(pid) {
-  if (!S.sourceSites || !S.sourceSites.length) return 0;
   let b = 0;
-  for (const s of S.sourceSites) {
+  for (const s of (S.sourceSites || [])) {
     let ownedLevel = 0, adjacentLevel = 0;
     for (const idx of s.cells) {
       const lvl = +(s.levels?.[idx] || 1);
@@ -1955,7 +1973,7 @@ function sourceIncomeBonus(pid) {
     if (ownedLevel) b += ownedLevel;
     else if (adjacentLevel) b += Math.max(1,Math.ceil(adjacentLevel / 2));
   }
-  return b;
+  return b + objectiveIncomeBonus(pid);
 }
 
 function sourceZoneAt(idx) {
@@ -1964,6 +1982,20 @@ function sourceZoneAt(idx) {
 function sourceLevelAt(idx) {
   const zone = sourceZoneAt(idx);
   return zone ? +(zone.levels?.[idx] || 1) : 0;
+}
+
+function objectiveAt(idx) {
+  return (S.objectives || []).find(objective => objective.i === idx) || null;
+}
+function objectiveIncomeBonus(pid) {
+  let bonus = 0;
+  const relayReserves = S.grid.filter(tile => tile?.o === pid && tile.t === 'reserve' && tile.path === 'relay').length;
+  for (const objective of (S.objectives || [])) {
+    const tile = S.grid[objective.i];
+    if (tile?.o === pid) bonus += (objective.bonus || 2) + relayReserves;
+    else if (tile && !tile.o && getAdjPassable(objective.i).some(j => S.grid[j]?.o === pid)) bonus += 1;
+  }
+  return bonus;
 }
 
 function spawnSlotsForPlayers(W, H, n, mode = 'mirror') {
@@ -2140,6 +2172,21 @@ function generateMirroredTerrain(W, H, nPlayers, cornerSet) {
   }
 }
 
+function seedObjectives(W, H, nPlayers, cornerSet) {
+  const center = Math.floor(H / 2) * W + Math.floor(W / 2);
+  const offsets = nPlayers <= 2 ? [[0,0],[0,1],[1,0]] : [[0,0],[0,2],[2,0],[-2,0],[0,-2]];
+  const picked = [];
+  for (const [dr, dc] of offsets) {
+    const r = Math.max(2, Math.min(H - 3, Math.floor(center / W) + dr));
+    const c = Math.max(2, Math.min(W - 3, center % W + dc));
+    const i = r * W + c;
+    if (cornerSet.has(i) || isMountainCell(S.grid[i]) || sourceZoneAt(i) || picked.includes(i)) continue;
+    picked.push(i);
+    if (picked.length >= (nPlayers <= 2 ? 2 : Math.min(4, nPlayers))) break;
+  }
+  S.objectives = picked.map((i, index) => ({ i, type:'relay', bonus:index === 0 ? 3 : 2 }));
+}
+
 const TILE_TINT = {
   outpost: 'rgba(147, 197, 255, .42)',
   bastion: 'rgba(186, 230, 253, .4)',
@@ -2162,7 +2209,7 @@ let S = {
   grid: [], players: {}, turnOrder: [1, 2], eliminated: {},
   cur: 1, turn: 1, active: false, actionsRemaining: 1, startTime: 0,
   botMode: 'MIX',
-  sourceSites: []
+  sourceSites: [], objectives: []
 };
 let particleInterval = null;
 let botClockInterval = null;
@@ -2446,7 +2493,7 @@ function decodeNumeric(value) {
   return JSON.parse(text);
 }
 function onlineSnapshotPayload() {
-  return { grid:S.grid, players:S.players, turnOrder:S.turnOrder, eliminated:S.eliminated, cur:S.cur, turn:S.turn, active:S.active, actionsRemaining:S.actionsRemaining, sourceSites:S.sourceSites, mapSeed:CONFIG.mapSeed, gridW:CONFIG.gridW, gridH:CONFIG.gridH, economyPhase, room:onlineRoomPayload() };
+  return { grid:S.grid, players:S.players, turnOrder:S.turnOrder, eliminated:S.eliminated, cur:S.cur, turn:S.turn, active:S.active, actionsRemaining:S.actionsRemaining, sourceSites:S.sourceSites, objectives:S.objectives, mapSeed:CONFIG.mapSeed, gridW:CONFIG.gridW, gridH:CONFIG.gridH, economyPhase, room:onlineRoomPayload() };
 }
 function broadcastOnlineState() {
   if (!CONFIG.online || !ONLINE.isHost || ONLINE.socket?.readyState !== WebSocket.OPEN) return;
@@ -2459,7 +2506,7 @@ function applyOnlineSnapshot(payload) {
   economyPhase = Number.isFinite(payload.economyPhase) ? payload.economyPhase : economyPhase;
   if (payload.room) applyOnlineRoomConfig(payload.room);
   CONFIG.online = true; CONFIG.vsAI = false;
-  S = { grid:payload.grid, players:payload.players, turnOrder:payload.turnOrder, eliminated:payload.eliminated, cur:payload.cur, turn:payload.turn, active:payload.active, actionsRemaining:payload.actionsRemaining, startTime:S.startTime || Date.now(), botMode:'MIX', sourceSites:payload.sourceSites || [] };
+  S = { grid:payload.grid, players:payload.players, turnOrder:payload.turnOrder, eliminated:payload.eliminated, cur:payload.cur, turn:payload.turn, active:payload.active, actionsRemaining:payload.actionsRemaining, startTime:S.startTime || Date.now(), botMode:'MIX', sourceSites:payload.sourceSites || [], objectives:payload.objectives || [] };
   ONLINE.gameStarted = !!payload.active;
   render(); updateTurnBanner();
 }
@@ -2467,7 +2514,7 @@ function initOnlineWaiting() {
   const waitingCfg = ONLINE.roomConfig || onlineDefaultConfig(ONLINE.mode);
   const waitingSize = waitingCfg.mapPreset === 'gigantic' ? 32 : waitingCfg.mapPreset === 'large' ? 20 : 14;
   const waitingPlayers = waitingCfg.totalPlayers || 2;
-  S = { grid:Array(waitingSize * waitingSize).fill(null).map(() => ({t:'empty',o:0,fresh:false})), players:Object.fromEntries(Array.from({length:waitingPlayers},(_,i)=>[i+1,{pts:0}])), turnOrder:Array.from({length:waitingPlayers},(_,i)=>i+1), eliminated:Object.fromEntries(Array.from({length:waitingPlayers},(_,i)=>[i+1,false])), cur:1, turn:1, active:false, actionsRemaining:0, startTime:Date.now(), botMode:'MIX', sourceSites:[] };
+  S = { grid:Array(waitingSize * waitingSize).fill(null).map(() => ({t:'empty',o:0,fresh:false})), players:Object.fromEntries(Array.from({length:waitingPlayers},(_,i)=>[i+1,{pts:0}])), turnOrder:Array.from({length:waitingPlayers},(_,i)=>i+1), eliminated:Object.fromEntries(Array.from({length:waitingPlayers},(_,i)=>[i+1,false])), cur:1, turn:1, active:false, actionsRemaining:0, startTime:Date.now(), botMode:'MIX', sourceSites:[], objectives:[] };
   render();
   const hint = document.getElementById('boardHint');
   if (hint) hint.textContent = 'En attente du signal de l’hôte…';
@@ -2526,7 +2573,7 @@ function applyOnlineAction(action) {
   try {
     if (action.type === 'build') doBuild(action.tile, action.building);
     else if (action.type === 'overwrite') doOverwrite(action.tile, action.building);
-    else if (action.type === 'upgrade') doUpgrade(action.tile);
+    else if (action.type === 'upgrade') doUpgrade(action.tile, action.path || null);
     else if (action.type === 'attack') doAttack(action.tile, action.building);
     else if (action.type === 'eco') eco();
     else if (action.type === 'abandon') abandon();
@@ -3055,6 +3102,10 @@ function setActionsForPlayer(pid, value) {
   if (isRealtimeMode()) p.actions = Math.max(0, Math.min(actionsPerTurnForPlayer(pid), Math.round(value)));
   else if (pid === S.cur) S.actionsRemaining = Math.max(0, value);
 }
+function grantAction(pid, amount = 1) {
+  if (!Number.isFinite(amount) || amount <= 0) return;
+  setActionsForPlayer(pid, actionsForPlayer(pid) + amount);
+}
 
 function grantEconomy(pid, amount) {
   const p = S.players[pid];
@@ -3132,7 +3183,7 @@ function initGame() {
   S.eliminated = {};
   S.turnOrder.forEach(id => { S.eliminated[id] = false; });
   const mult = CONFIG.pointsMultiplier;
-  const basePts = 3 * mult;
+  const basePts = 6 * mult;
   S.players = {};
   S.turnOrder.forEach(id => {
     S.players[id] = {
@@ -3146,6 +3197,7 @@ function initGame() {
   S.turnOrder.forEach(id => cornerSet.add(corners[id]));
 
   generateMirroredTerrain(GW, GH, n, cornerSet);
+  seedObjectives(GW, GH, n, cornerSet);
 
   S.turnOrder.forEach(id => {
     S.grid[corners[id]] = { t: 'citadel', o: id, lvl: 1 };
@@ -3265,6 +3317,7 @@ function showTileInspector(i, pin = false) {
   if (!pin && TILE_INSPECTOR_PINNED >= 0 && TILE_INSPECTOR_PINNED !== i) return;
   if (pin) TILE_INSPECTOR_PINNED = i;
   const zone = sourceZoneAt(i);
+  const objective = objectiveAt(i);
   const r = Math.floor(i / CONFIG.gridW) + 1, c = i % CONFIG.gridW + 1;
   let name = 'Terrain libre';
   let description = 'Une case neutre disponible pour étendre ton territoire.';
@@ -3292,12 +3345,19 @@ function showTileInspector(i, pin = false) {
     name = `Veine riche · Niveau ${sourceLvl}`; description = sourceLvl === 2 ? 'Cœur dense de la veine : rapporte +2 lorsqu’il est contrôlé.' : 'Bord de veine : rapporte +1 lorsqu’il est contrôlé.';
     role = 'Boost'; icon = '<span class="empty-tile-symbol">◆</span>';
   }
+  if (objective) {
+    description = `${description} Relais central : +${objective.bonus} revenus si tu le contrôles, +1 en pression adjacente.`;
+    if (!tile.o && !zone) { name = 'Relais central'; role = 'Objectif'; icon = '<span class="empty-tile-symbol">⊙</span>'; }
+  }
   const ownedCount = tile.o && tile.t !== 'mountain' ? countOwnedTilesOfType(tile.o, tile.t) : 0;
   document.getElementById('tileInspectorKicker').textContent = `CASE ${c}:${r} · ${owner}`;
   document.getElementById('tileInspectorName').textContent = name;
   document.getElementById('tileInspectorDescription').textContent = description;
   document.getElementById('tileInspectorIcon').innerHTML = icon;
   const tags = [`<span class="tile-info-tag">${role}</span>`];
+  const pathDef = tile.path && UPGRADE_PATHS[tile.t]?.[tile.path];
+  if (pathDef) tags.push(`<span class="tile-info-tag">Spécialisation · ${pathDef.name}</span>`);
+  if (objective) tags.push(`<span class="tile-info-tag boost">Relais +${objective.bonus}</span>`);
   if (zone) tags.push(`<span class="tile-info-tag boost">Ressource N${sourceLevelAt(i)}</span>`);
   if (tile.t === 'mountain') tags.push('<span class="tile-info-tag danger">Infranchissable</span>');
   if (tile.t === 'reserve' && tile.o && CONFIG.economyMode === 'pulse') {
@@ -3330,9 +3390,11 @@ function render() {
     const human = S.active && isControllableHuman(S.cur);
     const isAdj = human && getAdjPassable(i).some(a => S.grid[a].o === S.cur);
     let cls = 'tile ' + sqClass(i);
+    const objective = objectiveAt(i);
     if (t.o) cls += ' p' + t.o;
     if (t.t !== 'empty') cls += ' t-' + t.t;
     if (t.t === 'citadel') cls += ' citadel';
+    if (objective) cls += t.o ? ' objective-held' : ' objective-relay';
     if (t.fresh) { cls += ' just-placed'; t.fresh = false; }
     if (t.captured) { cls += ' conquered'; t.captured = false; }
     if (!t.o && t.t !== 'mountain' && isAdj) cls += ' playable';
@@ -3342,6 +3404,7 @@ function render() {
     div.dataset.owner = t.o ? String(t.o) : 'neutral';
     div.dataset.tileType = t.t || 'empty';
     div.dataset.level = t.o ? String(tileLvl(t)) : '0';
+    if (t.path) div.dataset.upgradePath = t.path;
     if (t.o) div.style.setProperty('--pc',playerColor(t.o));
     if (t.t === 'mountain') div.setAttribute('aria-label', 'Roc infranchissable');
     else if (t.o) div.setAttribute('aria-label', `${types[t.t]?.n || 'Territoire'} — ${playerLabel(t.o)} — niveau ${tileLvl(t)}`);
@@ -3354,6 +3417,8 @@ function render() {
         const sourceLvl = sourceLevelAt(i);
         div.classList.add('source-lvl-' + sourceLvl);
         div.innerHTML = `<span class="tile-source-zone pulse" data-source-level="${sourceLvl}" title="Veine riche niveau ${sourceLvl}"><b>N${sourceLvl}</b></span>`;
+      } else if (objective) {
+        div.innerHTML = `<span class="tile-objective" title="Relais central · +${objective.bonus} revenus"><span>⊙</span><b>+${objective.bonus}</b></span>`;
       }
     }
     if (t.o && types[t.t]) {
@@ -3543,17 +3608,22 @@ function showOverwriteRadial(tileIdx, cx, cy, tileSize) {
   }
   const upCost = upgradeCostForPlayer(S.cur, oldTile);
   const canUp = tileLvl(oldTile) < MAX_LVL && upCost !== Infinity && p.pts >= upCost;
-  const items = [{
-    key:oldT,
-    icon:'<svg class="tile-svg rad-svg" viewBox="0 0 64 64" aria-hidden="true"><path d="M14 42 32 22l18 20M32 22v34"/><path d="M20 12h24"/></svg>',
-    label:'Améliorer',
+  const items = [];
+  const paths = tileLvl(oldTile) === 2 ? Object.entries(UPGRADE_PATHS[oldT] || {}) : [];
+  if (paths.length) paths.forEach(([path, choice]) => items.push({
+    key:oldT, path, icon:tileIconSvg(oldT,'rad-svg'), label:choice.name,
+    price:`${upCost} énergie`, short:`N2 → N3 · ${choice.short}`,
+    meta:`Résistance ${tileRes(oldTile)} → ${tileRes({...oldTile,lvl:3,path})}`,
+    description:choice.d, can:canUp, action:() => doUpgrade(tileIdx,path)
+  }));
+  else items.push({
+    key:oldT, icon:tileIconSvg(oldT,'rad-svg'), label:'Améliorer',
     price:tileLvl(oldTile) >= MAX_LVL ? 'Niveau maximum' : `${upCost} énergie`,
     short:`N${tileLvl(oldTile)} → N${Math.min(MAX_LVL,tileLvl(oldTile)+1)}`,
-    meta:`Résistance ${tileRes(oldTile)} → ${types[oldT].r * Math.min(MAX_LVL,tileLvl(oldTile)+1)}`,
+    meta:`Résistance ${tileRes(oldTile)} → ${tileRes({...oldTile,lvl:Math.min(MAX_LVL,tileLvl(oldTile)+1)})}`,
     description:`Renforce ${types[oldT].n.toLowerCase()} sans changer son rôle ni sa texture principale.`,
-    can:canUp,
-    action:() => doUpgrade(tileIdx)
-  }];
+    can:canUp, action:() => doUpgrade(tileIdx)
+  });
   const keys = ['outpost','bastion','fortress','reserve','storage','armory'];
   if (CONFIG.baseShield) keys.push('citadel');
   keys.forEach(k => {
@@ -3600,8 +3670,7 @@ function doOverwrite(tileIdx, newType) {
 
   // Armurerie: peut donner 1 action immédiate (cap global)
   if (newType === 'armory') {
-    const cap = actionsPerTurnForPlayer(S.cur);
-    S.actionsRemaining = Math.min(S.actionsRemaining + 1, cap);
+    grantAction(S.cur);
   }
 
   S.grid[tileIdx] = { t: newType, o: S.cur, lvl: 1, ecoCounter: newType === 'reserve' ? moduleCounterSeed(tileIdx) : 0, fresh: true };
@@ -3624,8 +3693,7 @@ function doBuild(t, i) {
   clampPlayerPts(S.cur);
   if (t === 'armory') {
     // Optionnel: action immédiate ce tour (sans dépasser le cap)
-    const cap = actionsPerTurnForPlayer(S.cur);
-    S.actionsRemaining = Math.min(S.actionsRemaining + 1, cap);
+    grantAction(S.cur);
   }
   p.tilesPlaced++;
   S.grid[i] = { t, o: S.cur, lvl: 1, ecoCounter: t === 'reserve' ? moduleCounterSeed(i) : 0, fresh: true };
@@ -3634,8 +3702,8 @@ function doBuild(t, i) {
   consumeActionOrEndTurn();
 }
 
-function doUpgrade(tileIdx) {
-  if (sendOnlineAction({type:'upgrade', tile:tileIdx})) return;
+function doUpgrade(tileIdx, path = null) {
+  if (sendOnlineAction({type:'upgrade', tile:tileIdx, path})) return;
   const tile = S.grid[tileIdx];
   if (!tile || tile.o !== S.cur || tile.t === 'empty' || tile.t === 'citadel') return;
   const lvl = tileLvl(tile);
@@ -3646,11 +3714,11 @@ function doUpgrade(tileIdx) {
   closeRadial();
   p.pts -= cost;
   tile.lvl = lvl + 1;
+  if (path && UPGRADE_PATHS[tile.t]?.[path]) tile.path = path;
   tile.fresh = true;
   clampPlayerPts(S.cur);
   if (tile.t === 'armory') {
-    const cap = actionsPerTurnForPlayer(S.cur);
-    S.actionsRemaining = Math.min(S.actionsRemaining + 1, cap);
+    grantAction(S.cur);
   }
   flashBoard('build');
   consumeActionOrEndTurn();
@@ -3710,8 +3778,7 @@ function doAttack(i, replaceType) {
     if (replaceType) {
       p.pts -= repCost;
       if (replaceType === 'armory') {
-        const cap = actionsPerTurnForPlayer(S.cur);
-        S.actionsRemaining = Math.min(S.actionsRemaining + 1, cap);
+        grantAction(S.cur);
       }
       S.grid[i] = { t: replaceType, o: S.cur, lvl: 1, ecoCounter: replaceType === 'reserve' ? moduleCounterSeed(i) : 0, fresh: true, captured: true };
       p.tilesPlaced++;
@@ -3754,8 +3821,7 @@ function doAttack(i, replaceType) {
   if (replaceType) {
     p.pts -= repCost;
     if (replaceType === 'armory') {
-      const cap = actionsPerTurnForPlayer(S.cur);
-      S.actionsRemaining = Math.min(S.actionsRemaining + 1, cap);
+      grantAction(S.cur);
     }
     S.grid[i] = { t: replaceType, o: S.cur, lvl: 1, ecoCounter: replaceType === 'reserve' ? moduleCounterSeed(i) : 0, fresh: true, captured: true };
     p.attacks++;
@@ -3995,6 +4061,15 @@ function botPickCandidate(candidates, difficulty) {
   const pool = difficulty >= .82 ? 1 : difficulty >= .55 ? Math.min(2,candidates.length) : Math.min(4,candidates.length);
   return candidates[Math.floor(gameRandom() * pool)];
 }
+function botUpgradePath(tile, strategy) {
+  if (!tile || tileLvl(tile) !== 2) return null;
+  const choices = Object.keys(UPGRADE_PATHS[tile.t] || {});
+  if (!choices.length) return null;
+  const economy = { reserve:'yield', storage:'vault', armory:'tempo' };
+  if (strategy === 'ECONOMY' && economy[tile.t] && choices.includes(economy[tile.t])) return economy[tile.t];
+  if (strategy === 'DEFEND' && ['bastion','fortress'].includes(tile.t)) return choices[0];
+  return choices[Math.floor(gameRandom() * choices.length)];
+}
 function botTakeEconomy(pid) {
   if (isRealtimeMode()) { setActionsForPlayer(pid, 0); render(); return; }
   if (CONFIG.economyMode !== 'turn') { endTurn(); return; }
@@ -4066,7 +4141,7 @@ function runBotCore() {
     });
     const move = botPickCandidate(defenses,diff);
     if (move && (move.score > 5 || diff > .75)) {
-      if (move.kind === 'upgrade') doUpgrade(move.i); else doOverwrite(move.i,move.type);
+      if (move.kind === 'upgrade') doUpgrade(move.i, botUpgradePath(S.grid[move.i], strategy)); else doOverwrite(move.i,move.type);
       return;
     }
   }
@@ -4105,7 +4180,7 @@ function runBotCore() {
     upgrades.push({i,score:roleScore + (front ? 7 : 0) + tileLvl(tile) - cost * .45});
   });
   const upgrade = botPickCandidate(upgrades,diff);
-  if (upgrade && (strategy === 'CONSOLIDATE' || (strategy === 'DEFEND' && gameRandom() < .35))) { doUpgrade(upgrade.i); return; }
+  if (upgrade && (strategy === 'CONSOLIDATE' || (strategy === 'DEFEND' && gameRandom() < .35))) { doUpgrade(upgrade.i, botUpgradePath(S.grid[upgrade.i], strategy)); return; }
 
   /* 4. Expansion connectée : zones riches, fronts épais et direction du leader. */
   const enemyCitadels = S.grid.map((t,i) => t.t === 'citadel' && t.o && t.o !== pid && !areAllies(pid, t.o) ? i : -1).filter(i => i >= 0);
@@ -4115,7 +4190,7 @@ function runBotCore() {
     const enemyAdj = getAdjPassable(i).filter(j => S.grid[j].o && S.grid[j].o !== pid && !areAllies(pid, S.grid[j].o)).length;
     const nearestCitadel = enemyCitadels.length ? Math.min(...enemyCitadels.map(j => Math.abs(r - Math.floor(j / CONFIG.gridW)) + Math.abs(c - (j % CONFIG.gridW)))) : 20;
     const zone = sourceZoneAt(i);
-    return {i,ownAdj,enemyAdj,zone,score:ownAdj * 5 + enemyAdj * 3 + (zone ? 18 + zone.I * 3 : 0) + Math.max(0,12 - nearestCitadel) * (strategy === 'EXPAND' ? .6 : .25) + gameRandom() * (1 - diff) * 5};
+    return {i,ownAdj,enemyAdj,zone,objective:objectiveAt(i),score:ownAdj * 5 + enemyAdj * 3 + (zone ? 18 + zone.I * 3 : 0) + (objectiveAt(i) ? 22 : 0) + Math.max(0,12 - nearestCitadel) * (strategy === 'EXPAND' ? .6 : .25) + gameRandom() * (1 - diff) * 5};
   });
   const expansion = botPickCandidate(expansions,diff);
   if (expansion && strategy !== 'ECONOMY') {
