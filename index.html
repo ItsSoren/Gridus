@@ -1390,6 +1390,18 @@ html,body{background:#080b10;color:var(--txt)}body{background-image:radial-gradi
 @media(max-width:640px){.online-mode-btn{display:block}.online-mode-btn small{display:block;margin-top:4px}.online-option-grid{grid-template-columns:1fr;gap:4px}.online-option-grid label{margin-top:5px}.online-custom-options{padding:9px}.online-card{max-height:calc(100vh - 18px);overflow:auto}}
 .module-counter{position:absolute;right:4px;bottom:4px;z-index:5;min-width:22px;padding:2px 4px;border:1px solid rgba(190,224,255,.36);border-radius:4px;background:rgba(10,16,24,.82);color:#c7d8e8;font:700 .48rem 'JetBrains Mono',monospace;letter-spacing:.02em;text-align:center;line-height:1.1;pointer-events:none}.module-counter.ready{border-color:#7be0b0;color:#9ff5c9;background:rgba(17,53,43,.9);box-shadow:0 0 0 1px rgba(123,224,176,.18)}
 .action-choice:hover:not(:disabled):not(.cant),.action-choice.focused{background:#182333!important;color:var(--txt)!important;border-color:var(--radP);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--radP) 28%,transparent);transform:translateY(-1px)}.action-choice:hover:not(:disabled):not(.cant) .action-choice-copy strong,.action-choice.focused .action-choice-copy strong{color:var(--txt)!important}.action-choice:hover:not(:disabled):not(.cant) .action-choice-copy span,.action-choice.focused .action-choice-copy span{color:#edc56e!important}.action-choice:hover:not(:disabled):not(.cant) .action-choice-copy small,.action-choice.focused .action-choice-copy small{color:var(--txt-2)!important}.action-choice.cant:hover{background:#151e29!important;color:var(--txt)!important}
+.grid-wrap{overscroll-behavior:none;user-select:none}.grid-wrap.is-panning{cursor:grabbing!important}.grid-wrap.is-panning .tile{cursor:grabbing!important}
+/* Les niveaux sont une silhouette qui évolue, pas une constellation de losanges
+   posés par-dessus la carte. Chaque upgrade garde le type reconnaissable et
+   ajoute une couronne/une jauge mate clairement lisible. */
+.module-level-nodes{display:none!important}
+.module-shell{width:58%!important;border-width:2px!important;box-shadow:0 0 0 2px color-mix(in srgb,var(--pc) 22%,transparent),0 6px 14px rgba(0,0,0,.34)!important}
+.module-shell-ring{inset:18%!important;border-width:2px!important;opacity:.58!important}
+.tile[data-level="2"] .module-shell{width:63%!important}.tile[data-level="3"] .module-shell{width:68%!important}.tile[data-level="4"] .module-shell{width:73%!important}.tile[data-level="5"] .module-shell{width:78%!important}.tile[data-level="6"] .module-shell{width:83%!important}
+.tile[data-level="2"] .module-shell-ring{inset:15%!important;opacity:.68!important}.tile[data-level="3"] .module-shell-ring{inset:13%!important;opacity:.75!important}.tile[data-level="4"] .module-shell-ring{inset:11%!important;opacity:.82!important}.tile[data-level="5"] .module-shell-ring{inset:9%!important;opacity:.88!important}.tile[data-level="6"] .module-shell-ring{inset:7%!important;opacity:.94!important}
+.tile-level-badge{right:5px!important;top:5px!important;min-width:24px!important;height:18px!important;padding:0 5px!important;border-radius:6px!important;font-size:.48rem!important;letter-spacing:.04em!important;background:#0b121b!important;box-shadow:0 2px 5px rgba(0,0,0,.32)!important}
+.tile-level-track{left:12%!important;right:12%!important;bottom:6px!important;height:5px!important;gap:3px!important;padding:1px!important;border:1px solid rgba(255,255,255,.16);border-radius:5px;background:rgba(5,9,14,.58)!important}.tile-level-track i{height:100%;background:#273544!important;border-radius:2px!important}.tile-level-track i.on{background:var(--pc)!important;box-shadow:0 0 5px color-mix(in srgb,var(--pc) 52%,transparent)!important}
+@keyframes moduleUpgradePop{0%{transform:translate(-50%,-50%) scale(.72)}55%{transform:translate(-50%,-50%) scale(1.08)}100%{transform:translate(-50%,-50%) scale(1)}}.tile.just-placed .module-shell{animation:moduleUpgradePop .42s cubic-bezier(.2,.85,.3,1) both}
 @media (min-width:1000px){
   .hud{padding:12px 14px;gap:10px}.hud-chip{min-width:176px;padding:12px 16px;border-radius:12px}.hud-name{font-size:.68rem}.hud-pts{font-size:clamp(1.12rem,1.6vw,1.55rem)}.hud-res{font-size:.75rem}.hud-center{min-width:150px;padding:11px 16px;border-radius:12px}.hud-turn{font-size:.8rem}.hud-who{font-size:.86rem;max-width:14rem}.hud-actions{font-size:.74rem}.many-players .hud-chip{min-width:94px;padding:10px 11px;border-radius:10px}.many-players .hud-name{font-size:.6rem}.many-players .hud-pts{font-size:1rem}
   .board-legend{font-size:.68rem;padding:10px 14px}
@@ -2158,6 +2170,7 @@ let botClockStart = 0;
 let turnBannerHideTimeout = null;
 let economyInterval = null;
 let economyPhase = 0;
+let realtimeBotTimers = new Map();
 
 let ecoBtnCachedText = null;
 
@@ -2506,7 +2519,9 @@ function applyOnlineAction(action) {
     broadcastOnlineRoom();
     return;
   }
-  if (action.from !== S.cur || !S.players[action.from]) return;
+  if (!S.players[action.from] || (!isRealtimeMode() && action.from !== S.cur)) return;
+  const previousCur = S.cur;
+  if (isRealtimeMode()) S.cur = action.from;
   ONLINE.applyingRemote = true;
   try {
     if (action.type === 'build') doBuild(action.tile, action.building);
@@ -2515,7 +2530,7 @@ function applyOnlineAction(action) {
     else if (action.type === 'attack') doAttack(action.tile, action.building);
     else if (action.type === 'eco') eco();
     else if (action.type === 'abandon') abandon();
-  } finally { ONLINE.applyingRemote = false; }
+  } finally { ONLINE.applyingRemote = false; if (isRealtimeMode()) { S.cur = previousCur; render(); } }
 }
 function setOnlineStatus(text, live = false) {
   const status = document.getElementById('onlineStatus');
@@ -2912,6 +2927,16 @@ function updateTurnBanner() {
     return mm + ':' + ss;
   };
 
+  if (isRealtimeMode()) {
+    stopBotClock();
+    if (turnBannerHideTimeout) clearTimeout(turnBannerHideTimeout);
+    b.textContent = 'Temps réel · pulsations toutes les 5 s';
+    b.style.color = 'var(--p1)';
+    b.classList.remove('hide');
+    b.classList.add('show');
+    return;
+  }
+
   if (isHuman(S.cur)) {
     // 2 joueurs humains => "Au tour de J1/J2"
     let msg = '';
@@ -3014,6 +3039,21 @@ function stopEconomyClock() {
   if (economyInterval) clearInterval(economyInterval);
   economyInterval = null;
   economyPhase = 0;
+  realtimeBotTimers.forEach(timer => clearTimeout(timer));
+  realtimeBotTimers.clear();
+}
+
+function isRealtimeMode() { return CONFIG.economyMode === 'pulse'; }
+function actionsForPlayer(pid) {
+  const p = S.players[pid];
+  if (!p) return 0;
+  return isRealtimeMode() ? (Number.isFinite(p.actions) ? p.actions : actionsPerTurnForPlayer(pid)) : (pid === S.cur ? S.actionsRemaining : 0);
+}
+function setActionsForPlayer(pid, value) {
+  const p = S.players[pid];
+  if (!p) return;
+  if (isRealtimeMode()) p.actions = Math.max(0, Math.min(actionsPerTurnForPlayer(pid), Math.round(value)));
+  else if (pid === S.cur) S.actionsRemaining = Math.max(0, value);
 }
 
 function grantEconomy(pid, amount) {
@@ -3051,15 +3091,31 @@ function runEconomyPulse() {
       ? (runReserveModuleTicks(pid) + (economyPhase === 0 ? 1 + sourceIncomeBonus(pid) : 0)) * CONFIG.pointsMultiplier
       : (economyPhase === 0 ? 1 : Math.max(1,network)) * CONFIG.pointsMultiplier;
     grantEconomy(pid,gain);
+    if (isRealtimeMode() && economyPhase === 0) setActionsForPlayer(pid, actionsPerTurnForPlayer(pid));
   });
   render();
   if (CONFIG.online && ONLINE.isHost) broadcastOnlineState();
+}
+
+function scheduleRealtimeBots() {
+  if (!isRealtimeMode() || !S.active) return;
+  S.turnOrder.filter(pid => isBot(pid) && !S.eliminated[pid]).forEach(pid => {
+    if (realtimeBotTimers.has(pid)) return;
+    const delay = 260 + Math.floor(gameRandom() * Math.max(120, 760 - CONFIG.botDifficulty * 360));
+    realtimeBotTimers.set(pid, setTimeout(() => {
+      realtimeBotTimers.delete(pid);
+      if (!S.active || !isRealtimeMode() || S.eliminated[pid]) return;
+      if (actionsForPlayer(pid) > 0) runBot(pid);
+      scheduleRealtimeBots();
+    }, delay));
+  });
 }
 
 function startEconomyClock() {
   stopEconomyClock();
   if (CONFIG.economyMode === 'turn') return;
   economyInterval = setInterval(runEconomyPulse,1000);
+  if (isRealtimeMode()) scheduleRealtimeBots();
 }
 
 function initGame() {
@@ -3081,7 +3137,7 @@ function initGame() {
   S.turnOrder.forEach(id => {
     S.players[id] = {
       pts: basePts, res: 0, armories: 0, tilesPlaced: 0, attacks: 0,
-      bases: 0
+      bases: 0, actions: actionsPerTurnForPlayer(id)
     };
   });
 
@@ -3104,27 +3160,31 @@ function initGame() {
   startEconomyClock();
   zoom = 1; panX = 0; panY = 0;
   requestAnimationFrame(() => {
-    const wrap = document.getElementById('gridWrap');
-    const pan = document.getElementById('gridPan');
-    const gW = pan.offsetWidth;
-    const aW = wrap.offsetWidth;
-    const aH = wrap.offsetHeight;
-    if (gW > aW) panX = isCompactViewport() ? 0 : -(gW - aW) / 2;
-    if (gW > aH) panY = -(pan.offsetHeight - aH) / 2;
-    applyTransform();
+    centerBoard();
   });
   startPlayerTurn();
 }
 
 function startPlayerTurn() {
-  S.actionsRemaining = actionsPerTurnForPlayer(S.cur);
+  if (isRealtimeMode()) {
+    if (S.players[S.cur] && !Number.isFinite(S.players[S.cur].actions)) S.players[S.cur].actions = actionsPerTurnForPlayer(S.cur);
+    scheduleRealtimeBots();
+  } else S.actionsRemaining = actionsPerTurnForPlayer(S.cur);
   ecoBtnCachedText = null;
   render();
   updateTurnBanner();
-  if (isBot(S.cur)) setTimeout(runBot, Math.max(90,450 - Math.max(0,S.turnOrder.length - 2) * 32));
+  if (!isRealtimeMode() && isBot(S.cur)) setTimeout(runBot, Math.max(90,450 - Math.max(0,S.turnOrder.length - 2) * 32));
 }
 
 function consumeActionOrEndTurn() {
+  if (isRealtimeMode()) {
+    const pid = S.cur;
+    setActionsForPlayer(pid, actionsForPlayer(pid) - 1);
+    render();
+    broadcastOnlineState();
+    scheduleRealtimeBots();
+    return;
+  }
   S.actionsRemaining--;
   if (S.actionsRemaining > 0) {
     render();
@@ -3136,6 +3196,7 @@ function consumeActionOrEndTurn() {
 }
 
 function endTurn() {
+  if (isRealtimeMode()) return;
   const next = getNextPlayerId(S.cur);
   S.cur = next;
   S.turn++;
@@ -3298,7 +3359,6 @@ function render() {
     if (t.o && types[t.t]) {
       const lvl = tileLvl(t);
       const tint = TILE_TINT[t.t] || 'transparent';
-      const levelNodes = Array.from({length:Math.max(0,lvl - 1)},() => '<i></i>').join('');
       const moduleCounterValue = Number.isFinite(t.ecoCounter) ? ((t.ecoCounter % 5) + 5) % 5 : 0;
       const moduleCounter = CONFIG.economyMode === 'pulse' && t.t === 'reserve'
         ? `<span class="module-counter ${moduleCounterValue === 4 ? 'ready' : ''}" title="Production indépendante · prochaine dans ${5 - moduleCounterValue} s">${moduleCounterValue}/5</span>`
@@ -3308,7 +3368,7 @@ function render() {
         <span class="tile-type-tint"></span>
         ${gradeMarksHTML(lvl)}
         <span class="module-shell" aria-hidden="true"><span class="module-shell-ring"></span>${tileIconSvg(t.t)}</span>
-        <span class="module-level-nodes" aria-hidden="true">${levelNodes}</span>${moduleCounter}`;
+        ${moduleCounter}`;
     }
     div.onmouseenter = () => previewTileInspector(i);
     div.onmouseleave = leaveTileInspector;
@@ -3330,15 +3390,16 @@ function render() {
   if (boardHint) {
     boardHint.textContent = isBot(S.cur)
       ? `${playerLabel(S.cur)} analyse le réseau…`
-      : `${S.actionsRemaining} action${S.actionsRemaining > 1 ? 's' : ''} · énergie ${Math.round(S.players[S.cur]?.pts || 0)}`;
+      : `${actionsForPlayer(S.cur)} action${actionsForPlayer(S.cur) > 1 ? 's' : ''} · énergie ${Math.round(S.players[S.cur]?.pts || 0)}`;
   }
   document.getElementById('turnInfo').textContent = 'Manche ' + S.turn;
   document.getElementById('turnPlayer').textContent = playerLabel(S.cur);
   const hudActions = document.getElementById('hudActions');
   const maxA = actionsPerTurnForPlayer(S.cur);
   const economyStatus = CONFIG.economyMode === 'turn' ? '' : CONFIG.economyMode === 'pulse' ? ' · pulse 5 s' : ` · flux ${economyPhase === 0 ? '+1' : '+réseau'}`;
-  hudActions.textContent = S.actionsRemaining > 0
-    ? `Actions: ${S.actionsRemaining}/${maxA}${economyStatus}`
+  const currentActions = actionsForPlayer(S.cur);
+  hudActions.textContent = currentActions > 0
+    ? `Actions: ${currentActions}/${maxA}${economyStatus}`
     : '';
 
   const hc = document.getElementById('hudCenter');
@@ -3352,7 +3413,7 @@ function render() {
 
 function onTile(i) {
   showTileInspector(i, true);
-  if (!S.active || !isControllableHuman(S.cur) || S.actionsRemaining <= 0) return;
+  if (!S.active || !isControllableHuman(S.cur) || actionsForPlayer(S.cur) <= 0) return;
   const tile = S.grid[i];
   if (isMountainCell(tile)) return;
   const el = document.querySelectorAll('.tile')[i];
@@ -3884,6 +3945,15 @@ function updateEcoButtonUI() {
     return;
   }
 
+  if (isRealtimeMode()) {
+    btn.style.pointerEvents = 'none';
+    btn.classList.remove('passe-tour');
+    const liveText = window.matchMedia('(max-width:760px)').matches ? 'Temps réel' : 'Temps réel · pulse 5 s';
+    if (ecoBtnCachedText !== liveText) { label.textContent = liveText; ecoBtnCachedText = liveText; }
+    btn.title = 'Mode temps réel : les ressources arrivent par pulsations et les bots jouent indépendamment.';
+    return;
+  }
+
   btn.style.pointerEvents = 'auto';
   const mult = CONFIG.pointsMultiplier;
   const p = S.players[S.cur];
@@ -3926,6 +3996,7 @@ function botPickCandidate(candidates, difficulty) {
   return candidates[Math.floor(gameRandom() * pool)];
 }
 function botTakeEconomy(pid) {
+  if (isRealtimeMode()) { setActionsForPlayer(pid, 0); render(); return; }
   if (CONFIG.economyMode !== 'turn') { endTurn(); return; }
   const p = S.players[pid];
   const cap = playerEconomyCap(pid);
@@ -3944,8 +4015,16 @@ function botCaptureType(pid, targetIdx, atkCost, pressure) {
   order.push('outpost','bastion','storage','reserve','fortress','armory');
   return [...new Set(order)].find(k => p.pts >= atkCost + buildCostForPlayer(pid,k)) || null;
 }
-function runBot() {
-  if (!S.active || !isBot(S.cur) || S.actionsRemaining <= 0) return;
+function runBot(pidOverride = null) {
+  const previousCur = S.cur;
+  if (isRealtimeMode() && pidOverride != null) S.cur = pidOverride;
+  try { return runBotCore(); }
+  finally {
+    if (isRealtimeMode() && pidOverride != null) { S.cur = previousCur; render(); }
+  }
+}
+function runBotCore() {
+  if (!S.active || !isBot(S.cur) || actionsForPlayer(S.cur) <= 0) return;
   const pid = S.cur, p = S.players[pid], diff = CONFIG.botDifficulty;
   const cap = playerEconomyCap(pid), energyRatio = p.pts / Math.max(1,cap);
   const scores = estimateWinScores();
@@ -4056,47 +4135,96 @@ function runBot() {
 }
 
 let zoom = 1, panX = 0, panY = 0, panning = false, px0, py0;
+let pointerMoved = false, suppressTileClick = false, panPointerId = null;
+
+function boardMetrics() {
+  const wrap = document.getElementById('gridWrap');
+  const pan = document.getElementById('gridPan');
+  return { wrap, pan, width: wrap?.clientWidth || 0, height: wrap?.clientHeight || 0,
+    boardWidth: pan?.scrollWidth || pan?.offsetWidth || 0, boardHeight: pan?.scrollHeight || pan?.offsetHeight || 0 };
+}
+
+function clampPan() {
+  const { width, height, boardWidth, boardHeight } = boardMetrics();
+  if (!width || !height || !boardWidth || !boardHeight) return;
+  const scaledW = boardWidth * zoom, scaledH = boardHeight * zoom;
+  panX = scaledW <= width ? (width - scaledW) / 2 : Math.max(width - scaledW, Math.min(0, panX));
+  panY = scaledH <= height ? (height - scaledH) / 2 : Math.max(height - scaledH, Math.min(0, panY));
+}
+
+function centerBoard() {
+  panX = 0; panY = 0;
+  clampPan();
+  applyTransform();
+}
 
 function applyTransform() {
-  document.getElementById('gridPan').style.transform =
-    `translate(${panX}px,${panY}px) scale(${zoom})`;
+  clampPan();
+  const pan = document.getElementById('gridPan');
+  if (pan) pan.style.transform = `translate3d(${panX}px,${panY}px,0) scale(${zoom})`;
+}
+
+function zoomAt(clientX, clientY, nextZoom) {
+  const { wrap } = boardMetrics();
+  if (!wrap) return;
+  const rect = wrap.getBoundingClientRect();
+  const x = clientX - rect.left, y = clientY - rect.top;
+  const oldZoom = zoom;
+  zoom = Math.max(.35, Math.min(4.5, nextZoom));
+  // Preserve the board point beneath the cursor instead of zooming around the corner.
+  panX = x - ((x - panX) / oldZoom) * zoom;
+  panY = y - ((y - panY) / oldZoom) * zoom;
+  applyTransform();
 }
 
 (function initZoomPan() {
   const wrap = document.getElementById('gridWrap');
+  if (!wrap) return;
   wrap.addEventListener('wheel', e => {
     e.preventDefault();
-    zoom = Math.max(.25, Math.min(5, zoom * (e.deltaY < 0 ? 1.1 : 0.91)));
-    applyTransform();
+    const factor = Math.exp(-Math.max(-120, Math.min(120, e.deltaY)) * .0012);
+    zoomAt(e.clientX, e.clientY, zoom * factor);
   }, { passive: false });
   wrap.addEventListener('pointerdown', e => {
-    if (e.target.closest('.tile')) return;
-    panning = true; px0 = e.clientX - panX; py0 = e.clientY - panY;
+    if (e.button !== 0 || e.target.closest('.tile-inspector,.action-bar,#radialMenu,.board-legend')) return;
+    panning = true; pointerMoved = false; panPointerId = e.pointerId;
+    px0 = e.clientX - panX; py0 = e.clientY - panY;
+    wrap.classList.add('is-panning');
     wrap.setPointerCapture(e.pointerId);
   });
   wrap.addEventListener('pointermove', e => {
-    if (!panning) return;
+    if (!panning || e.pointerId !== panPointerId) return;
+    const dx = e.clientX - (px0 + panX), dy = e.clientY - (py0 + panY);
+    if (!pointerMoved && Math.hypot(dx, dy) < 5) return;
+    pointerMoved = true;
     panX = e.clientX - px0; panY = e.clientY - py0; applyTransform();
   });
-  const endPan = () => { panning = false; };
+  const endPan = e => {
+    if (!panning || (e?.pointerId != null && e.pointerId !== panPointerId)) return;
+    if (pointerMoved) suppressTileClick = true;
+    panning = false; panPointerId = null; wrap.classList.remove('is-panning');
+  };
   wrap.addEventListener('pointerup', endPan);
   wrap.addEventListener('pointercancel', endPan);
+  // A drag that began on a tile must not turn into a tile action on release.
+  wrap.addEventListener('click', e => {
+    if (!suppressTileClick) return;
+    suppressTileClick = false;
+    e.preventDefault(); e.stopPropagation();
+  }, true);
   let lastDist = 0;
   wrap.addEventListener('touchstart', e => {
-    if (e.touches.length === 2)
-      lastDist = Math.hypot(
-        e.touches[0].clientX - e.touches[1].clientX,
-        e.touches[0].clientY - e.touches[1].clientY);
-  });
+    if (e.touches.length === 2) lastDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+  }, { passive: true });
   wrap.addEventListener('touchmove', e => {
-    if (e.touches.length !== 2) return;
+    if (e.touches.length !== 2 || !lastDist) return;
     e.preventDefault();
-    const d = Math.hypot(
-      e.touches[0].clientX - e.touches[1].clientX,
-      e.touches[0].clientY - e.touches[1].clientY);
-    zoom = Math.max(.25, Math.min(5, zoom * (d / lastDist)));
-    lastDist = d; applyTransform();
+    const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+    zoomAt((e.touches[0].clientX + e.touches[1].clientX) / 2, (e.touches[0].clientY + e.touches[1].clientY) / 2, zoom * (d / lastDist));
+    lastDist = d;
   }, { passive: false });
+  wrap.addEventListener('touchend', () => { lastDist = 0; }, { passive: true });
+  window.addEventListener('resize', () => { if (S.active) applyTransform(); });
 })();
 
 function recordMatch(winnerId) {
