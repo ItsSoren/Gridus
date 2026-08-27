@@ -1280,6 +1280,74 @@ body::after{display:none!important;}
   .profile-edit label{margin-bottom:-4px;}
   .board-legend{left:8px;top:8px;}
 }
+
+/* ══ GRIDUS FRONTLINE PASS ================================================= */
+.match-presets{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:4px;border:1px solid var(--bdr);border-radius:15px;background:var(--bg3);}
+.match-preset{min-height:46px;border:0;border-radius:11px;background:transparent;color:var(--txt-2);display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;transition:.15s;}
+.match-preset strong{font-size:.74rem;color:inherit;}.match-preset span{font-size:.58rem;color:var(--txt-3);}
+.match-preset:hover{background:rgba(255,255,255,.72);color:var(--txt);}.match-preset.active{background:#fff;color:var(--p1);box-shadow:0 5px 14px rgba(28,53,86,.10);}
+.advanced-match-settings{display:contents}.mobile-advanced-toggle{display:none}
+.player-style-setting{align-self:stretch;}.player-color-row{display:grid;grid-template-columns:48px 92px 1fr;gap:10px;align-items:center;}
+.player-color-row .form-control-color{width:48px;height:42px;padding:4px!important;}.player-color-preview{height:34px;border-radius:10px;border:1px solid var(--bdr-md);box-shadow:inset 0 1px 0 rgba(255,255,255,.65);}
+.player-color-row>span{font-size:.62rem;line-height:1.35;color:var(--txt-2);}
+
+/* HUD : mêmes surfaces et rayons que le reste du produit. */
+.hud{gap:8px;padding:8px 10px;background:rgba(244,247,251,.94);border-bottom:1px solid var(--bdr);box-shadow:0 10px 28px rgba(28,53,86,.10);}
+#hudStrip{gap:8px;}.hud-chip{margin:0;border:1px solid var(--bdr);border-radius:15px;background:rgba(255,255,255,.88);padding:9px 12px;box-shadow:0 5px 14px rgba(28,53,86,.06);}
+.hud-chip::before{width:4px;border-radius:15px 0 0 15px;}.hud-chip.active-turn{background:#fff;box-shadow:0 0 0 2px color-mix(in srgb,var(--chip) 18%,transparent),0 7px 18px rgba(28,53,86,.09);filter:none;}
+.hud-center{min-width:126px;border:1px solid var(--bdr);border-radius:15px;background:#fff;padding:8px 12px;box-shadow:0 5px 14px rgba(28,53,86,.06);}
+.hud::after{display:none;}.hud-stars .star,.win-stars .star{color:#d9e1eb;}.hud-stars .star.on,.win-stars .star.on{text-shadow:none;}
+
+/* Terrain et modules : chaque famille possède sa matière, pas seulement une icône. */
+.tile.sq-neutral{background-color:#edf3f8!important;background-image:linear-gradient(145deg,rgba(255,255,255,.88),rgba(213,224,236,.58)),radial-gradient(circle at 20% 22%,rgba(53,85,120,.12) 0 1px,transparent 1.5px)!important;background-size:auto,11px 11px!important;}
+.tile.sq-neutral::before{background:linear-gradient(135deg,rgba(255,255,255,.5),transparent 45%,rgba(71,100,132,.08)),repeating-linear-gradient(90deg,transparent 0 13px,rgba(76,103,132,.035) 13px 14px)!important;}
+.tile.t-mountain{background-image:linear-gradient(145deg,#b9c7d3,#788b9d),repeating-linear-gradient(38deg,rgba(255,255,255,.18) 0 2px,transparent 2px 9px)!important;background-blend-mode:overlay,normal;}
+.tile.t-mountain::before{inset:2px!important;background:linear-gradient(145deg,transparent 42%,rgba(44,63,82,.22) 43% 48%,transparent 49%),linear-gradient(35deg,rgba(255,255,255,.18) 0 18%,transparent 19% 70%,rgba(35,54,73,.16) 71%)!important;}
+.tile-source-zone{background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.82),transparent 18%),repeating-radial-gradient(circle at center,rgba(231,174,49,.28) 0 4px,rgba(255,229,158,.2) 5px 10px)!important;box-shadow:inset 0 0 0 2px rgba(200,136,20,.32)!important;}
+.tile.t-outpost::before{background:repeating-linear-gradient(45deg,rgba(255,255,255,.20) 0 3px,transparent 3px 10px),linear-gradient(145deg,rgba(255,255,255,.18),transparent)!important;}
+.tile.t-bastion::before{background:linear-gradient(90deg,rgba(255,255,255,.14) 2px,transparent 2px),linear-gradient(rgba(255,255,255,.14) 2px,transparent 2px)!important;background-size:13px 13px!important;}
+.tile.t-fortress::before{background:repeating-linear-gradient(0deg,rgba(255,255,255,.16) 0 2px,transparent 2px 9px),repeating-linear-gradient(90deg,rgba(17,31,48,.18) 0 2px,transparent 2px 14px)!important;}
+.tile.t-reserve::before{background:repeating-radial-gradient(circle at 50% 50%,rgba(255,255,255,.2) 0 3px,transparent 4px 11px)!important;}
+.tile.t-storage::before{background:repeating-linear-gradient(0deg,rgba(255,255,255,.20) 0 4px,rgba(25,43,62,.10) 5px 8px)!important;}
+.tile.t-armory::before{background:repeating-linear-gradient(135deg,rgba(255,255,255,.21) 0 4px,rgba(54,21,28,.15) 4px 9px)!important;}
+.tile.t-citadel::before{background:conic-gradient(from 22deg,rgba(255,255,255,.26),transparent 12%,rgba(255,255,255,.15) 24%,transparent 36%,rgba(255,255,255,.22) 52%,transparent 68%,rgba(255,255,255,.18) 84%,transparent)!important;}
+.tile-level-badge{position:absolute;right:4px;top:4px;z-index:6;min-width:25px;height:18px;padding:0 5px;border-radius:7px;background:rgba(15,27,44,.74);color:#fff;display:grid;place-items:center;font:800 .48rem 'JetBrains Mono',monospace;box-shadow:0 2px 6px rgba(18,34,54,.25);}
+.tile-level-track{position:absolute;left:6px;right:6px;bottom:5px;z-index:6;display:flex;gap:2px;height:4px;}.tile-level-track i{flex:1;border-radius:3px;background:rgba(255,255,255,.28);}.tile-level-track i.on{background:#fff;box-shadow:0 0 4px rgba(255,255,255,.5);}
+.tile.conquered{animation:territoryCapture .5s cubic-bezier(.2,.9,.2,1)!important;}.tile.conquered::after{content:'';position:absolute;inset:-20%;z-index:9;background:linear-gradient(105deg,transparent 26%,rgba(255,255,255,.82) 48%,transparent 70%);animation:captureSweep .48s ease-out forwards;pointer-events:none;}
+@keyframes territoryCapture{0%{transform:scale(.78);filter:saturate(1.7) brightness(1.35)}100%{transform:scale(1);filter:none}}@keyframes captureSweep{0%{translate:-80% 0}100%{translate:80% 0;opacity:0}}
+
+/* Inspecteur de case, affiché au survol et verrouillable au clic. */
+.tile-inspector{position:absolute;right:18px;top:18px;z-index:12;width:min(310px,calc(100% - 36px));padding:16px;border:1px solid var(--bdr-md);border-radius:18px;background:rgba(255,255,255,.96);box-shadow:0 18px 40px rgba(28,53,86,.17);backdrop-filter:blur(18px);color:var(--txt);opacity:0;transform:translateY(-8px);pointer-events:none;transition:.16s;}
+.tile-inspector.visible{opacity:1;transform:none;pointer-events:auto;}.tile-inspector-close{position:absolute;right:10px;top:10px;width:34px;height:34px;border:1px solid var(--bdr);border-radius:10px;background:var(--bg3);color:var(--txt-2);font-size:1.2rem;cursor:pointer;}
+.tile-inspector-top{display:flex;gap:11px;align-items:center;padding-right:34px;}.tile-inspector-icon{width:48px;height:48px;border-radius:13px;background:var(--bg3);display:grid;place-items:center;color:var(--p1);flex:0 0 auto;}.tile-inspector-icon .tile-svg{width:31px!important;height:31px!important;stroke:currentColor!important;filter:none;}
+.tile-inspector-kicker{font:700 .48rem 'JetBrains Mono',monospace;letter-spacing:.14em;color:var(--txt-3);}.tile-inspector h3{font-size:1rem;margin:2px 0 0;font-weight:800;color:var(--txt);}.tile-inspector p{font-size:.68rem;line-height:1.45;color:var(--txt-2);margin:12px 0;}
+.tile-inspector-tags{display:flex;gap:5px;flex-wrap:wrap;}.tile-info-tag{padding:4px 7px;border-radius:999px;background:var(--bg3);color:var(--txt-2);font:700 .48rem 'JetBrains Mono',monospace;}.tile-info-tag.boost{background:#fff2c9;color:#8b5b00;}.tile-info-tag.danger{background:#ffe4e7;color:#a72d42;}
+.tile-inspector-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px;}.tile-inspector-stat{padding:7px;border-radius:10px;background:var(--bg3);}.tile-inspector-stat span{display:block;font-size:.46rem;color:var(--txt-3);text-transform:uppercase;}.tile-inspector-stat strong{display:block;margin-top:2px;font:800 .68rem 'JetBrains Mono',monospace;color:var(--txt);}
+
+/* Menu d'action borné au viewport : upgrade visible, fermeture lisible, aperçu complet. */
+.rad-overlay{background:rgba(42,59,80,.18);backdrop-filter:blur(3px);}
+.action-popover{position:fixed;z-index:930;width:min(560px,calc(100vw - 24px));padding:14px;border:1px solid var(--bdr-md);border-radius:20px;background:rgba(255,255,255,.98);box-shadow:0 24px 64px rgba(28,53,86,.24);color:var(--txt);}
+.action-popover-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;}.action-popover-title{flex:1;min-width:0;}.action-popover-title strong{display:block;font-size:.9rem;color:var(--txt);}.action-popover-title span{display:block;font-size:.58rem;color:var(--txt-3);margin-top:2px;}
+.action-close{width:44px;height:44px;flex:0 0 auto;border:1px solid var(--bdr-md);border-radius:13px;background:var(--bg3);color:var(--txt);display:grid;place-items:center;font-size:1.35rem;cursor:pointer;}.action-close:hover{background:#ffe8eb;color:var(--danger);border-color:rgba(201,71,87,.25);}
+.action-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;}.action-choice{min-height:82px;padding:8px;border:1px solid var(--bdr);border-radius:13px;background:#fff;color:var(--txt);display:grid;grid-template-columns:34px 1fr;gap:7px;align-items:center;text-align:left;cursor:pointer;transition:.14s;}.action-choice:hover:not(:disabled):not(.cant),.action-choice.focused{border-color:var(--radP);background:color-mix(in srgb,var(--radP) 6%,#fff);transform:translateY(-1px);}.action-choice:disabled,.action-choice.cant{opacity:.42;cursor:not-allowed;filter:saturate(.35);}.action-choice.cant:hover{transform:none;border-color:var(--bdr);background:#fff;}.action-choice .rad-svg,.action-choice .tile-svg{width:31px!important;height:31px!important;stroke:var(--radP)!important;filter:none;}.action-choice-copy strong{display:block;font-size:.65rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}.action-choice-copy span{display:block;margin-top:3px;font:700 .52rem 'JetBrains Mono',monospace;color:var(--gold);}.action-choice-copy small{display:block;margin-top:2px;font-size:.48rem;color:var(--txt-3);}
+.action-detail{margin-top:9px;padding:10px 12px;border-radius:13px;background:var(--bg3);border:1px solid var(--bdr);}.action-detail strong{display:block;font-size:.72rem;color:var(--txt);}.action-detail p{font-size:.6rem;line-height:1.4;color:var(--txt-2);margin:3px 0 0;}.action-detail-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:5px;font:700 .5rem 'JetBrains Mono',monospace;color:var(--txt-3);}
+
+/* Modal/statistiques : aucun reste sombre du thème précédent. */
+.modal-dialog{max-width:min(760px,calc(100vw - 24px));}.modal-content{overflow:hidden;}.modal-header{background:#fff!important;border-bottom:1px solid var(--bdr)!important;padding:15px 18px!important;}.modal-title-text{color:var(--txt);font-size:1rem;}.modal-body{background:#fff!important;color:var(--txt)!important;padding:18px!important;max-height:min(72vh,680px);overflow:auto;}.btn-close-white{filter:none!important;opacity:.55;}
+.stats-overview{display:grid;grid-template-columns:190px 1fr;gap:16px;align-items:center;}.stats-donut-card,.stats-kpi,.stats-player{border:1px solid var(--bdr);border-radius:16px;background:var(--bg3);}.stats-donut-card{padding:16px;display:grid;place-items:center;gap:10px;}.stat-pie{width:140px;height:140px;border:0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.6);}.stat-pie::after{background:#fff;border:1px solid var(--bdr);}.stats-kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}.stats-kpi{padding:11px;}.stats-kpi span{display:block;font-size:.55rem;color:var(--txt-3);}.stats-kpi strong{display:block;margin-top:3px;font:800 .8rem 'JetBrains Mono',monospace;color:var(--txt);}.stats-players{display:grid;gap:8px;margin-top:12px;}.stats-player{display:grid;grid-template-columns:1fr auto;gap:12px;padding:11px 13px;align-items:center;}.stats-player-main strong{display:block;font:850 .72rem 'JetBrains Mono',monospace;}.stats-player-main span{display:block;margin-top:3px;font-size:.58rem;color:var(--txt-2);}.stats-player-score{text-align:right;}.stats-player-score>strong{display:block;font:850 .72rem 'JetBrains Mono',monospace;}
+.online-status{background:var(--bg3)!important;color:var(--txt-2)!important;}.presence-pill{background:#eefaf8!important;color:#197561!important;border-color:rgba(19,132,106,.18)!important;}.mobile-action-sheet{background:#fff!important;color:var(--txt)!important;}.mobile-action-sheet .sheet-btn{background:var(--bg3)!important;color:var(--txt)!important;}
+#turnBanner{background:rgba(255,255,255,.94);border-color:var(--bdr-md);color:var(--txt);box-shadow:0 16px 34px rgba(28,53,86,.18);}.bot-turn-time-box{background:var(--bg3);border-color:var(--bdr);}.win-overlay{background:rgba(238,244,250,.9);}.win-badge{background:#fff;border-color:var(--bdr-md);box-shadow:0 28px 70px rgba(28,53,86,.22);}.online-note{background:#eefaf8;border-color:rgba(19,132,106,.18);}
+
+@media (max-width:760px){
+  .match-presets{grid-template-columns:1fr;}.match-preset{justify-content:flex-start;padding:0 12px;}.player-color-row{grid-template-columns:48px 72px 1fr;}
+  .mobile-advanced-toggle{display:flex;align-items:center;justify-content:space-between;min-height:48px;padding:0 14px;border:1px solid var(--bdr);border-radius:14px;background:#fff;color:var(--txt);font-size:.72rem;font-weight:750;cursor:pointer}.mobile-advanced-toggle span:last-child{color:var(--p1);font-size:.62rem}.advanced-match-settings{display:none}.advanced-match-settings.open{display:grid;gap:8px}
+  .hud{padding:6px;gap:6px;}.hud-center{min-width:82px;padding:7px 8px;}.hud-chip{border-radius:12px;}
+  .hud-res{display:none;}.hud-chip{justify-content:center;}.hud-chip .hud-row{justify-content:center;}
+  .action-bar .abtn:first-child{flex:.7 1 0}.action-bar #btnEco{flex:1.4 1 0}.action-bar .abtn:last-child{flex:1 1 0}
+  .tile-inspector{left:8px;right:8px;top:auto;bottom:72px;width:auto;padding:12px;}.tile-inspector-stats{display:none;}
+  .action-popover{left:8px!important;right:8px!important;bottom:8px!important;top:auto!important;width:auto;max-height:78vh;overflow:auto;}.action-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.action-choice{min-height:70px;}.action-detail{position:sticky;bottom:0;background:#fff;box-shadow:0 -6px 16px rgba(28,53,86,.08);}
+  .stats-overview{grid-template-columns:1fr;}.stats-donut-card{grid-template-columns:150px 1fr;}.stats-kpis{grid-template-columns:repeat(2,1fr);}
+}
 </style>
 </head>
 <body>
@@ -1382,6 +1450,14 @@ body::after{display:none!important;}
   <div class="card-wrap card border-secondary shadow screen-card mx-auto" style="max-width:600px">
     <div class="card-title" id="setupTitle">Partie</div>
     <div class="card-sub" id="setupSub">Réglages</div>
+    <div class="match-presets" aria-label="Préréglages de partie">
+      <button type="button" class="match-preset active" data-match-preset="duel" onclick="applyMatchPreset('duel')"><strong>Duel</strong><span>équilibré</span></button>
+      <button type="button" class="match-preset" data-match-preset="blitz" onclick="applyMatchPreset('blitz')"><strong>Blitz</strong><span>court · énergie ×2</span></button>
+      <button type="button" class="match-preset" data-match-preset="front" onclick="applyMatchPreset('front')"><strong>Grand front</strong><span>carte large · renforts</span></button>
+    </div>
+
+    <button type="button" class="mobile-advanced-toggle" aria-controls="advancedMatchSettings" aria-expanded="false" onclick="toggleAdvancedMatchSettings(this)"><span>Réglages avancés</span><span>Afficher</span></button>
+    <div class="advanced-match-settings" id="advancedMatchSettings">
 
     <div class="mb-4">
       <label class="form-label fw-semibold mb-2 d-block"><span class="section-icon">⌘</span> Taille de la carte</label>
@@ -1442,25 +1518,14 @@ body::after{display:none!important;}
       </div>
     </div>
 
-    <div class="mb-2">
-      <label class="form-label fw-semibold mb-2 d-block"><span class="section-icon">◈</span> Couleurs (appliquées en partie)</label>
-      <div class="row g-3">
-        <div class="col-md-6">
-          <div class="small text-secondary mb-1">Joueur 1</div>
-          <div class="d-flex gap-2 align-items-center">
-            <input type="color" class="form-control form-control-color" id="p1ColorPicker" value="#5b9cf6" title="J1" onchange="CONFIG.p1Color=this.value;updateConfigDisplay()">
-            <div id="p1ColorPreview" class="flex-grow-1 rounded border" style="height:40px;background:#5b9cf6;border-color:rgba(91,156,246,.35)!important"></div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="small text-secondary mb-1">Autres joueurs (dérivées)</div>
-          <div class="d-flex flex-column gap-1 small font-monospace">
-            <div class="d-flex align-items-center gap-2"><span class="text-secondary" style="min-width:1.5rem">2</span><div id="p2ColorPreview" class="flex-grow-1 rounded border" style="height:22px;background:#f0633a"></div></div>
-            <div class="d-flex align-items-center gap-2"><span class="text-secondary" style="min-width:1.5rem">3</span><div id="p3ColorPreview" class="flex-grow-1 rounded border" style="height:22px;background:#888"></div></div>
-            <div class="d-flex align-items-center gap-2"><span class="text-secondary" style="min-width:1.5rem">4</span><div id="p4ColorPreview" class="flex-grow-1 rounded border" style="height:22px;background:#aaa"></div></div>
-          </div>
-        </div>
+    <div class="mb-2 player-style-setting">
+      <label class="form-label fw-semibold mb-2 d-block"><span class="section-icon">◈</span> Ta couleur</label>
+      <div class="player-color-row">
+        <input type="color" class="form-control form-control-color" id="p1ColorPicker" value="#5b9cf6" title="Couleur du joueur" onchange="CONFIG.p1Color=this.value;updateConfigDisplay()">
+        <div id="p1ColorPreview" class="player-color-preview" style="background:#5b9cf6"></div>
+        <span>Les adversaires reçoivent automatiquement une couleur contrastée.</span>
       </div>
+    </div>
     </div>
 
     <div class="setup-actions d-flex flex-wrap gap-2 align-items-center justify-content-between px-0">
@@ -1531,6 +1596,16 @@ body::after{display:none!important;}
       <span id="boardHint">Zone riche · énergie bonus</span>
       <span class="legend-hint">Clique une case adjacente pour agir</span>
     </div>
+    <aside class="tile-inspector" id="tileInspector" aria-live="polite" aria-hidden="true">
+      <button type="button" class="tile-inspector-close" onclick="closeTileInspector()" aria-label="Fermer l’inspecteur">×</button>
+      <div class="tile-inspector-top">
+        <div class="tile-inspector-icon" id="tileInspectorIcon"></div>
+        <div><div class="tile-inspector-kicker" id="tileInspectorKicker">CASE</div><h3 id="tileInspectorName">Terrain libre</h3></div>
+      </div>
+      <p id="tileInspectorDescription">Une case neutre disponible pour étendre ton territoire.</p>
+      <div class="tile-inspector-tags" id="tileInspectorTags"></div>
+      <div class="tile-inspector-stats" id="tileInspectorStats"></div>
+    </aside>
     <div id="gridPan">
       <div class="grid" id="grid"></div>
     </div>
@@ -1597,15 +1672,15 @@ function readMatchHistory() {
 }
 
 const types = {
-  outpost : { n:'Avant-poste',  c:1,  r:1, i:'△', progressive:false },
-  bastion : { n:'Bastion',      c:3,  r:3, i:'◇', progressive:false },
-  fortress: { n:'Forteresse',  c:5,  r:5, i:'⬡', progressive:false },
-  reserve : { n:'Réserve',      c:5,  r:1, i:'◆', progressive:true,  incomePerLvl: 1, upkeep: 0 },
-  storage : { n:'Stockage',     c:5,  r:2, i:'■', progressive:true,  capPerLvl: 10, upkeep: 0 },
-  armory  : { n:'Armurerie',    c:10, r:3, i:'⚒', progressive:true,  actionsPerLvl: 1, upkeep: 0 },
+  outpost : { n:'Avant-poste', c:1, r:1, i:'△', progressive:false, role:'Expansion', d:'Module rapide pour ouvrir un nouveau front et relier deux zones.' },
+  bastion : { n:'Bastion', c:3, r:3, i:'◇', progressive:false, role:'Défense', d:'Position solide pour ralentir une poussée ennemie et tenir un passage.' },
+  fortress: { n:'Forteresse', c:5, r:5, i:'⬡', progressive:false, role:'Verrou', d:'Défense lourde conçue pour verrouiller un corridor stratégique.' },
+  reserve : { n:'Réserve', c:5, r:1, i:'◆', progressive:true, role:'Économie', d:'Produit un revenu supplémentaire à chaque action Économie.', incomePerLvl: 1, upkeep: 0 },
+  storage : { n:'Stockage', c:5, r:2, i:'■', progressive:true, role:'Capacité', d:'Augmente ton plafond d’énergie et absorbe une partie des pertes.', capPerLvl: 10, upkeep: 0 },
+  armory  : { n:'Armurerie', c:10, r:3, i:'⚒', progressive:true, role:'Tempo', d:'Ajoute une action par tour, jusqu’au plafond global.', actionsPerLvl: 1, upkeep: 0 },
   // "citadelle" est buildable uniquement si l'option "secours" est activée (voir showRadial)
-  citadel : { n:'Citadelle',   c:50, r:12, i:'★', progressive:false },
-  mountain: { n:'Roc',        c:0,  r:0,  i:'', progressive:false }
+  citadel : { n:'Citadelle', c:50, r:12, i:'★', progressive:false, role:'Base', d:'Cœur du territoire. Perdre ta dernière citadelle entraîne l’élimination.' },
+  mountain: { n:'Mur rocheux', c:0, r:0, i:'', progressive:false, role:'Obstacle', d:'Terrain infranchissable qui canalise les fronts et protège les flancs.' }
 };
 
 /* Icônes vectorielles natives : la silhouette reste nette à toute taille et
@@ -1762,6 +1837,10 @@ function sourceIncomeBonus(pid) {
   return b;
 }
 
+function sourceZoneAt(idx) {
+  return (S.sourceSites || []).find(zone => Array.isArray(zone.cells) && zone.cells.includes(idx)) || null;
+}
+
 function citadelSlotsForPlayers(W, H, n) {
   const ix = (r, c) => r * W + c;
   const TL = ix(0, 0), TR = ix(0, W - 1), BL = ix(H - 1, 0), BR = ix(H - 1, W - 1);
@@ -1898,33 +1977,10 @@ const TILE_TINT = {
   mountain: 'transparent'
 };
 
-/** Niveau tuile 2–5 : △ puis ◁▷ ; niveau 6 : ◤◥◣◢ uniquement. */
 function gradeMarksHTML(lvl) {
   if (lvl <= 1) return '';
-
-  // Niveau 6 et plus : coins diagonaux uniquement
-  if (lvl >= 6) {
-    return `<span class="tile-grade-marks tile-grade-corners" aria-hidden="true">
-      <span class="tg-corner tg-tl">◤</span>
-      <span class="tg-corner tg-tr">◥</span>
-      <span class="tg-corner tg-bl">◣</span>
-      <span class="tg-corner tg-br">◢</span>
-    </span>`;
-  }
-
-  // Niveaux 2–5 : triangles et côtés
-  let inner = '';
-
-  // Triangle haut / bas
-  if (lvl >= 2) {
-    inner += `<span class="tile-grade-top">△</span>`;
-  }
-  if (lvl >= 3) inner += `<span class="tile-grade-bottom">▽</span>`;
-  // Triangles latéraux
-  if (lvl >= 4) inner += `<span class="tile-grade-side-l">◁</span>`;
-  if (lvl >= 5) inner += `<span class="tile-grade-side-r">▷</span>`;
-
-  return `<span class="tile-grade-marks">${inner}</span>`;
+  const segments = Array.from({length:MAX_LVL - 1}, (_, i) => `<i class="${i < lvl - 1 ? 'on' : ''}"></i>`).join('');
+  return `<span class="tile-level-badge" aria-label="Niveau ${lvl}">N${lvl}</span><span class="tile-level-track" aria-hidden="true">${segments}</span>`;
 }
 
 let S = {
@@ -1941,6 +1997,7 @@ let turnBannerHideTimeout = null;
 let ecoBtnCachedText = null;
 
 let CONFIG = {
+  matchPreset: 'duel',
   mapPreset: 'normal',
   mapSeed: '',
   humanPlayers: 2,
@@ -2342,8 +2399,35 @@ function startGameFromSetup() {
   go('game');
 }
 
+function applyMatchPreset(name) {
+  const presets = {
+    duel: { mapPreset:'normal', pointsMultiplier:1, extraBots:0, baseShield:false },
+    blitz: { mapPreset:'small', pointsMultiplier:2, extraBots:0, baseShield:false },
+    front: { mapPreset:'large', pointsMultiplier:1, extraBots:2, baseShield:true }
+  };
+  const preset = presets[name] || presets.duel;
+  CONFIG.matchPreset = name in presets ? name : 'duel';
+  Object.assign(CONFIG, preset);
+  updateConfigDisplay();
+}
+
+function toggleAdvancedMatchSettings(button) {
+  const panel = document.getElementById('advancedMatchSettings');
+  if (!panel) return;
+  const isOpen = panel.classList.toggle('open');
+  button.setAttribute('aria-expanded',String(isOpen));
+  const state = button.querySelector('span:last-child');
+  if (state) state.textContent = isOpen ? 'Masquer' : 'Afficher';
+}
+
 function updateConfigDisplay() {
   derivePlayerColors();
+  const presetChecks = {
+    duel: CONFIG.mapPreset === 'normal' && CONFIG.pointsMultiplier === 1 && CONFIG.extraBots === 0 && !CONFIG.baseShield,
+    blitz: CONFIG.mapPreset === 'small' && CONFIG.pointsMultiplier === 2 && CONFIG.extraBots === 0 && !CONFIG.baseShield,
+    front: CONFIG.mapPreset === 'large' && CONFIG.pointsMultiplier === 1 && CONFIG.extraBots === 2 && CONFIG.baseShield
+  };
+  CONFIG.matchPreset = Object.keys(presetChecks).find(k => presetChecks[k]) || 'custom';
   const dSl = document.getElementById('diffSlider');
   const eSl = document.getElementById('extraBotsSelect');
   if (dSl) dSl.value = CONFIG.botDifficulty;
@@ -2355,6 +2439,9 @@ function updateConfigDisplay() {
 
   document.querySelectorAll('.map-preset-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.preset === CONFIG.mapPreset);
+  });
+  document.querySelectorAll('.match-preset').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.matchPreset === CONFIG.matchPreset);
   });
   const diffLabels = {
     '0.0': 'Très facile', '0.1': 'Très facile +', '0.2': 'Faible', '0.3': 'Faible +', '0.4': 'Modéré −',
@@ -2369,11 +2456,10 @@ function updateConfigDisplay() {
   document.querySelectorAll('.multiplier-btn').forEach(btn => {
     btn.classList.toggle('active', +btn.dataset.mult === CONFIG.pointsMultiplier);
   });
-  document.getElementById('p1ColorPicker').value = CONFIG.p1Color;
-  document.getElementById('p1ColorPreview').style.background = CONFIG.p1Color;
-  document.getElementById('p2ColorPreview').style.background = CONFIG.p2Color;
-  document.getElementById('p3ColorPreview').style.background = CONFIG.p3Color;
-  document.getElementById('p4ColorPreview').style.background = CONFIG.p4Color;
+  const p1Picker = document.getElementById('p1ColorPicker');
+  const p1Preview = document.getElementById('p1ColorPreview');
+  if (p1Picker) p1Picker.value = CONFIG.p1Color;
+  if (p1Preview) p1Preview.style.background = CONFIG.p1Color;
 }
 
 function randomizeMapSeed() {
@@ -2506,6 +2592,7 @@ function eliminatePlayer(pid, keepIdx = -1) {
     if (idx === keepIdx) return;
     if (cell.o === pid) S.grid[idx] = { t: 'empty', o: 0, fresh: false };
   });
+  if (document.getElementById('game')?.classList.contains('active')) render();
 }
 
 function estimateWinScores() {
@@ -2666,6 +2753,61 @@ function renderHudStrip() {
   });
 }
 
+let TILE_INSPECTOR_PINNED = -1;
+function closeTileInspector() {
+  TILE_INSPECTOR_PINNED = -1;
+  const panel = document.getElementById('tileInspector');
+  if (panel) { panel.classList.remove('visible'); panel.setAttribute('aria-hidden','true'); }
+}
+function showTileInspector(i, pin = false) {
+  const tile = S.grid[i];
+  const panel = document.getElementById('tileInspector');
+  if (!tile || !panel) return;
+  if (!pin && TILE_INSPECTOR_PINNED >= 0 && TILE_INSPECTOR_PINNED !== i) return;
+  if (pin) TILE_INSPECTOR_PINNED = i;
+  const zone = sourceZoneAt(i);
+  const r = Math.floor(i / CONFIG.gridW) + 1, c = i % CONFIG.gridW + 1;
+  let name = 'Terrain libre';
+  let description = 'Une case neutre disponible pour étendre ton territoire.';
+  let icon = '<span class="empty-tile-symbol">＋</span>';
+  let role = 'Terrain';
+  let owner = 'Neutre';
+  let level = '—';
+  let resistance = '0';
+  let cost = '—';
+  if (tile.t === 'mountain') {
+    name = types.mountain.n; description = types.mountain.d; role = types.mountain.role;
+    icon = '<svg class="tile-svg" viewBox="0 0 64 64" aria-hidden="true"><path d="M8 49 23 18l9 14 8-20 16 37Z"/><path d="m18 37 9-7 7 9 9-8"/></svg>';
+    resistance = '∞';
+  } else if (tile.o && types[tile.t]) {
+    const def = types[tile.t];
+    name = def.n; description = def.d; role = def.role; owner = playerLabel(tile.o);
+    level = String(tileLvl(tile)); resistance = String(tileRes(tile)); cost = String(def.c);
+    icon = tileIconSvg(tile.t);
+  } else if (zone) {
+    name = 'Zone riche'; description = `Relais énergétique : +${zone.I} revenu si elle est occupée, +${Math.ceil(zone.I / 2)} depuis une case adjacente.`;
+    role = 'Boost'; icon = '<span class="empty-tile-symbol">◆</span>';
+  }
+  const ownedCount = tile.o && tile.t !== 'mountain' ? countOwnedTilesOfType(tile.o, tile.t) : 0;
+  document.getElementById('tileInspectorKicker').textContent = `CASE ${c}:${r} · ${owner}`;
+  document.getElementById('tileInspectorName').textContent = name;
+  document.getElementById('tileInspectorDescription').textContent = description;
+  document.getElementById('tileInspectorIcon').innerHTML = icon;
+  const tags = [`<span class="tile-info-tag">${role}</span>`];
+  if (zone) tags.push(`<span class="tile-info-tag boost">Boost +${zone.I}</span>`);
+  if (tile.t === 'mountain') tags.push('<span class="tile-info-tag danger">Infranchissable</span>');
+  document.getElementById('tileInspectorTags').innerHTML = tags.join('');
+  document.getElementById('tileInspectorStats').innerHTML = `
+    <div class="tile-inspector-stat"><span>Niveau</span><strong>${level}</strong></div>
+    <div class="tile-inspector-stat"><span>Résistance</span><strong>${resistance}</strong></div>
+    <div class="tile-inspector-stat"><span>${tile.o ? 'Possédés' : 'Coût base'}</span><strong>${tile.o ? ownedCount : cost}</strong></div>`;
+  panel.classList.add('visible'); panel.setAttribute('aria-hidden','false');
+}
+function previewTileInspector(i) { showTileInspector(i, false); }
+function leaveTileInspector() {
+  if (TILE_INSPECTOR_PINNED < 0) closeTileInspector();
+}
+
 function render() {
   injectDynamicColors();
   const g = document.getElementById('grid');
@@ -2674,8 +2816,6 @@ function render() {
   g.style.setProperty('--grid-rows', String(GH));
   g.style.gridTemplateColumns = `repeat(${GW}, 1fr)`;
   g.innerHTML = '';
-
-  const sourceAt = (idx) => S.sourceSites && S.sourceSites.find(z => z.cells && z.cells.includes(idx));
 
   S.grid.forEach((t, i) => {
     const div = document.createElement('div');
@@ -2686,6 +2826,7 @@ function render() {
     if (t.t !== 'empty') cls += ' t-' + t.t;
     if (t.t === 'citadel') cls += ' citadel';
     if (t.fresh) { cls += ' just-placed'; t.fresh = false; }
+    if (t.captured) { cls += ' conquered'; t.captured = false; }
     if (!t.o && t.t !== 'mountain' && isAdj) cls += ' playable';
     else if (t.o && t.o !== S.cur && isAdj) cls += ' attackable';
     div.className = cls;
@@ -2698,7 +2839,7 @@ function render() {
     if (t.t === 'mountain') {
       div.innerHTML = '';
     } else if (!t.o) {
-      const src = sourceAt(i);
+      const src = sourceZoneAt(i);
       if (src) {
         div.innerHTML = `<span class="tile-source-zone pulse" title="Zone riche +${src.I} (plein / mi-tour à distance 1)"></span>`;
       }
@@ -2712,6 +2853,8 @@ function render() {
         ${gradeMarksHTML(lvl)}
         ${tileIconSvg(t.t)}`;
     }
+    div.onmouseenter = () => previewTileInspector(i);
+    div.onmouseleave = leaveTileInspector;
     div.onclick = () => onTile(i);
     g.appendChild(div);
   });
@@ -2748,6 +2891,7 @@ function render() {
 }
 
 function onTile(i) {
+  showTileInspector(i, true);
   if (!S.active || !isControllableHuman(S.cur) || S.actionsRemaining <= 0) return;
   const tile = S.grid[i];
   if (isMountainCell(tile)) return;
@@ -2761,58 +2905,65 @@ function onTile(i) {
   else if (tile.o && tile.o !== S.cur && isAdj) attackMenu(i);
 }
 
-function showRadial(tileIdx, cx, cy, tileSize) {
-  const p = S.players[S.cur];
-  const citCount = countCitadels(S.cur);
-  const items = ['outpost', 'bastion', 'fortress', 'reserve', 'storage', 'armory'];
-  if (CONFIG.baseShield) items.push('citadel');
-  if (isCompactViewport()) {
-    showMobileActionSheet('Construire', items.map(k => ({
-      icon: tileIconSvg(k), label: types[k].n,
-      price: `${k === 'citadel' ? types.citadel.c : buildCostForPlayer(S.cur, k)} ⚡`,
-      can: k === 'citadel' ? (p.pts >= types.citadel.c && citCount < 2) : (p.pts >= buildCostForPlayer(S.cur, k)),
-      action: () => doBuild(k, tileIdx)
-    })));
-    return;
-  }
+function showActionPopover({ title, subtitle, items, cx, cy, accent = 'var(--p1)' }) {
   const menu = document.getElementById('radialMenu');
   menu.innerHTML = '';
-  menu.style.setProperty('--radP', 'var(--p' + S.cur + ')');
+  menu.style.setProperty('--radP', accent);
   const ov = document.createElement('div');
   ov.className = 'rad-overlay';
   ov.onclick = closeRadial;
   menu.appendChild(ov);
-  const R = Math.max(84, Math.min(175, tileSize * (items.length >= 6 ? 2.2 : 2.05)));
-  const center = document.createElement('div');
-  center.className = 'rad-center';
-  center.style.cssText = `left:${cx}px;top:${cy}px`;
-  const resetCenter = () => {
-    center.innerHTML = '<div style="font-size:.95rem;line-height:1">✕</div><span class="rad-cost">Fermer</span>';
+  const popover = document.createElement('section');
+  popover.className = 'action-popover';
+  popover.innerHTML = `
+    <div class="action-popover-head">
+      <div class="action-popover-title"><strong>${title}</strong><span>${subtitle || 'Choisis une action'}</span></div>
+      <button type="button" class="action-close" aria-label="Fermer">×</button>
+    </div>
+    <div class="action-grid"></div>
+    <div class="action-detail"></div>`;
+  popover.querySelector('.action-close').onclick = closeRadial;
+  const grid = popover.querySelector('.action-grid');
+  const detail = popover.querySelector('.action-detail');
+  const renderDetail = item => {
+    detail.innerHTML = `<strong>${item.label}</strong><p>${item.description || ''}</p><div class="action-detail-meta"><span>${item.price || ''}</span><span>${item.meta || ''}</span><span>${item.can ? 'Disponible' : 'Énergie insuffisante'}</span></div>`;
   };
-  resetCenter();
-  center.onclick = closeRadial;
-  menu.appendChild(center);
-  items.forEach((k, idx) => {
-    const angle = (idx / items.length) * 2 * Math.PI - Math.PI / 2;
-    const bx = cx + Math.cos(angle) * R;
-    const by = cy + Math.sin(angle) * R;
-    const cost = (k === 'citadel') ? types.citadel.c : buildCostForPlayer(S.cur, k);
-    const can = k === 'citadel'
-      ? (p.pts >= types.citadel.c && citCount < 2)
-      : (p.pts >= cost);
-    const btn = document.createElement('div');
-    btn.className = 'rad-btn' + (can ? '' : ' cant');
-    btn.style.cssText = `left:${bx}px;top:${by}px;animation-delay:${idx * 0.045}s`;
-    btn.innerHTML = `${tileIconSvg(k, 'rad-svg')}<span class="rad-lbl">${types[k].n}</span><span class="rad-price">${cost} ⚡</span>`;
-    btn.title = `${types[k].n} — ${cost} ⚡`;
-    btn.onmouseenter = () => {
-      center.innerHTML = `<div style="font-size:.95rem;line-height:1">✕</div><span class="rad-cost">${k === 'citadel' ? 'Secours' : 'Construire'} · ${cost} ⚡</span>`;
-    };
-    btn.onmouseleave = resetCenter;
-    if (can) btn.onclick = e => { e.stopPropagation(); doBuild(k, tileIdx); };
-    menu.appendChild(btn);
+  items.forEach((item, index) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'action-choice' + (item.can ? '' : ' cant');
+    btn.setAttribute('aria-disabled', item.can ? 'false' : 'true');
+    btn.innerHTML = `${item.icon}<span class="action-choice-copy"><strong>${item.label}</strong><span>${item.price || ''}</span><small>${item.short || item.meta || ''}</small></span>`;
+    btn.onmouseenter = () => { grid.querySelectorAll('.action-choice').forEach(x => x.classList.remove('focused')); btn.classList.add('focused'); renderDetail(item); };
+    btn.onfocus = btn.onmouseenter;
+    btn.onclick = e => { e.stopPropagation(); if (item.can) item.action(); else renderDetail(item); };
+    grid.appendChild(btn);
+    if (index === 0) renderDetail(item);
   });
+  menu.appendChild(popover);
   menu.classList.add('open');
+  if (!isCompactViewport()) {
+    const rect = popover.getBoundingClientRect();
+    let left = Math.max(12, Math.min(window.innerWidth - rect.width - 12, cx - rect.width / 2));
+    let top = cy + 20;
+    if (top + rect.height > window.innerHeight - 12) top = cy - rect.height - 20;
+    top = Math.max(12, Math.min(window.innerHeight - rect.height - 12, top));
+    popover.style.left = `${left}px`; popover.style.top = `${top}px`;
+  }
+}
+
+function showRadial(tileIdx, cx, cy, tileSize) {
+  const p = S.players[S.cur];
+  const citCount = countCitadels(S.cur);
+  const keys = ['outpost', 'bastion', 'fortress', 'reserve', 'storage', 'armory'];
+  if (CONFIG.baseShield) keys.push('citadel');
+  const items = keys.map(k => {
+    const cost = k === 'citadel' ? types.citadel.c : buildCostForPlayer(S.cur, k);
+    const owned = countOwnedTilesOfType(S.cur, k);
+    const can = k === 'citadel' ? p.pts >= cost && citCount < 2 : p.pts >= cost;
+    return { icon:tileIconSvg(k,'rad-svg'), label:types[k].n, price:`${cost} énergie`, short:`${owned} possédé${owned > 1 ? 's' : ''}`, meta:`R${types[k].r} · ${owned} possédé${owned > 1 ? 's' : ''}`, description:types[k].d, can, action:() => doBuild(k,tileIdx) };
+  });
+  showActionPopover({ title:'Construire un module', subtitle:`Énergie disponible : ${Math.round(p.pts)}`, items, cx, cy, accent:`var(--p${S.cur})` });
 }
 
 function closeRadial() {
@@ -2861,111 +3012,40 @@ function showOverwriteRadial(tileIdx, cx, cy, tileSize) {
   const p = S.players[S.cur];
   const oldTile = S.grid[tileIdx];
   if (!oldTile || !oldTile.t) return;
-
   const oldT = oldTile.t;
   const oldRes = tileRes(oldTile);
   const citCount = countCitadels(S.cur);
-
-  // Empêche l'écrasement de sa citadelle (base)
   if (oldT === 'citadel') {
-    showM('Action impossible', `<p class="mb-0 small text-secondary">Tu ne peux pas écraser ta citadelle.</p>`);
+    showTileInspector(tileIdx, true);
     return;
   }
-
-  const items = ['outpost', 'bastion', 'fortress', 'reserve', 'storage', 'armory'];
-  if (CONFIG.baseShield) items.push('citadel');
-  if (isCompactViewport()) {
-    const upCost = upgradeCostForPlayer(S.cur, oldTile);
-    const sheetItems = [];
-    if (tileLvl(oldTile) < MAX_LVL) sheetItems.push({
-      icon:'▲', label:'Améliorer', price:`${upCost} ⚡`, can:upCost !== Infinity && p.pts >= upCost,
-      action:() => doUpgrade(tileIdx)
-    });
-    items.forEach(k => {
-      const cost = k === 'citadel' ? types.citadel.c : buildCostForPlayer(S.cur, k);
-      const canCitadel = k === 'citadel' ? (oldT === 'citadel' ? citCount <= 2 : citCount < 2) : true;
-      sheetItems.push({
-        icon:tileIconSvg(k), label:types[k].n, price:`${cost} ⚡`,
-        can:canCitadel && p.pts >= cost,
-        action:() => doOverwrite(tileIdx, k)
-      });
-    });
-    showMobileActionSheet('Modifier · ' + types[oldT].n, sheetItems);
-    return;
-  }
-
-  const menu = document.getElementById('radialMenu');
-  menu.innerHTML = '';
-  menu.style.setProperty('--radP', 'var(--p' + S.cur + ')');
-
-  // overlay sombre
-  const ov = document.createElement('div');
-  ov.className = 'rad-overlay';
-  ov.onclick = closeRadial;
-  menu.appendChild(ov);
-
-  const R = Math.max(84, Math.min(175, tileSize * (items.length >= 6 ? 2.2 : 2.05)));
-
-  const center = document.createElement('div');
-  center.className = 'rad-center';
-  center.style.cssText = `left:${cx}px;top:${cy}px`;
-  const resetCenter = () => {
-    center.innerHTML = `<div style="font-size:.95rem;line-height:1">✕</div><span class="rad-cost">Modifier</span>`;
-  };
-  resetCenter();
-  center.onclick = closeRadial;
-  menu.appendChild(center);
-
   const upCost = upgradeCostForPlayer(S.cur, oldTile);
   const canUp = tileLvl(oldTile) < MAX_LVL && upCost !== Infinity && p.pts >= upCost;
-  const upBtn = document.createElement('div');
-  upBtn.className = 'rad-btn rad-upgrade-top' + (canUp ? '' : ' cant');
-  upBtn.style.cssText = `left:${cx}px;top:${cy - R - 62}px;animation-delay:0s`;
-  const upLabel = tileLvl(oldTile) >= MAX_LVL ? 'Niv. max' : `${upCost === Infinity ? '—' : upCost + ' ⚡'}`;
-  upBtn.innerHTML = `<span style="font-size:1.1rem">▲</span><span class="rad-lbl">Améliorer</span><span class="rad-price">${upLabel}</span>`;
-  upBtn.title = canUp ? `Améliorer (lvl ${tileLvl(oldTile)} → ${tileLvl(oldTile) + 1})` : 'Amélioration indisponible';
-  if (canUp) {
-    upBtn.onmouseenter = () => {
-      center.innerHTML = `<div style="font-size:.95rem;line-height:1">✕</div><span class="rad-cost">Upgrade · ${upCost} ⚡</span>`;
-    };
-    upBtn.onmouseleave = resetCenter;
-    upBtn.onclick = e => { e.stopPropagation(); doUpgrade(tileIdx); };
-  }
-  menu.appendChild(upBtn);
-
-  items.forEach((k, idx) => {
-    const angle = (idx / items.length) * 2 * Math.PI - Math.PI / 2;
-    const bx = cx + Math.cos(angle) * R;
-    const by = cy + Math.sin(angle) * R;
-
-    const canCitadel = k === 'citadel'
-      ? (oldT === 'citadel' ? citCount <= 2 : citCount < 2)
-      : true;
-
-    const cost = (k === 'citadel') ? types.citadel.c : buildCostForPlayer(S.cur, k);
-    const canCost = p.pts >= cost;
-    const can = canCitadel && canCost;
+  const items = [{
+    icon:'<svg class="tile-svg rad-svg" viewBox="0 0 64 64" aria-hidden="true"><path d="M14 42 32 22l18 20M32 22v34"/><path d="M20 12h24"/></svg>',
+    label:'Améliorer',
+    price:tileLvl(oldTile) >= MAX_LVL ? 'Niveau maximum' : `${upCost} énergie`,
+    short:`N${tileLvl(oldTile)} → N${Math.min(MAX_LVL,tileLvl(oldTile)+1)}`,
+    meta:`Résistance ${tileRes(oldTile)} → ${types[oldT].r * Math.min(MAX_LVL,tileLvl(oldTile)+1)}`,
+    description:`Renforce ${types[oldT].n.toLowerCase()} sans changer son rôle ni sa texture principale.`,
+    can:canUp,
+    action:() => doUpgrade(tileIdx)
+  }];
+  const keys = ['outpost','bastion','fortress','reserve','storage','armory'];
+  if (CONFIG.baseShield) keys.push('citadel');
+  keys.forEach(k => {
+    const cost = k === 'citadel' ? types.citadel.c : buildCostForPlayer(S.cur,k);
+    const canCitadel = k !== 'citadel' || citCount < 2;
     const net = oldRes - cost;
-
-    const btn = document.createElement('div');
-    btn.className = 'rad-btn' + (can ? '' : ' cant');
-    btn.style.cssText = `left:${bx}px;top:${by}px;animation-delay:${(idx + 1) * 0.045}s`;
-    btn.innerHTML = `${tileIconSvg(k, 'rad-svg')}<span class="rad-lbl">${types[k].n || types.citadel.n}</span><span class="rad-price">${cost} ⚡</span>`;
-    btn.title = `${types[k].n} — ${cost} ⚡`;
-
-    if (can) {
-      btn.onmouseenter = () => {
-        const sign = net >= 0 ? '+' : '';
-        center.innerHTML = `<div style="font-size:.95rem;line-height:1">✕</div><span class="rad-cost">−${cost} +${oldRes} = ${sign}${net}</span>`;
-      };
-      btn.onmouseleave = resetCenter;
-      btn.onclick = e => { e.stopPropagation(); doOverwrite(tileIdx, k); };
-    }
-
-    menu.appendChild(btn);
+    items.push({
+      icon:tileIconSvg(k,'rad-svg'), label:types[k].n, price:`${cost} énergie`,
+      short:`rembourse ${oldRes} · solde ${net >= 0 ? '+' : ''}${net}`,
+      meta:`R${types[k].r} · ${countOwnedTilesOfType(S.cur,k)} possédé(s)`,
+      description:`Remplace le module actuel. ${types[k].d}`,
+      can:canCitadel && p.pts >= cost, action:() => doOverwrite(tileIdx,k)
+    });
   });
-
-  menu.classList.add('open');
+  showActionPopover({ title:`Modifier · ${types[oldT].n}`, subtitle:`Niveau ${tileLvl(oldTile)} · remboursement ${oldRes}`, items, cx, cy, accent:`var(--p${S.cur})` });
 }
 
 function doOverwrite(tileIdx, newType) {
@@ -3062,55 +3142,21 @@ function attackMenu(i) {
 
 function showAttackRadial(tileIdx, cx, cy, tileSize, targetTile) {
   const p = S.players[S.cur];
-  const items = ['outpost', 'bastion', 'fortress', 'reserve', 'storage', 'armory'];
-  const menu = document.getElementById('radialMenu');
   const atkCost = tileRes(targetTile);
-  if (isCompactViewport()) {
-    showMobileActionSheet(`Assaut · ${atkCost} ⚡`, items.map(k => {
-      const tileCost = buildCostForPlayer(S.cur, k);
-      const total = atkCost + tileCost;
-      return {
-        icon:tileIconSvg(k), label:types[k].n, price:`${total} ⚡`,
-        can:p.pts >= total, action:() => doAttack(tileIdx, k)
-      };
-    }), 'var(--p2)');
-    return;
-  }
-  menu.innerHTML = '';
-  const ov = document.createElement('div');
-  ov.className = 'rad-overlay';
-  ov.onclick = closeRadial;
-  menu.appendChild(ov);
-  const R = Math.max(78, Math.min(165, tileSize * 2.0));
-  const center = document.createElement('div');
-  center.className = 'rad-center atk';
-  center.style.cssText = `left:${cx}px;top:${cy}px`;
-  const resetCenter = () => {
-    center.innerHTML = `<div>⚔ ${atkCost} ⚡</div><div style="font-size:.5rem;opacity:.6;margin-top:1px">assaut</div>`;
-  };
-  resetCenter();
-  menu.appendChild(center);
-  items.forEach((k, idx) => {
-    const angle = (idx / items.length) * 2 * Math.PI - Math.PI / 2;
-    const bx = cx + Math.cos(angle) * R;
-    const by = cy + Math.sin(angle) * R;
+  const keys = ['outpost','bastion','fortress','reserve','storage','armory'];
+  const items = keys.map(k => {
     const tileCost = buildCostForPlayer(S.cur, k);
     const total = atkCost + tileCost;
     const can = p.pts >= total;
-    const btn = document.createElement('div');
-    btn.className = 'rad-btn atk' + (can ? '' : ' cant');
-    btn.style.cssText = `left:${bx}px;top:${by}px;animation-delay:${idx * 0.045}s`;
-    btn.innerHTML = `${tileIconSvg(k, 'rad-svg')}<span class="rad-lbl">${types[k].n}</span><span class="rad-price">⚔${atkCost} + 🏗${tileCost}</span><span class="rad-price" style="opacity:.85">= ${total} ⚡</span>`;
-    if (can) {
-      btn.onmouseenter = () => {
-        center.innerHTML = `<div style="font-size:.95rem;font-weight:800">${total} ⚡</div><div style="font-size:.5rem;opacity:.6">total</div>`;
-      };
-      btn.onmouseleave = resetCenter;
-      btn.onclick = e => { e.stopPropagation(); doAttack(tileIdx, k); };
-    }
-    menu.appendChild(btn);
+    return {
+      icon:tileIconSvg(k,'rad-svg'), label:types[k].n, price:`${total} énergie`,
+      short:`assaut ${atkCost} + module ${tileCost}`,
+      meta:`R${types[k].r} après conquête · ${countOwnedTilesOfType(S.cur,k)} possédé(s)`,
+      description:`Conquiert ${types[targetTile.t]?.n || 'la case'} puis installe ce module. ${types[k].d}`,
+      can, action:() => doAttack(tileIdx,k)
+    };
   });
-  menu.classList.add('open');
+  showActionPopover({ title:`Conquérir · ${types[targetTile.t]?.n || 'Territoire'}`, subtitle:`Défense adverse : ${atkCost} · énergie ${Math.round(p.pts)}`, items, cx, cy, accent:'var(--danger)' });
 }
 
 function doAttack(i, replaceType) {
@@ -3143,7 +3189,7 @@ function doAttack(i, replaceType) {
         const cap = actionsPerTurnForPlayer(S.cur);
         S.actionsRemaining = Math.min(S.actionsRemaining + 1, cap);
       }
-      S.grid[i] = { t: replaceType, o: S.cur, lvl: 1, fresh: true };
+      S.grid[i] = { t: replaceType, o: S.cur, lvl: 1, fresh: true, captured: true };
       p.tilesPlaced++;
     } else {
       S.grid[i] = { t: 'empty', o: 0 };
@@ -3187,7 +3233,7 @@ function doAttack(i, replaceType) {
       const cap = actionsPerTurnForPlayer(S.cur);
       S.actionsRemaining = Math.min(S.actionsRemaining + 1, cap);
     }
-    S.grid[i] = { t: replaceType, o: S.cur, lvl: 1, fresh: true };
+    S.grid[i] = { t: replaceType, o: S.cur, lvl: 1, fresh: true, captured: true };
     p.attacks++;
     p.tilesPlaced++;
   } else {
@@ -3248,50 +3294,41 @@ function showStats() {
   const totalAttacks = alive.reduce((a, id) => a + (S.players[id]?.attacks || 0), 0);
   const totalRes = alive.reduce((a, id) => a + sumPlayerReserveIncome(id), 0);
   const totalArm = alive.reduce((a, id) => a + sumPlayerArmoryLvls(id), 0);
-  const pieLegend = pieOrder.map(pid => {
-    const pct = Math.round(100 * (terr[pid] || 0) / totalTerr);
-    return `<div class="d-flex justify-content-between gap-3"><span class="text-secondary">${playerLabel(pid)}</span><span style="color:var(--p${pid});font-family:'JetBrains Mono',monospace;font-weight:900">${pct}%</span></div>`;
-  }).join('');
-
-  showM('📊 Statistiques', `
-    <div class="row g-3 align-items-center">
-      <div class="col-12 col-md-4">
-        <div class="stat-pie" style="background:conic-gradient(from 90deg, ${pieParts.join(',')});">
-          <div class="stat-pie-inner">${bestPct}%</div>
-        </div>
+  showM('Statistiques de la partie', `
+    <div class="stats-overview">
+      <div class="stats-donut-card">
+        <div class="stat-pie" style="background:conic-gradient(from 90deg, ${pieParts.join(',')});"><div class="stat-pie-inner">${bestPct}%</div></div>
+        <div style="font-size:.58rem;color:var(--txt-2)">Territoire du leader · ${playerLabel(bestPid)}</div>
       </div>
-      <div class="col-12 col-md-8">
-        <div class="d-flex flex-column gap-2">${pieLegend}</div>
-        <div class="stat-grid mt-3">
-          <span class="stat-key">⏱ Temps</span><span class="stat-val">${mm}:${ss}</span>
-          <span class="stat-key">🔄 Manche</span><span class="stat-val">${S.turn}</span>
-          <span class="stat-key">⌁ Seed</span><span class="stat-val">${CONFIG.mapSeed || '—'}</span>
-          <span class="stat-key">⚒ Armureries</span><span class="stat-val">${totalArm}</span>
-          <span class="stat-key">◆ Revenus</span><span class="stat-val">${totalRes}</span>
-          <span class="stat-key">🏗 Constructions</span><span class="stat-val">${totalBuilds}</span>
-          <span class="stat-key">⚔ Assauts</span><span class="stat-val">${totalAttacks}</span>
-        </div>
+      <div class="stats-kpis">
+        <div class="stats-kpi"><span>Temps</span><strong>${mm}:${ss}</strong></div>
+        <div class="stats-kpi"><span>Manche</span><strong>${S.turn}</strong></div>
+        <div class="stats-kpi"><span>Constructions</span><strong>${totalBuilds}</strong></div>
+        <div class="stats-kpi"><span>Assauts</span><strong>${totalAttacks}</strong></div>
+        <div class="stats-kpi"><span>Revenus</span><strong>${totalRes}</strong></div>
+        <div class="stats-kpi"><span>Armureries</span><strong>${totalArm}</strong></div>
       </div>
     </div>
-
-    <div class="mt-3 d-flex flex-column gap-2">
+    <div class="stats-players">
       ${alive.map(pid => {
         const p = S.players[pid];
         const chance = (scores[pid] || 0) / totScore;
         const chanceLabel = Math.round(chance * 100);
+        const pct = Math.round(100 * (terr[pid] || 0) / totalTerr);
         return `
-          <div class="p-2 rounded border border-secondary border-opacity-25 small d-flex justify-content-between align-items-center flex-wrap gap-2">
-            <div>
-              <div style="font-family:'JetBrains Mono',monospace;font-weight:900;color:var(--p${pid})">${playerLabel(pid)}</div>
-              <div class="text-secondary">Terr: ${terr[pid] || 0} • ${Math.round(p.pts)} ⚡ • ${p.tilesPlaced} builds • ${p.attacks} assauts</div>
+          <div class="stats-player">
+            <div class="stats-player-main">
+              <strong style="color:var(--p${pid})">${playerLabel(pid)}</strong>
+              <span>${terr[pid] || 0} cases · ${Math.round(p.pts)} énergie · ${p.tilesPlaced} modules · ${p.attacks} assauts</span>
             </div>
-            <div class="text-end">
-              <div class="small text-secondary" style="font-family:'JetBrains Mono',monospace">~${chanceLabel}%</div>
+            <div class="stats-player-score">
+              <strong style="color:var(--p${pid})">${pct}% carte · ~${chanceLabel}%</strong>
               ${mkStars(pid)}
             </div>
           </div>`;
       }).join('')}
     </div>
+    <div style="margin-top:10px;font:.52rem 'JetBrains Mono',monospace;color:var(--txt-3)">Seed ${CONFIG.mapSeed || '—'}</div>
   `);
 }
 
@@ -3389,18 +3426,19 @@ function updateEcoButtonUI() {
   const cap = playerEconomyCap(S.cur);
   const atCap = p.pts >= cap - 1e-9;
   const canAny = canPlayerTakeAnyAction(S.cur);
+  const compact = window.matchMedia('(max-width:760px)').matches;
 
   let newText;
   let title;
   if (atCap) {
-    newText = 'Passer mon tour';
+    newText = compact ? 'Passer' : 'Passer mon tour';
     title = 'Plafond ⚡ atteint — termine le tour sans gain';
     btn.classList.add('passe-tour');
   } else {
     btn.classList.remove('passe-tour');
     newText = canAny
-      ? `Économiser (×${mult} + rev.)`
-      : 'Finir mon tour';
+      ? (compact ? 'Économiser' : `Économiser (×${mult} + rev.)`)
+      : (compact ? 'Fin du tour' : 'Finir mon tour');
     title = canAny
       ? `Économie — termine le tour et encaisse (plafond ${Math.round(cap)} ⚡)`
       : `Finir ton tour — encaisse même sans action finançable`;
@@ -3413,182 +3451,139 @@ function updateEcoButtonUI() {
   btn.title = title;
 }
 
+function botPickCandidate(candidates, difficulty) {
+  if (!candidates.length) return null;
+  candidates.sort((a,b) => b.score - a.score);
+  const pool = difficulty >= .82 ? 1 : difficulty >= .55 ? Math.min(2,candidates.length) : Math.min(4,candidates.length);
+  return candidates[Math.floor(gameRandom() * pool)];
+}
+function botTakeEconomy(pid) {
+  const p = S.players[pid];
+  const cap = playerEconomyCap(pid);
+  const gain = (1 + sumPlayerReserveIncome(pid) + sourceIncomeBonus(pid)) * CONFIG.pointsMultiplier;
+  p.pts += Math.min(gain,Math.max(0,cap - p.pts));
+  clampPlayerPts(pid); endTurn();
+}
+function botCaptureType(pid, targetIdx, atkCost, pressure) {
+  const p = S.players[pid];
+  const zone = sourceZoneAt(targetIdx);
+  const ownedArmories = countOwnedTilesOfType(pid,'armory');
+  const order = [];
+  if (pressure >= 2) order.push('fortress','bastion');
+  if (zone) order.push('reserve');
+  if (!ownedArmories && p.pts >= atkCost + buildCostForPlayer(pid,'armory')) order.push('armory');
+  order.push('outpost','bastion','storage','reserve','fortress','armory');
+  return [...new Set(order)].find(k => p.pts >= atkCost + buildCostForPlayer(pid,k)) || null;
+}
 function runBot() {
   if (!S.active || !isBot(S.cur) || S.actionsRemaining <= 0) return;
-  const pid = S.cur;
-  const p = S.players[pid];
-  const diff = CONFIG.botDifficulty;
-  const hellF = CONFIG.hellMode ? 2 : 1;
+  const pid = S.cur, p = S.players[pid], diff = CONFIG.botDifficulty;
+  const cap = playerEconomyCap(pid), energyRatio = p.pts / Math.max(1,cap);
   const scores = estimateWinScores();
-  const myScore = scores[pid] || 1;
-  let sumOther = 0, bestEnemy = null, bestSc = 0;
-  S.turnOrder.forEach(id => {
-    if (id === pid || S.eliminated[id]) return;
-    sumOther += scores[id];
-    if (scores[id] > bestSc) { bestSc = scores[id]; bestEnemy = id; }
+  const alive = S.turnOrder.filter(id => !S.eliminated[id]);
+  const totalScore = alive.reduce((sum,id) => sum + (scores[id] || 0),0) || 1;
+  const myChance = (scores[pid] || 0) / totalScore;
+  const strongestEnemy = alive.filter(id => id !== pid).sort((a,b) => (scores[b] || 0) - (scores[a] || 0))[0];
+  const own = [], emptyFront = [], enemyFront = [], threatened = [];
+  S.grid.forEach((tile,i) => {
+    const adj = getAdjPassable(i);
+    if (tile.o === pid) {
+      own.push(i);
+      const enemyAdj = adj.filter(j => S.grid[j].o && S.grid[j].o !== pid);
+      if (enemyAdj.length) threatened.push({i,pressure:enemyAdj.length + (tile.t === 'citadel' ? 4 : 0)});
+    } else if (!tile.o && tile.t !== 'mountain' && adj.some(j => S.grid[j].o === pid)) emptyFront.push(i);
+    else if (tile.o && tile.o !== pid && adj.some(j => S.grid[j].o === pid)) enemyFront.push(i);
   });
-  const tAll = sumOther + myScore;
-  const myChance = myScore / (tAll || 1);
-  const aggression = diff * 0.55 + (1 - myChance) * 0.45;
+  const threatRatio = threatened.length / Math.max(1,own.length);
+  const developmentFloor = Math.max(6,Math.round((CONFIG.gridW + CONFIG.gridH) / 4));
+  const underDeveloped = own.length < developmentFloor && emptyFront.length > 0;
+  const needsArmory = diff > .45 && own.length >= 5 && countOwnedTilesOfType(pid,'armory') === 0;
+  const savingForInfrastructure = needsArmory && p.pts < buildCostForPlayer(pid,'armory');
+  const strategy = threatRatio > .18 ? 'DEFEND' : (energyRatio < .28 || savingForInfrastructure) ? 'ECONOMY' : underDeveloped ? 'EXPAND' : myChance > .58 ? 'CONSOLIDATE' : 'EXPAND';
 
-  const stratRoll = Math.random();
-  let strategy = 'EXPAND';
-  if (stratRoll < aggression * 0.4) strategy = 'RUSH';
-  else if (stratRoll < aggression * 0.65) strategy = 'HIT';
-  else if (myChance < 0.35 && diff > 0.35) strategy = 'ECO';
-
-  const adj = [];
-  S.grid.forEach((t, i) => {
-    if (!t.o && t.t !== 'mountain' && getAdjPassable(i).some(a => S.grid[a].o === pid)) adj.push(i);
-  });
-
-  const enemyCitadel = (oid) => S.grid.findIndex((t, i) => t.t === 'citadel' && t.o === oid && getAdjPassable(i).some(a => S.grid[a].o === pid));
-
-  if (strategy === 'RUSH' && bestEnemy != null) {
-    const tgt = enemyCitadel(bestEnemy);
-    if (tgt >= 0) {
-      const tr = tileRes(S.grid[tgt]);
-      if (p.pts >= tr) {
-        const rep = botPickReplaceType(p, tr, pid);
-        if (rep) { doAttack(tgt, rep); return; }
+  /* 1. Défense active : renforcer le point réellement menacé, pas attaquer au hasard. */
+  if (threatened.length && (strategy === 'DEFEND' || diff > .68)) {
+    const defenses = threatened.flatMap(front => {
+      const tile = S.grid[front.i], result = [];
+      if (tile.t !== 'citadel' && tileLvl(tile) < MAX_LVL) {
+        const cost = upgradeCostForPlayer(pid,tile);
+        if (cost !== Infinity && p.pts >= cost) result.push({kind:'upgrade',i:front.i,score:front.pressure * 8 + tileRes(tile) * 1.4 - cost * .45});
       }
-    }
-  }
-
-  for (const oid of S.turnOrder) {
-    if (oid === pid || S.eliminated[oid]) continue;
-    const tgt = enemyCitadel(oid);
-    if (tgt >= 0) {
-      const tr = tileRes(S.grid[tgt]);
-      if (p.pts >= tr) {
-        const rep = botPickReplaceType(p, tr, pid);
-        if (rep && (strategy !== 'ECO' || diff > 0.75)) {
-          doAttack(tgt, rep);
-          return;
-        }
+      if (tile.t === 'outpost' || tile.t === 'reserve' || tile.t === 'storage') {
+        const replacement = p.pts >= buildCostForPlayer(pid,'fortress') && front.pressure > 1 ? 'fortress' : 'bastion';
+        const cost = buildCostForPlayer(pid,replacement);
+        if (p.pts >= cost) result.push({kind:'replace',i:front.i,type:replacement,score:front.pressure * 9 + types[replacement].r * 2 - cost});
       }
-    }
-  }
-
-  let best = null, bestVal = -1;
-  S.grid.forEach((t, i) => {
-    if (t.o && t.o !== pid && t.t !== 'citadel' && getAdjPassable(i).some(a => S.grid[a].o === pid)) {
-      const atk = tileRes(t);
-      const rep = botPickReplaceType(p, atk, pid);
-      if (!rep) return;
-      const rc = buildCostForPlayer(pid, rep);
-      const priority = (t.t === 'storage' ? 6 : t.t === 'reserve' ? 5 : t.t === 'armory' ? 4 : 1) / (atk + rc);
-      const val = priority * (strategy === 'HIT' ? 1.6 : 1) + Math.random() * 0.15 * diff;
-      if (val > bestVal) { bestVal = val; best = i; }
-    }
-  });
-  if (best != null && (strategy === 'HIT' || strategy === 'RUSH' || aggression > 0.42 + diff * 0.2)) {
-    const atkCost = tileRes(S.grid[best]);
-    const rep = botPickReplaceType(p, atkCost, pid);
-    if (rep) { doAttack(best, rep); return; }
-  }
-
-  if (S.actionsRemaining > 0 && strategy !== 'RUSH' && Math.random() < 0.26 + diff * 0.28) {
-    const ups = [];
-    S.grid.forEach((t, i) => {
-      if (!t || t.o !== pid || t.t === 'citadel') return;
-      if (tileLvl(t) >= MAX_LVL) return;
-      const uc = upgradeCostForPlayer(pid, t);
-      if (uc !== Infinity && p.pts >= uc) ups.push(i);
+      return result;
     });
-    if (ups.length) {
-      const i = ups[Math.floor(Math.random() * ups.length)];
-      const before = tileLvl(S.grid[i]);
-      doUpgrade(i);
-      if (tileLvl(S.grid[i]) > before) return;
-    }
-  }
-
-  if (adj.length && p.pts >= 1 && strategy !== 'ECO') {
-    const move = adj[Math.floor(Math.random() * adj.length)];
-    const citCount = countCitadels(pid);
-    let type = 'outpost';
-    if (
-      CONFIG.baseShield &&
-      citCount < 2 &&
-      p.pts >= types.citadel.c &&
-      strategy !== 'RUSH' &&
-      Math.random() < 0.22 + diff * 0.18
-    ) type = 'citadel';
-    else if (CONFIG.hellMode) {
-      // enfer : copie la compo humaine (mais avec une légère amélioration selon la stratégie)
-      const counts = getHumanTypeCounts();
-      const cand = ['outpost', 'bastion', 'reserve', 'storage', 'armory', 'fortress']
-        .filter(k => p.pts >= buildCostForPlayer(pid, k));
-      if (cand.length) {
-        const weights = cand.map(k => {
-          let w = (counts[k] || 0) + 1;
-          if (strategy === 'HIT' || strategy === 'RUSH') {
-            if (k === 'bastion' || k === 'fortress') w *= 1.35;
-          }
-          if (strategy === 'EXPAND') w *= 1.12;
-          if (k === 'armory') w *= 1.18; // amélioration : plus d'actions
-          if (k === 'reserve') w *= 1.06;
-          // plus la difficulté est haute, plus le bot respecte ses préférences
-          w *= 0.85 + diff * 0.35;
-          return w;
-        });
-        const sum = weights.reduce((a, b) => a + b, 0) || 1;
-        let pick = Math.random() * sum;
-        let chosen = cand[0];
-        for (let idx = 0; idx < cand.length; idx++) {
-          pick -= weights[idx];
-          if (pick <= 0) { chosen = cand[idx]; break; }
-        }
-        type = chosen;
-      }
-    } else if (p.pts >= 8 && Math.random() < 0.22 + diff * 0.33) type = 'armory';
-    else if (p.pts >= 5 && Math.random() < 0.30 + diff * 0.2) type = 'reserve';
-    else if (p.pts >= 5 && Math.random() < 0.18 + diff * 0.15) type = 'storage';
-    else if (p.pts >= 3 && Math.random() < 0.4 + diff * 0.15) type = 'bastion';
-    else if (p.pts >= 5 && Math.random() < diff * 0.3) type = 'fortress';
-    const cost = buildCostForPlayer(pid, type);
-    if (p.pts >= cost) {
-      p.pts -= cost;
-      p.tilesPlaced++;
-      S.grid[move] = { t: type, o: pid, lvl: 1, fresh: true };
-      consumeActionOrEndTurn();
+    const move = botPickCandidate(defenses,diff);
+    if (move && (move.score > 5 || diff > .75)) {
+      if (move.kind === 'upgrade') doUpgrade(move.i); else doOverwrite(move.i,move.type);
       return;
     }
   }
 
-  if (strategy === 'ECO' || (myChance < 0.4 && diff > 0.3)) {
-    const m = CONFIG.pointsMultiplier;
-    const inc = sumPlayerReserveIncome(pid);
-    const src = sourceIncomeBonus(pid);
-    const cap = playerEconomyCap(pid);
-    const gain = (1 + inc + src) * m * hellF;
-    const room = Math.max(0, cap - p.pts);
-    p.pts += Math.min(gain, room);
-    clampPlayerPts(pid);
-    endTurn();
-    return;
+  /* 2. Conquête calculée : valeur du module, coût total, leader ciblé et réserve après combat. */
+  const attacks = [];
+  enemyFront.forEach(i => {
+    const tile = S.grid[i], atkCost = tileRes(tile);
+    const enemyPressure = getAdjPassable(i).filter(j => S.grid[j].o && S.grid[j].o !== pid).length;
+    const replacement = botCaptureType(pid,i,atkCost,enemyPressure);
+    if (!replacement) return;
+    const buildCost = buildCostForPlayer(pid,replacement), total = atkCost + buildCost;
+    const after = p.pts - total;
+    const strategic = tile.t === 'citadel' ? 120 : tile.t === 'armory' ? 22 : tile.t === 'storage' ? 18 : tile.t === 'reserve' ? 16 : 6;
+    const leaderBonus = tile.o === strongestEnemy ? 8 : 0;
+    const zoneBonus = sourceZoneAt(i) ? 7 : 0;
+    const buffer = tile.t === 'citadel' ? 0 : Math.max(1,cap * (.2 - diff * .12));
+    if (after < buffer) return;
+    attacks.push({i,replacement,score:strategic + leaderBonus + zoneBonus + enemyPressure * 2 - total * (1.1 - diff * .35)});
+  });
+  const attack = botPickCandidate(attacks,diff);
+  const attackThreshold = strategy === 'DEFEND' ? 13 : strategy === 'ECONOMY' ? 18 : 5 + (1 - diff) * 6;
+  if (attack && attack.score >= attackThreshold) { doAttack(attack.i,attack.replacement); return; }
+
+  /* 3. Consolidation économique : upgrade utile plutôt que front suicidaire. */
+  const upgrades = [];
+  own.forEach(i => {
+    const tile = S.grid[i];
+    if (tile.t === 'citadel' || tileLvl(tile) >= MAX_LVL) return;
+    const cost = upgradeCostForPlayer(pid,tile);
+    if (cost === Infinity || p.pts < cost) return;
+    const front = getAdjPassable(i).some(j => S.grid[j].o && S.grid[j].o !== pid);
+    const usefulCap = tile.t === 'armory' ? 4 : tile.t === 'reserve' || tile.t === 'storage' ? 3 : front ? 3 : 1;
+    if (tileLvl(tile) >= usefulCap) return;
+    const roleScore = tile.t === 'armory' ? 15 : tile.t === 'reserve' ? 13 : tile.t === 'storage' ? 10 : front ? 12 : 3;
+    upgrades.push({i,score:roleScore + (front ? 7 : 0) + tileLvl(tile) - cost * .45});
+  });
+  const upgrade = botPickCandidate(upgrades,diff);
+  if (upgrade && (strategy === 'CONSOLIDATE' || (strategy === 'DEFEND' && gameRandom() < .35))) { doUpgrade(upgrade.i); return; }
+
+  /* 4. Expansion connectée : zones riches, fronts épais et direction du leader. */
+  const enemyCitadels = S.grid.map((t,i) => t.t === 'citadel' && t.o && t.o !== pid ? i : -1).filter(i => i >= 0);
+  const expansions = emptyFront.map(i => {
+    const r = Math.floor(i / CONFIG.gridW), c = i % CONFIG.gridW;
+    const ownAdj = getAdjPassable(i).filter(j => S.grid[j].o === pid).length;
+    const enemyAdj = getAdjPassable(i).filter(j => S.grid[j].o && S.grid[j].o !== pid).length;
+    const nearestCitadel = enemyCitadels.length ? Math.min(...enemyCitadels.map(j => Math.abs(r - Math.floor(j / CONFIG.gridW)) + Math.abs(c - (j % CONFIG.gridW)))) : 20;
+    const zone = sourceZoneAt(i);
+    return {i,ownAdj,enemyAdj,zone,score:ownAdj * 5 + enemyAdj * 3 + (zone ? 18 + zone.I * 3 : 0) + Math.max(0,12 - nearestCitadel) * (strategy === 'EXPAND' ? .6 : .25) + gameRandom() * (1 - diff) * 5};
+  });
+  const expansion = botPickCandidate(expansions,diff);
+  if (expansion && strategy !== 'ECONOMY') {
+    const ownedArmories = countOwnedTilesOfType(pid,'armory');
+    let type = 'outpost';
+    if (expansion.enemyAdj >= 2 && p.pts >= buildCostForPlayer(pid,'fortress')) type = 'fortress';
+    else if (expansion.enemyAdj && p.pts >= buildCostForPlayer(pid,'bastion')) type = 'bastion';
+    else if (expansion.zone && p.pts >= buildCostForPlayer(pid,'reserve')) type = 'reserve';
+    else if (!ownedArmories && own.length >= 5 && p.pts >= buildCostForPlayer(pid,'armory') && diff > .45) type = 'armory';
+    else if (energyRatio > .76 && p.pts >= buildCostForPlayer(pid,'storage')) type = 'storage';
+    const cost = buildCostForPlayer(pid,type);
+    if (p.pts >= cost) { p.pts -= cost; p.tilesPlaced++; S.grid[expansion.i] = {t:type,o:pid,lvl:1,fresh:true}; consumeActionOrEndTurn(); return; }
   }
 
-  if (adj.length && p.pts >= 1) {
-    const move = adj[Math.floor(Math.random() * adj.length)];
-    const type = 'outpost';
-    p.pts -= 1;
-    p.tilesPlaced++;
-    S.grid[move] = { t: type, o: pid, lvl: 1, fresh: true };
-    consumeActionOrEndTurn();
-    return;
-  }
-
-  const m = CONFIG.pointsMultiplier;
-  const inc = sumPlayerReserveIncome(pid);
-  const src = sourceIncomeBonus(pid);
-  const cap = playerEconomyCap(pid);
-  const gain = (1 + inc + src) * m * hellF;
-  const room = Math.max(0, cap - p.pts);
-  p.pts += Math.min(gain, room);
-  clampPlayerPts(pid);
-  endTurn();
+  /* L’IA ne triche plus sur les revenus : la difficulté vient du choix des actions. */
+  botTakeEconomy(pid);
 }
 
 let zoom = 1, panX = 0, panY = 0, panning = false, px0, py0;
